@@ -1,7 +1,3 @@
-{-# OPTIONS_GHC -Wno-unrecognised-pragmas #-}
-{-# HLINT ignore "Use even" #-}
-{-# HLINT ignore "Redundant bracket" #-}
-import System.Win32 (xBUTTON1, zeroMemory)
 {- notacion PREfija:
     mod n 10
 
@@ -40,6 +36,11 @@ problema h(k: g(n: f(n: Z))): Z {
     asegura: {res = n}
 }
 -}
+h :: Int -> Int
+h n = f (g (n))
+
+k :: Int -> Int
+k n = g (f (n))
 
 
 -- EJERCICIO 2 --
@@ -138,7 +139,7 @@ problema digitoUnidades(x: Z): Z {
 }
 -}
 digitoUnidades :: Int -> Int
-digitoUnidades x = mod x 10
+digitoUnidades x = mod (abs x) 10
 
 {- j)
 problema digitoDecenas(x: Z): Z {
@@ -147,7 +148,7 @@ problema digitoDecenas(x: Z): Z {
 }
 -}
 digitoDecenas :: Int -> Int
-digitoDecenas x = mod x 100
+digitoDecenas x = mod (abs x) 100
 
 
 -- EJERCICIO 3 --
