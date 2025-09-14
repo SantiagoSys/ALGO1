@@ -37,10 +37,10 @@ problema h(k: g(n: f(n: Z))): Z {
 }
 -}
 h :: Int -> Int
-h n = f (g (n))
+h n = f (g n)
 
 k :: Int -> Int
-k n = g (f (n))
+k n = g (f n)
 
 
 -- EJERCICIO 2 --
@@ -84,7 +84,7 @@ problema algunoEsCero(x: R, y: R): Bool {
 -}
 -- Con pattern matching
 algunoEsCero :: Float -> Float -> Bool
-algunoEsCero x y = (x == 0 || y == 0)
+algunoEsCero x y = x == 0 || y == 0
 
 -- Sin pattern matching
 algunoEsCero2 :: Float -> Float -> Bool
@@ -99,7 +99,7 @@ problema ambosSonCero(x: R, y: R): Bool {
 -}
 -- Con pattern matching
 ambosSonCero :: Float -> Float -> Bool
-ambosSonCero x y = (x == 0 && y == 0)
+ambosSonCero x y = x == 0 && y == 0
 
 -- Sin pattern matching
 ambosSonCero2 :: Float -> Float -> Bool
@@ -169,15 +169,17 @@ problema productoInterno(x: (R, R), y: (R, R)): R {
     asegura: {res = fst x * fst y + snd x * snd y}
 }
 -}
-
+productoInterno :: (Float, Float) -> (Float, Float) -> Float
+productoInterno x y = fst x * fst y + snd x * snd y
 
 {- b) 
 problema esParMenor(x: (R, R), y: (R, R)): Bool {
     requiere: {True}
-    asegura: {res = True <=> fst x < fst y && snd x z snd y}
+    asegura: {res = True <=> fst x < fst y && snd x < snd y}
 }
 -}
-
+esParMenor :: (Float, Float) -> (Float, Float) -> Bool
+esParMenor p1 p2 = (fst p1 < fst p2) && (snd p1 < snd p2)
 
 {- c)
 problema distancia(x: (R, R), y: (R, R)): Float {
@@ -185,7 +187,8 @@ problema distancia(x: (R, R), y: (R, R)): Float {
     asegura: {res = sqrt((fst x - fst y)**2 + (snd x - snd y)**2)}
 }
 -}
-
+distancia :: (Float, Float) -> (Float, Float) -> Float
+distancia x y = sqrt(fst x - fst y)^2 + (snd x - snd y)^2
 
 {- d)
 problema sumaTerna(x: (Z, Z, Z)): Z {
@@ -193,7 +196,8 @@ problema sumaTerna(x: (Z, Z, Z)): Z {
     asegura: {res = fst x + snd x + }
 }
 -}
-
+sumaTerna :: (Int, Int, Int) -> Int
+sumaTerna (x, y, z) = x + y + z
 
 {- e)
 problema sumarSoloMultiplos(x: (Z, Z, Z), n: N): Z {
@@ -207,7 +211,10 @@ problema sumarSoloMultiplos(x: (Z, Z, Z), n: N): Z {
             | not (y `mod` n == 0) = 0
 }
 -}
-
+sumarSoloMultiplos :: (Int, Int, Int) -> Int -> Int
+sumarSoloMultiplos (x, y, z) n = sumMult x + sumMult y + sumMult z
+    where sumMult a | mod a n == 0 = a
+                    | otherwise = 0
 
 {- f)
 problema posPrimerPar(x: (Z, Z, Z)): N {
@@ -220,7 +227,11 @@ problema posPrimerPar(x: (Z, Z, Z)): N {
     }
 }
 -}
-
+posPrimerPar :: (Int, Int, Int) -> Int
+posPrimerPar (x, y, z) | mod x 2 == 0 = 1
+                       | mod x 2 /= 0 && mod y 2 == 0 = 2
+                       | mod x 2 /= 0 && mod y 2 /= 0 && mod z 2 == 0 = 3
+                       | otherwise = 4
 
 {- g)
 problema crearPar(a: A, b: B): (A, B) {
@@ -228,6 +239,8 @@ problema crearPar(a: A, b: B): (A, B) {
     asegura: {res = (a, b)}
 }
 -}
+crearPar :: Int -> Int -> (Int, Int)
+crearPar a b = (a, b)
 
 {- h)
 problema invertir(x: (a, b)): (b, a) {
@@ -235,38 +248,44 @@ problema invertir(x: (a, b)): (b, a) {
     asegura: {res = (snd x, fst x)}
 }
 -}
+invertir :: (Int, Int) -> (Int, Int)
+invertir (a, b) = (b, a)
 
 
-
--- EJERCICIO 5 --
+-- EJERCICIO 5 -- ¡¡PREGUNTAR!! --------------?
 {-
 problema todosMenores (t : Z × Z × Z) : Bool {
     requiere: {True}
     asegura: {(res = true) ↔ ((f(t0) > g(t0)) ∧ (f(t1) > g(t1)) ∧ (f(t2) > g(t2)))}
 }
 -}
-
+todosMenores :: (Int, Int, Int) -> Bool
+todosMenores (t0, t1, t2) = (f2 t0 > g2 t0) && (f2 t1 > g2 t1) && (f2 t2 > g2 t2)
 
 {-
-problema f (n : Z) : Z {
+problema f2 (n : Z) : Z {
     requiere: {True}
     asegura: {(n ≤ 7 → res = n^2) ∧ (n > 7 → res = 2n − 1)}
 }
 -}
-
+f2 :: Int -> Int
+f2 n | n <= 7 = n^2
+     | otherwise = 2*n - 1
 
 {-
-problema g (n : Z) : Z {
+problema g2 (n : Z) : Z {
 requiere: {True}
 asegura: {Si n es un n´umero par entonces res = n/2, en caso contrario, res = 3n + 1}
 }
 -}
-
+g2 :: Int -> Int
+g2 n | mod n 2 == 0 = div n 2
+     | otherwise = 3*n + 1
 
 
 -- EJERCICIO 6 --
 type Año = Int
-type EsBisnieto = Bool
+type EsBisiesto = Bool
 {-
 problema bisiesto (a˜no : Z) : Bool {
 requiere: {True}
@@ -276,7 +295,8 @@ Por ejemplo:
 bisiesto 1901 ⇝ False bisiesto 1904 ⇝ True
 bisiesto 1900 ⇝ False bisiesto 2000 ⇝ True
 -}
-
+bisiesto :: Int -> Bool
+bisiesto año = (mod año 4 == 0) || (mod año 100 /= 0 && mod año 400 == 0)
 
 
 -- EJERCICIO 7 --
@@ -293,6 +313,11 @@ Por ejemplo:
 distanciaManhattan (2, 3, 4) (7, 3, 8) ⇝ 9
 distanciaManhattan ((-1), 0, (-8.5)) (3.3, 4, (-4)) ⇝ 12.8
 -}
+distanciaManhattan :: (Float, Float, Float) -> (Float, Float, Float) -> Float
+distanciaManhattan p q = sumaTernaf p - sumaTernaf q
+
+sumaTernaf :: (Float, Float, Float) -> Float
+sumaTernaf (x, y, z) = x + y + z
 
 {- b)
 Reimplementar la funci´on teniendo en cuenta el siguiente tipo: type Punto3D = (Float, Float, Float)
@@ -308,7 +333,10 @@ problema comparar (a : Z, b : Z) : Z {
     asegura: {(res = 0) ↔ (sumaUltimosDosDigitos(a) = sumaUltimosDosDigitos(b))}
 }
 -}
-
+comparar :: Integer -> Integer -> Integer
+comparar a b | sumaUltimosDosDigitos a < sumaUltimosDosDigitos b = 1
+             | sumaUltimosDosDigitos a > sumaUltimosDosDigitos b = -1
+             | otherwise     = 0
 
 {-
 problema sumaUltimosDosDigitos (x : Z) : Z {
@@ -323,7 +351,8 @@ comparar 45 312 ⇝ -1 porque 45 ≺ 312 y 4 + 5 > 1 + 2.
 comparar 2312 7 ⇝ 1 porque 2312 ≺ 7 y 1 + 2 < 0 + 7.
 comparar 45 172 ⇝ 0 porque no vale 45 ≺ 172 ni tampoco 172 ≺ 45.
 -}
-
+sumaUltimosDosDigitos :: Integer -> Integer
+sumaUltimosDosDigitos x = (mod (abs x) 10) + (mod (div (abs x) 10) 10)
 
 
 -- EJERCICIO 9 --
