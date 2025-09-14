@@ -1,3 +1,4 @@
+
 -- EJERCICIO 1 --
 {-
 problema fibonacci (n: Z) : Z {
@@ -97,10 +98,20 @@ sumaDigitos :: Int -> Int
 sumaDigitos n | n < 10 = n
               | otherwise = mod n 10 + sumaDigitos (div n 10)
 
--- EJERCICIO 9 --
+-- EJERCICIO 9 -- ¡¡PREGUNTAR!! --------------?
 {-
 problema esCapicua(n: Z): Bool {
     requiere: {n > 0}
     asegura: {res = () }
 }
 -}
+primerDigito :: Int -> Int
+primerDigito n = div n (10^cantDigitos(n-1))
+
+ultimoDigito :: Int -> Int
+ultimoDigito n = mod n 10
+
+esCapicua :: Int -> Bool
+esCapicua n | n < 10 = True
+            | otherwise = primerDigito n == ultimoDigito n && esCapicua nInterno
+                where nInterno = mod (div n 10) (10 ^ (cantDigitos n  - 1))
