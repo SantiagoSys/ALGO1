@@ -148,7 +148,7 @@ problema digitoDecenas(x: Z): Z {
 }
 -}
 digitoDecenas :: Int -> Int
-digitoDecenas x = mod (abs x) 100
+digitoDecenas x = div (mod (abs x) 100) 10
 
 
 -- EJERCICIO 3 --
@@ -180,6 +180,13 @@ problema esParMenor(x: (R, R), y: (R, R)): Bool {
 -}
 esParMenor :: (Float, Float) -> (Float, Float) -> Bool
 esParMenor p1 p2 = (fst p1 < fst p2) && (snd p1 < snd p2)
+
+esParMenor2 :: (Float, Float) -> (Float, Float) -> Bool
+esParMenor2 t1 t2 | (fst t1 < fst t2) && (snd t1 < snd t2) = True
+                  | otherwise = False
+
+esParMenor3 :: (Float, Float) -> (Float, Float) -> Bool
+esParMenor3 (a,b) (c,d) = (a < c) && (b < d)
 
 {- c)
 problema distancia(x: (R, R), y: (R, R)): Float {
@@ -232,6 +239,16 @@ posPrimerPar (x, y, z) | mod x 2 == 0 = 1
                        | mod x 2 /= 0 && mod y 2 == 0 = 2
                        | mod x 2 /= 0 && mod y 2 /= 0 && mod z 2 == 0 = 3
                        | otherwise = 4
+
+esPar :: Int -> Bool
+esPar n | mod n 2 == 0 = True
+        | otherwise = False
+
+posPrimerPar2 :: (Int, Int, Int) -> Int
+posPrimerPar2 (x, y, z) | esPar x = 1
+                        | esPar y = 2
+                        | esPar z = 3
+                        | otherwise = 4
 
 {- g)
 problema crearPar(a: A, b: B): (A, B) {
