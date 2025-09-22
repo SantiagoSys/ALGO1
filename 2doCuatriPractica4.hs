@@ -113,5 +113,47 @@ ultimoDigito n = mod n 10
 
 esCapicua :: Int -> Bool
 esCapicua n | n < 10 = True
-            | otherwise = primerDigito n == ultimoDigito n && esCapicua nInterno
-                where nInterno = mod (div n 10) (10 ^ (cantDigitos n  - 1))
+            | (primerDigito n == ultimoDigito n) && (esCapicua (sacarPrimeroYUltimo n)) = True
+            | otherwise = False
+
+numerosASacar :: Int -> Int -> Int
+numerosASacar n i = (cantDigitos n) - i
+
+sacarPrimeroYUltimo :: Int -> Int
+sacarPrimeroYUltimo n = (mod (div n 10) (10^(cantDigitos n)-1))
+
+
+-- EJERCICIO 14 --
+sumaPotencias :: Integer -> Integer -> Integer -> Integer
+sumaPotencias q n m = (sumatoria q n) * (sumatoria q m)
+
+sumatoria :: Integer -> Integer -> Integer
+sumatoria q 1 = q
+sumatoria q k = sumatoria q (k-1) + q^k
+
+
+-- EJERCICIO 16 --
+menorDivisor :: Integer -> Integer
+menorDivisor 2 = 2
+menorDivisor n = esDivisor n 2
+
+esDivisor :: Integer -> Integer -> Integer
+esDivisor n m | mod n m == 0 = m
+              | otherwise = esDivisor n (m+1)
+
+esPrimo :: Integer -> Bool
+esPrimo n = n == menorDivisor n
+
+
+-- EJERCICIO 19 --
+esSumaInicialDePrimos :: Int -> Bool
+esSumaInicialDePrimos n = esSumaDePrimerosKPrimos 1 n
+
+esSumaDePrimerosKPrimos :: Int -> Int -> Bool
+esSumaDePrimerosKPrimos k n | (sumaKprimos k) == n = True
+                            | (sumaKprimos k) > n = False
+                            | otherwise = esSumaDePrimerosKPrimos (k+1) n
+
+sumaKprimos :: Integer -> Integer
+sumaKprimos 2 = 1
+sumaKprimos k = 
