@@ -155,5 +155,13 @@ esSumaDePrimerosKPrimos k n | (sumaKprimos k) == n = True
                             | otherwise = esSumaDePrimerosKPrimos (k+1) n
 
 sumaKprimos :: Integer -> Integer
-sumaKprimos 2 = 1
+sumaKprimos 1 = 2
 sumaKprimos k = 
+
+nEsimoPrimo :: Integer -> Integer
+nEsimoPrimo k = nEsimoPrimoAux 2 k
+
+nEsimoPrimoAux :: Integer -> Integer -> Integer
+nEsimoPrimoAux n k | esPrimo n && k == 1 = n
+                   | esPrimo n && k /= 1 = nEsimoPrimoAux (n+1) (k-1)
+                   | otherwise = nEsimoPrimoAux (n+1) k
