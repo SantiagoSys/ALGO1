@@ -138,4 +138,6 @@ las posiciones correspondientes en el camino.}
 } -}
 valoresDeCamino :: Tablero -> Camino -> [Int]
 valoresDeCamino (x:xs) [] = []
-valoresDeCamino []
+valoresDeCamino tablero (y:ys) = devolverPosicion y tablero : valoresDeCamino tablero ys
+
+devolverPosicion :: Posicion -> Tablero -> Int
