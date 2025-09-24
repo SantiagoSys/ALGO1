@@ -70,3 +70,8 @@ enLosContactos :: Nombre -> ContactosTel -> Bool
 enLosContactos _ [] = False
 enLosContactos nombre ((n, t) : xs) | nombre == n = True
                                     | otherwise = enLosContactos nombre xs
+
+agregarContacto :: Contacto -> ContactosTel -> ContactosTel
+agregarContacto p [] = [p]
+agregarContacto p (c : xs) | p == c = c : xs
+                           | otherwise = c : agregarContacto p xs
