@@ -58,4 +58,4 @@ quitarTodos e (x:xs) | e == x = quitarTodos e xs
 
 ordenar :: [Int] -> [Int]
 ordenar [] = []
-ordenar (x:xs) = ordenar (quitar (maximo (x:xs)) xs) ++ [maximo (x:xs)]
+ordenar l = ordenar (quitar (maximo l) l) ++ [maximo l]
