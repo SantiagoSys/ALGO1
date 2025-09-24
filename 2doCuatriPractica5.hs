@@ -73,5 +73,5 @@ enLosContactos nombre ((n, t) : xs) | nombre == n = True
 
 agregarContacto :: Contacto -> ContactosTel -> ContactosTel
 agregarContacto p [] = [p]
-agregarContacto p (c : xs) | p == c = c : xs
-                           | otherwise = c : agregarContacto p xs
+agregarContacto p (c : cs) | p == c = c : cs
+                           | otherwise = c : agregarContacto p cs
