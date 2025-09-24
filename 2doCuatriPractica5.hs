@@ -59,3 +59,14 @@ quitarTodos e (x:xs) | e == x = quitarTodos e xs
 ordenar :: [Int] -> [Int]
 ordenar [] = []
 ordenar l = ordenar (quitar (maximo l) l) ++ [maximo l]
+
+type Texto = [Char]
+type Nombre = Texto
+type Telefono = Texto
+type Contacto = (Nombre, Telefono)
+type ContactosTel = [Contacto]
+
+enLosContactos :: Nombre -> ContactosTel -> Bool
+enLosContactos _ [] = False
+enLosContactos nombre ((n, t) : xs) | nombre == n = True
+                                    | otherwise = enLosContactos nombre xs
