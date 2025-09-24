@@ -55,3 +55,7 @@ quitarTodos :: (Eq t) => t -> [t] -> [t]
 quitarTodos _ [] = []
 quitarTodos e (x:xs) | e == x = quitarTodos e xs
                      | otherwise = x : quitarTodos e xs
+
+ordenar :: [Int] -> [Int]
+ordenar [] = []
+ordenar (x:xs) = ordenar (quitar (maximo (x:xs)) xs) ++ [maximo (x:xs)]
