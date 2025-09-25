@@ -137,7 +137,92 @@ asegura: {res es igual a la secuencia de n´umeros que est´an en el camino c, o
 las posiciones correspondientes en el camino.}
 } -}
 valoresDeCamino :: Tablero -> Camino -> [Int]
-valoresDeCamino (x:xs) [] = []
+valoresDeCamino tablero [] = []
 valoresDeCamino tablero (y:ys) = devolverPosicion y tablero : valoresDeCamino tablero ys
 
+elementoFila :: Int -> Fila -> Int
+elementoFila j (x:xs) | j == 0    = x
+                      | otherwise = elementoFila (j-1) xs
+
 devolverPosicion :: Posicion -> Tablero -> Int
+devolverPosicion (i,j) (fila:filas)  | i == 0    = elementoFila j fila
+                                     | otherwise = devolverPosicion (i-1,j) filas
+
+
+-- EJERCICIO 8 --
+{-Implementar la funci´on esCaminoFibo :: [Int]->Int->Bool
+ problema esCaminoFibo (s:seq⟨Z⟩, i : Z) : Bool {
+ requiere: {La secuencia de numeros s es no vacıa y esta compuesta por numeros positivos (mayores estrictos a 0)
+ que representan los numeros ubicados en las posiciones que forman un camino en un tablero}
+ requiere: {i ≥ 0}
+ asegura: {res = true ⇔ los valores de s son la sucesion de Fibonacci inicializada con el numero pasado como
+ parametro i}}
+ -}
+esCaminoFibo :: [Int] -> Int -> Bool
+esCaminoFibo (x:xs) i = empiezaConFibo x i && esSucesionDeFibo (x:xs) i
+
+fibonacci :: Int -> Int
+fibonacci n | n == 0 = 0
+            | n == 1 = 1
+            | otherwise = fibonacci (n-1) + fibonacci (n-2)
+
+empiezaConFibo :: Int -> Int -> Bool
+empiezaConFibo x i = x == fibonacci i
+
+esSucesionDeFibo :: [Int] -> Int -> Bool
+esSucesionDeFibo [x] _ = True
+esSucesionDeFibo (x:y:xs) n | y == fibonacci (n + 1) = esSucesionDeFibo (y:xs) (n + 1)
+                            | otherwise = False
+
+
+-- EJERCICIO 9 --
+{- 
+ Implementar la funcion divisoresPropios :: Int->[Int]
+ problema divisoresPropios (n: Z) : seq⟨Z⟩ {
+ requiere: {n > 0}
+ asegura: {res contiene a todos los divisores propios de n, ordenados de menor a mayor}
+ asegura: {res no tiene elementos repetidos}
+ asegura: {res no contiene a ning´ un elemento que no sea un divisor propio de n}}
+ -}
+divisoresPropios :: Int -> [Int]
+divisoresPropios n = divisoresPropiosAux n 1 []
+
+divisoresPropiosAux :: Int -> Int -> [Int] -> [Int]
+divisoresPropiosAux n i divisores | i >= n = divisores
+                                  | mod n i == 0 && n /= i = divisoresPropiosAux n (i + 1) (divisores ++ [i])
+                                  | otherwise = divisoresPropiosAux n (i + 1) divisores
+
+
+-- EJERCICIO 10 --
+{-
+ Implementar la funci´on sonAmigos :: Int->Int->Bool
+ problema sonAmigos (n,m: Z) : Bool {
+ requiere: {n > 0}
+ requiere: {m > 0}
+ requiere: {m= n}
+ asegura: {res = True ⇔ n y m son n´ umeros amigos}}
+ -}
+sonAmigos :: Int -> Int -> Bool
+sonAmigos n m = sumaDivisoresPropios n == m && sumaDivisoresPropios m == n
+
+sumaDivisoresPropios :: Int -> Int
+sumaDivisoresPropios n = suma (divisoresPropios n)
+
+suma :: [Int] -> Int
+suma [] = 0
+suma (x:xs) = x + suma xs
+
+
+-- EJERCICIO 11 --
+{-
+Implementar la funcion losPrimerosNPerfectos :: Int->[Int]
+ problema losPrimerosNPerfectos (n: Z) : seq⟨Z⟩ {
+ requiere: {n > 0}
+ asegura: {|res| = n}
+ asegura: {res es la lista de los primeros n numeros perfectos, de menor a mayor}}
+ -}
+--losPrimerosNPerfectos :: Int -> [Int]
+--losPrimerosNPerfectos n = 
+
+esPerfecto :: Int -> Bool
+esPerfecto n = sumaDivisoresPropios n == n
