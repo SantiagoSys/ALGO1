@@ -231,3 +231,22 @@ primerosPerfectos k x | esPerfecto x = x : primerosPerfectos (k-1) (x+1)
 
 esPerfecto :: Int -> Bool
 esPerfecto n = sumaDivisoresPropios n == n
+
+
+{-
+Implementar la funci´on listaDeAmigos :: [Int]->[(Int,Int)]
+ problema listaDeAmigos (lista: seq⟨Z⟩) : seq⟨Z × Z⟩ {
+ requiere: {Todos los n´ umeros de lista son mayores a 0}
+ requiere: {Todos los n´ umeros de lista son distintos}
+ asegura: {res es una lista de tuplas sin repetidos, que contiene a todos los pares de n´ umeros que pertenecen a lista
+ y son amigos entre s´ ı}
+ asegura: {|res| es igual a la cantidad de pares de n´ umeros amigos que hay en lista.}}
+ -}
+listaDeAmigos :: [Int] -> [(Int, Int)]
+listaDeAmigos [] = []
+listaDeAmigos (x:xs) = listaDeAmigosAux x xs ++ listaDeAmigos xs
+
+listaDeAmigosAux :: Int -> [Int] -> [(Int, Int)]
+listaDeAmigosAux _ [] = []
+listaDeAmigosAux n (x:xs) | sonAmigos n x = (n, x) : listaDeAmigosAux n xs
+                          | otherwise = listaDeAmigosAux n xs
