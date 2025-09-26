@@ -221,8 +221,13 @@ Implementar la funcion losPrimerosNPerfectos :: Int->[Int]
  asegura: {|res| = n}
  asegura: {res es la lista de los primeros n numeros perfectos, de menor a mayor}}
  -}
---losPrimerosNPerfectos :: Int -> [Int]
---losPrimerosNPerfectos n = 
+losPrimerosNPerfectos :: Int -> [Int]
+losPrimerosNPerfectos n = 
+
+primerosPerfectos :: Int -> Int -> [Int]
+primerosPerfectos 0 _ = []
+primerosPerfectos k x | esPerfecto x = x : primerosPerfectos (k-1) (x+1)
+                      | otherwise = primerosPerfectos k (x+1)
 
 esPerfecto :: Int -> Bool
 esPerfecto n = sumaDivisoresPropios n == n
