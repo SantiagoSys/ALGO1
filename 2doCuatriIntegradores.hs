@@ -184,11 +184,11 @@ esSucesionDeFibo (x:y:xs) n | y == fibonacci (n + 1) = esSucesionDeFibo (y:xs) (
  asegura: {res no tiene elementos repetidos}
  asegura: {res no contiene a ning´ un elemento que no sea un divisor propio de n}}
  -}
-divisoresPropios :: Int -> [Int]
+divisoresPropios :: Integer -> [Integer]
 divisoresPropios n = divisoresPropiosAux n 1 []
 
-divisoresPropiosAux :: Int -> Int -> [Int] -> [Int]
-divisoresPropiosAux n i divisores | i >= n = divisores
+divisoresPropiosAux :: Integer -> Integer -> [Integer] -> [Integer]
+divisoresPropiosAux n i divisores | n <= i = divisores
                                   | mod n i == 0 && n /= i = divisoresPropiosAux n (i + 1) (divisores ++ [i])
                                   | otherwise = divisoresPropiosAux n (i + 1) divisores
 
@@ -202,13 +202,13 @@ divisoresPropiosAux n i divisores | i >= n = divisores
  requiere: {m= n}
  asegura: {res = True ⇔ n y m son n´ umeros amigos}}
  -}
-sonAmigos :: Int -> Int -> Bool
+sonAmigos :: Integer -> Integer -> Bool
 sonAmigos n m = sumaDivisoresPropios n == m && sumaDivisoresPropios m == n
 
-sumaDivisoresPropios :: Int -> Int
+sumaDivisoresPropios :: Integer -> Integer
 sumaDivisoresPropios n = suma (divisoresPropios n)
 
-suma :: [Int] -> Int
+suma :: [Integer] -> Integer
 suma [] = 0
 suma (x:xs) = x + suma xs
 
@@ -221,32 +221,61 @@ Implementar la funcion losPrimerosNPerfectos :: Int->[Int]
  asegura: {|res| = n}
  asegura: {res es la lista de los primeros n numeros perfectos, de menor a mayor}}
  -}
-losPrimerosNPerfectos :: Int -> [Int]
-losPrimerosNPerfectos n = 
+losPrimerosNPerfectos :: Integer -> [Integer]
+losPrimerosNPerfectos n = primerosPerfectos n 1
 
-primerosPerfectos :: Int -> Int -> [Int]
+primerosPerfectos :: Integer -> Integer -> [Integer]
 primerosPerfectos 0 _ = []
 primerosPerfectos k x | esPerfecto x = x : primerosPerfectos (k-1) (x+1)
                       | otherwise = primerosPerfectos k (x+1)
 
-esPerfecto :: Int -> Bool
+esPerfecto :: Integer -> Bool
 esPerfecto n = sumaDivisoresPropios n == n
+
+-- EJERCICIO 13 --
+{-
+Problema cantidadNumerosAbundantes (d : Z, h : Z) : Z {
+Requiere : {0 <= d <= h}
+Asegura : {res es la cantidad de números abundantes en el rango [d..h]}}
+-}
+cantidadNumerosAbundantes :: Integer -> Integer -> Integer
+cantidadNumerosAbundantes d h | d > h = 0
+                              | esAbundante d = 1 + cantidadNumerosAbundantes (d+1) h
+                              | otherwise = cantidadNumerosAbundantes (d+1) h
+
+esAbundante :: Integer -> Bool
+esAbundante n | (sumaDivisoresPropios n) > n = True
+              | otherwise = False
 
 
 {-
-Implementar la funci´on listaDeAmigos :: [Int]->[(Int,Int)]
- problema listaDeAmigos (lista: seq⟨Z⟩) : seq⟨Z × Z⟩ {
- requiere: {Todos los n´ umeros de lista son mayores a 0}
- requiere: {Todos los n´ umeros de lista son distintos}
- asegura: {res es una lista de tuplas sin repetidos, que contiene a todos los pares de n´ umeros que pertenecen a lista
- y son amigos entre s´ ı}
- asegura: {|res| es igual a la cantidad de pares de n´ umeros amigos que hay en lista.}}
- -}
-listaDeAmigos :: [Int] -> [(Int, Int)]
-listaDeAmigos [] = []
-listaDeAmigos (x:xs) = listaDeAmigosAux x xs ++ listaDeAmigos xs
+Problema cursadasVencidas (s : seq <String X Z X Z>) : seq <String> {
+Requiere : {s[i]1 >= 1993 para todo i tal que 0 <= i < |5|}
+Requiere : {0 <= s[i]2 <= 2 para todo i tal que 0 <= i < |5|}
+Asegura : {res no tiene elementos repetidos}
+Asegura : {res contiene los nombres de todas las materias incluidas en s tales que la materia fue aprobada a mas tardar en el primer cuatrimestre de 2021, inclusive}
+}
+-}
+cursadasVencidas :: [(String, Integer, Integer)] -> [String]
+cursadasVencidas 
 
-listaDeAmigosAux :: Int -> [Int] -> [(Int, Int)]
-listaDeAmigosAux _ [] = []
-listaDeAmigosAux n (x:xs) | sonAmigos n x = (n, x) : listaDeAmigosAux n xs
-                          | otherwise = listaDeAmigosAux n xs
+
+{-
+Problema saturarEnUmbralHastaNegativo (s : seq <Z>, u : Z) : seq<Z>, {
+Requiere : {u > 0}
+Asegura : {la longitud de res es igual a la cantidad de elementos no negativos consecutivos desde el inicio de s}
+Asegura : {para cualquier i en el rango 0 <= i < |res| tal que 0 <= s[i] <= u, se cumple que res[i] = s[i]}
+Asegura : {para cualquier i en el rango 0 <= i < |res| tal que s[i] > u, se cumple que res[i] = u}
+}
+-}
+
+
+{-
+Problema cantidadParesColumna (matriz : seq<seq<Z>>, col : Z) : Z {
+Requiere : {todos los elementros de la secuencia matriz tienen la misma longitud}
+Requiere : {|matriz| > 0}
+Requiere : {|matriz[0]| > 0}
+Requiere : {1 <= col <= |matriz[0]|}
+Asegura : {res es la cantidad de números pares de los elementos matriz[i] [col-1] para todo i tal que 0 <= i < |matriz|}
+}
+-}
