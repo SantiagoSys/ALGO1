@@ -140,13 +140,13 @@ valoresDeCamino :: Tablero -> Camino -> [Int]
 valoresDeCamino tablero [] = []
 valoresDeCamino tablero (y:ys) = devolverPosicion y tablero : valoresDeCamino tablero ys
 
-elementoFila :: Int -> Fila -> Int
-elementoFila j (x:xs) | j == 0    = x
-                      | otherwise = elementoFila (j-1) xs
-
 devolverPosicion :: Posicion -> Tablero -> Int
 devolverPosicion (i,j) (fila:filas)  | i == 0    = elementoFila j fila
                                      | otherwise = devolverPosicion (i-1,j) filas
+
+elementoFila :: Int -> Fila -> Int
+elementoFila j (x:xs) | j == 0    = x
+                      | otherwise = elementoFila (j-1) xs
 
 
 -- EJERCICIO 8 --
