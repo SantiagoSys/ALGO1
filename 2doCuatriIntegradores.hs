@@ -257,7 +257,17 @@ Asegura : {res contiene los nombres de todas las materias incluidas en s tales q
 }
 -}
 cursadasVencidas :: [(String, Integer, Integer)] -> [String]
-cursadasVencidas 
+cursadasVencidas [] = []
+cursadasVencidas ((materia, año, cuatri) : xs) | esVencida año cuatri = agregarSiNoEsta materia (cursadasVencidas xs)
+                                               | otherwise = cursadasVencidas xs
+
+esVencida :: Integer -> Integer -> Bool
+esVencida año cuatri = año < 2021 || (año == 2021 && cuatri <= 1)
+
+agregarSiNoEsta :: (Eq t) => t -> [t] -> [t]
+agregarSiNoEsta x [] = [x]
+agregarSiNoEsta e (x:xs) | e == x = x:xs
+                         | otherwise = x : agregarSiNoEsta e xs
 
 
 {-
@@ -268,6 +278,11 @@ Asegura : {para cualquier i en el rango 0 <= i < |res| tal que 0 <= s[i] <= u, s
 Asegura : {para cualquier i en el rango 0 <= i < |res| tal que s[i] > u, se cumple que res[i] = u}
 }
 -}
+saturarEnUmbralHastaNegativo :: [Integer] -> Integer -> [Integer]
+saturarEnUmbralHastaNegativo [] _ = []
+saturarEnUmbralHastaNegativo (x:xs) u | x < 0 = []
+                                      | x <= u = x : saturarEnUmbralHastaNegativo xs u
+                                      | otherwise = u : saturarEnUmbralHastaNegativo xs u
 
 
 {-
@@ -279,3 +294,14 @@ Requiere : {1 <= col <= |matriz[0]|}
 Asegura : {res es la cantidad de números pares de los elementos matriz[i] [col-1] para todo i tal que 0 <= i < |matriz|}
 }
 -}
+cantidadParesColumna :: [[Integer]] -> Integer -> Integer
+cantidadParesColumna [] _ = 0
+cantidadParesColumna (fila:filas) col | esPar (elementoEnColumna fila col) = 1 + cantidadParesColumna filas col
+                                      | otherwise = cantidadParesColumna filas col
+
+elementoEnColumna :: [Integer] -> Integer -> Integer
+elementoEnColumna (x:_) 1 = x
+elementoEnColumna (_:xs) n = elementoEnColumna xs (n-1)
+
+esPar :: Integer -> Bool
+esPar x = mod x 2 == 0
