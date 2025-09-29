@@ -315,11 +315,30 @@ problema hayPrimosGemelos (d: Z,h: Z) : Bool {
 }
 AclaraciÃ³n: Se dice que p1 y p2 son primos gemelos si ambos son primos y ademÃ¡s |p2-p1| = 2
 -}
+hayPrimosGemelos :: Integer -> Integer -> Bool
+hayPrimosGemelos d h | d == h = False
+                     | sonPrimosGemelos d h = True
+                     | otherwise = hayPrimosGemelos (d+1) h
+
+absoluto :: Integer -> Integer
+absoluto x | x < 0 = -x
+           | otherwise = x
+
+sonPrimosGemelos :: Integer -> Integer -> Bool
+sonPrimosGemelos a b = absoluto (b-a) == 2 && esPrimo a && esPrimo b
+
+esPrimo :: Integer -> Bool
+esPrimo x = esPrimoAux x 2
+
+esPrimoAux :: Integer -> Integer -> Bool
+esPrimoAux x i | x == i = True
+               | mod x i == 0 && x /= i = False
+               | otherwise = esPrimoAux x (i+1)
 
 
 -- EJERCICIO 18 --
 {- 
-Representaremos un dÃ­a de cursada de cierta materia con una tupla String x String x Z x Z, donde:
+Representaremos un di­a de cursada de cierta materia con una tupla String x String x Z x Z, donde:
     La primera componente de la tupla contiene el nombre de una materia
     La segunda componente de la tupla contiene el dÃ­a de cursada (lunes, martes, etc)
     La tercera componente de la tupla contiene el horario de inicio de la cursada de ese dÃ­a
@@ -336,6 +355,13 @@ problema materiasTurnoTarde (s: seqâŸ¨String x String x Z x ZâŸ©) :seqâŸ
   asegura: { res contiene solamente los nombre las materias incluÃ­das en s tales el horario de cursada de dichas materias se superpone (total o parcialmente) con el rango (14..17)}
 }
 -}
+materiasTurnoTarde :: [(String, String, Integer, Integer)] -> [String]
+materiasTurnoTarde [] = []
+materiasTurnoTarde ((nombre, dia, inicio, final):xs) | esMateriaTurnoTarde (nombre, dia, inicio, final) = nombre : materiasTurnoTarde xs
+                                                     | otherwise = materiasTurnoTarde xs
+
+esMateriaTurnoTarde :: (String, String, Integer, Integer) -> Bool
+esMateriaTurnoTarde (nombre, dia, inicio, final) = (inicio >= 14 && inicio <= 17) && (final >= 14 && final <= 17)
 
 
 -- EJERCICIO 19 --
@@ -344,8 +370,13 @@ problema maximaSumaDeTresConsecutivos (s: seqâŸ¨ZâŸ©) : Z {
   requiere: { |s| â‰¥ 3}
   asegura: { res es la suma de tres elementos que se encuentran en posiciones consecutivas de s }
   asegura: {Para cualquier i en el rango 1 â‰¤ i < |s|-1, se cumple que s[i-1]+s[i]+s[i+1] â‰¤ res}
-}
 -}
+maximaSumaDeTresConsecutivos :: [Integer] -> Integer
+maximaSumaDeTresConsecutivos [] = 0
+maximaSumaDeTresConsecutivos [x, y, z] = x + y + z
+maximaSumaDeTresConsecutivos (x:y:z:xs) | x + y + z > maximoPrevio = x + y + z
+                                        | otherwise = maximoPrevio
+                                        where maximoPrevio = maximaSumaDeTresConsecutivos (y:z:xs)
 
 
 -- EJERCICIO 20 --
@@ -358,6 +389,9 @@ problema sumaIesimaColumna (matriz: seqâŸ¨seqâŸ¨IntegerâŸ©âŸ©, col: 
   asegura: {res es la sumatoria de los elementos matriz[i][col-1] para todo i tal que 0 â‰¤ i < |matriz| }
 }
 -}
+sumaIesimaColumna :: [[Integer]] -> Integer -> Integer
+sumaIesimaColumna [    ] _ = 0
+sumaIesimaColumna (x:xs) i = elementoEnColumna x (i - 1) + sumaIesimaColumna xs i
 
 
 -- EJERCICIO 21 --
@@ -399,6 +433,7 @@ problema mediaMovilN (lista: seq⟨Z⟩, n: Z) : Float {
 -}
 
 
+-- EJERCICIO 25 --
 {-
 problema aproboMasDeNMaterias (registro: seq⟨seq⟨Char⟩ x seq⟨Z⟩⟩, alumno:seq⟨Char⟩, n: Z) : Bool {
   requiere: {No hay nombres de alumnos repetidos en registro}
@@ -410,6 +445,7 @@ problema aproboMasDeNMaterias (registro: seq⟨seq⟨Char⟩ x seq⟨Z⟩⟩, al
 -}
 
 
+-- EJERCICIO 26 --
 {-
 problema buenosAlumnos (registro: seq⟨seq⟨Char⟩ x seq⟨Z⟩⟩) : seq⟨seq⟨Char⟩⟩ {
   requiere: {No hay nombres de alumnos repetidos en registro}
@@ -420,6 +456,7 @@ Para resolver el promedio pueden utilizar la función del Preludio de Haskell fr
 -}
 
 
+-- EJERCICIO 27 --
 {-
 problema mejorPromedio (registro: seq⟨seq⟨Char⟩ x seq⟨Z⟩⟩) : seq⟨Char⟩ {
   requiere: {No hay nombres de alumnos repetidos en registro}
@@ -430,6 +467,7 @@ problema mejorPromedio (registro: seq⟨seq⟨Char⟩ x seq⟨Z⟩⟩) : seq⟨C
 -}
 
 
+-- EJERCICIO 28 --
 {-
 problema seGraduoConHonores (registro: seq⟨seq⟨Char⟩ x seq⟨Z⟩⟩, cantidadDeMateriasDeLaCarrera: Z, alumno: seq⟨Char⟩ ) : Bool {
   requiere: {No hay nombres de alumnos repetidos en registro}
@@ -442,6 +480,7 @@ problema seGraduoConHonores (registro: seq⟨seq⟨Char⟩ x seq⟨Z⟩⟩, cant
 -}
 
 
+-- EJERCICIO 29 --
 {-
 problema porcentajeDeVotosAfirmativos (formulas: seq⟨String x String⟩,votos:seq< Z >, cantTotalVotos: Z) : R {
  requiere: {¬formulasInvalidas(formulas)}
@@ -456,6 +495,7 @@ division a b = (fromIntegral a) / (fromIntegral b)
 -}
 
 
+-- EJERCICIO 30 --
 {-
 problema formulasInvalidas (formulas: seq⟨String x String⟩) : Bool {
  requiere: {True}
@@ -464,6 +504,7 @@ problema formulasInvalidas (formulas: seq⟨String x String⟩) : Bool {
 -}
 
 
+-- EJERCICIO 31 --
 {-
 problema porcentajeDeVotos (vice: String, formulas: seq⟨String x String⟩,votos:seq< Z >) : R {
  requiere: {La segunda componente de algún elemento de formulas es vice}
@@ -477,6 +518,7 @@ Para resolver este ejercicio pueden utilizar la función division presentada en 
 -}
 
 
+-- EJERCICIO 32 --
 {-
 problema menosVotado (formulas: seq⟨String x String⟩, votos:seq< Z >) : String {
  requiere: {¬formulasInvalidas(formulas)}
