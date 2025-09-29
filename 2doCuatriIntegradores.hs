@@ -305,3 +305,187 @@ elementoEnColumna (_:xs) n = elementoEnColumna xs (n-1)
 
 esPar :: Integer -> Bool
 esPar x = mod x 2 == 0
+
+
+-- EJERCICIO 17 --
+{-
+problema hayPrimosGemelos (d: Z,h: Z) : Bool {
+  requiere: {0 < d â‰¤ h}
+  asegura: {res = true <=> existen dos nÃºmeros p1 y p2 contenidos en el rango [d..h] tales que p1 y p2 son primos gemelos}
+}
+AclaraciÃ³n: Se dice que p1 y p2 son primos gemelos si ambos son primos y ademÃ¡s |p2-p1| = 2
+-}
+
+
+-- EJERCICIO 18 --
+{- 
+Representaremos un dÃ­a de cursada de cierta materia con una tupla String x String x Z x Z, donde:
+    La primera componente de la tupla contiene el nombre de una materia
+    La segunda componente de la tupla contiene el dÃ­a de cursada (lunes, martes, etc)
+    La tercera componente de la tupla contiene el horario de inicio de la cursada de ese dÃ­a
+    La cuarta componente de la tupla contiene el horario de fin de la cursada de ese dÃ­a
+Se pide implementar materiasTurnoTarde, que dada una lista de cursadas devuelva aquellas materias que se cursan en el turno tarde (14 a 17hs)
+
+problema materiasTurnoTarde (s: seqâŸ¨String x String x Z x ZâŸ©) :seqâŸ¨StringâŸ© {
+  requiere: { s[i]1 es alguno de los siguientes valores: "Lunes", "Martes", "MiÃ©rcoles", "Jueves", "Viernes"}
+  requiere: { s[i]2 â‰¥ 8 para todo i tal que 0 â‰¤ i < |s|}
+  requiere: { s[i]3 â‰¤ 22 para todo i tal que 0 â‰¤ i < |s|}
+  requiere: { s[i]2 < s[i]3 para todo i tal que 0 â‰¤ i < |s|}
+  asegura: { res no tiene elementos repetidos}
+  asegura: { res contiene los nombre de todas las materias incluÃ­das en s tales el horario de cursada de dichas materias se superpone (total o parcialmente) con el rango (14..17)}
+  asegura: { res contiene solamente los nombre las materias incluÃ­das en s tales el horario de cursada de dichas materias se superpone (total o parcialmente) con el rango (14..17)}
+}
+-}
+
+
+-- EJERCICIO 19 --
+{-
+problema maximaSumaDeTresConsecutivos (s: seqâŸ¨ZâŸ©) : Z {
+  requiere: { |s| â‰¥ 3}
+  asegura: { res es la suma de tres elementos que se encuentran en posiciones consecutivas de s }
+  asegura: {Para cualquier i en el rango 1 â‰¤ i < |s|-1, se cumple que s[i-1]+s[i]+s[i+1] â‰¤ res}
+}
+-}
+
+
+-- EJERCICIO 20 --
+{-
+problema sumaIesimaColumna (matriz: seqâŸ¨seqâŸ¨IntegerâŸ©âŸ©, col: Integer) : IntegerâŸ©{
+  requiere: {Todos los elementos de la secuencia matriz tienen la misma longitud}
+  requiere: {|matriz| > 0}
+  requiere: {|matriz[0]| > 0}
+  requiere: {1 â‰¤ col â‰¤ |matriz[0]| }
+  asegura: {res es la sumatoria de los elementos matriz[i][col-1] para todo i tal que 0 â‰¤ i < |matriz| }
+}
+-}
+
+
+-- EJERCICIO 21 --
+{-
+problema mediaMovilN (lista: seq⟨Z⟩, n: Z) : Float {
+  requiere: {|lista| > 0}
+  requiere: {n > 0 ∧ n ≤ |lista|}
+  asegura: {res es el promedio de los últimos n elementos de lista}
+ }
+-}
+
+
+-- EJERCICIO 22 --
+{-
+-- problema esAtractivo (n: Z) : Bool {
+--   requiere: {n > 0}
+--   asegura: {res = true <=> la cantidad de factores primos de n (distintos o no) es también un número primo.}
+-- }
+-- Aclaración: los factores primos de 30 son [5,3,2]. Los factores primos de 9 son [3,3]
+-}
+
+
+-- EJERCICIO 23 --
+{-
+-- problema palabraOrdenada (palabra: seq⟨Char⟩) : Bool {
+--   requiere: {True}
+--   asegura: {res = true <=> cada uno de los elementos no blancos de palabra es mayor o igual al anterior caracter no blanco, si existe alguno.}
+-- }
+-- Aclaración: 'a' < 'b' es True.
+-}
+
+
+-- EJERCICIO 24 --
+{-
+-- problema similAnagrama (palabra1: seq⟨Char⟩, palabra2: seq⟨Char⟩) : Bool⟩{
+--   requiere: {True}
+--   asegura: {res = true <=> (para todo caracter no blanco, la cantidad de apariciones de ese caracter en palabra1 es igual a la cantidad de apariciones en palabra2, y además existe al menos un caracter en palabra1 que tiene una posición distinta en palabra2)}
+-- }
+-}
+
+
+{-
+problema aproboMasDeNMaterias (registro: seq⟨seq⟨Char⟩ x seq⟨Z⟩⟩, alumno:seq⟨Char⟩, n: Z) : Bool {
+  requiere: {No hay nombres de alumnos repetidos en registro}
+  requiere: {Las notas de registro son todas iguales o mayores a cero y menores o iguales a 10}
+  requiere: {n > 0}
+  requiere: {El alumno se encuentra en el registro }
+  asegura: {res = true <=> el alumno tiene más de n notas de finales mayores o iguales a 4 en el registro}
+}
+-}
+
+
+{-
+problema buenosAlumnos (registro: seq⟨seq⟨Char⟩ x seq⟨Z⟩⟩) : seq⟨seq⟨Char⟩⟩ {
+  requiere: {No hay nombres de alumnos repetidos en registro}
+  requiere: {Las notas de registro son todas iguales o mayores a cero y menores o iguales a 10}
+  asegura: {res es la lista de los nombres de los alumnos que están en registro cuyo promedio de notas es mayor o igual a 8 y no tiene aplazos (notas menores que 4)}
+}
+Para resolver el promedio pueden utilizar la función del Preludio de Haskell fromIntegral que dado un valor de tipo Int devuelve su equivalente de tipo Float.
+-}
+
+
+{-
+problema mejorPromedio (registro: seq⟨seq⟨Char⟩ x seq⟨Z⟩⟩) : seq⟨Char⟩ {
+  requiere: {No hay nombres de alumnos repetidos en registro}
+  requiere: {Las notas de registro son todas iguales o mayores a cero y menores o iguales a 10}
+  requiere: {|registro| > 0 }
+  asegura: {res es el nombre del alumno cuyo promedio de notas es el más alto; si hay más de un alumno con el mismo promedio de notas, devuelve el nombre de alumno que aparece primero en registro}
+}
+-}
+
+
+{-
+problema seGraduoConHonores (registro: seq⟨seq⟨Char⟩ x seq⟨Z⟩⟩, cantidadDeMateriasDeLaCarrera: Z, alumno: seq⟨Char⟩ ) : Bool {
+  requiere: {No hay nombres de alumnos repetidos en registro}
+  requiere: {Las notas de registro son todas iguales o mayores a cero y menores o iguales a 10}
+  requiere: {cantidadDeMateriasDeLaCarrera > 0}
+  requiere: {El alumno se encuentra en el registro }
+  requiere: {|buenosAlumnos(registro)| > 0}
+  asegura: {res <=> true si aproboMasDeNMaterias(registro, alumno, cantidadDeMateriasDeLaCarrera -1) = true y alumno pertenece al conjunto de buenosAlumnos(registro) y el promedio de notas de finales de alumno está a menos (estrictamente) de 1 punto del mejorPromedio(registro)}
+}
+-}
+
+
+{-
+problema porcentajeDeVotosAfirmativos (formulas: seq⟨String x String⟩,votos:seq< Z >, cantTotalVotos: Z) : R {
+ requiere: {¬formulasInvalidas(formulas)}
+ requiere: {|formulas| = |votos|}
+ requiere: {Todos los elementos de votos son mayores o iguales a 0}
+ requiere: {La suma de todos los elementos de votos es menor o igual a cantTotalVotos}
+ asegura: {res es el porcentaje de votos no blancos (es decir, asociados a alguna de las fórmulas) sobre el total de votos emitidos}
+}
+Para resolver este ejercicio pueden utilizar la siguiente función que devuelve como Float la división entre dos números de tipo Int:
+division :: Int -> Int -> Float
+division a b = (fromIntegral a) / (fromIntegral b)
+-}
+
+
+{-
+problema formulasInvalidas (formulas: seq⟨String x String⟩) : Bool {
+ requiere: {True}
+ asegura: {(res = true) <=> formulas contiene un candidato se propone para presidente y vicepresidente en la misma fórmula;
+  o algún candidato se postula para presidente o vice en más de una fórmula }
+-}
+
+
+{-
+problema porcentajeDeVotos (vice: String, formulas: seq⟨String x String⟩,votos:seq< Z >) : R {
+ requiere: {La segunda componente de algún elemento de formulas es vice}
+ requiere: {¬formulasInvalidas(formulas)}
+ requiere: {|formulas| = |votos|}
+ requiere: {Todos los elementos de votos son mayores o iguales a 0}
+ requiere: {Hay al menos un elemento de votos mayores estricto a 0}
+ asegura: {res es el porcentaje de votos que obtuvo vice sobre el total de votos afirmativos}
+}
+Para resolver este ejercicio pueden utilizar la función division presentada en el Ejercicio 1.
+-}
+
+
+{-
+problema menosVotado (formulas: seq⟨String x String⟩, votos:seq< Z >) : String {
+ requiere: {¬formulasInvalidas(formulas)}
+ requiere: {|formulas| = |votos|}
+ requiere: {Todos los elementos de votos son mayores o iguales a 0}
+ requiere: {Hay al menos un elemento de votos mayores estricto a 0}
+ requiere: {|formulas| > 0}
+ asegura: {res es el candidato a presidente de formulas menos votado de acuerdo a los votos contabilizados en votos}
+}
+A continuación te dejamos una estructura básica para resolver los ejercicios.
+ Este código no pretende resolver ningun caso de los ejercicios planteados, es sólo una plantilla.
+-}
