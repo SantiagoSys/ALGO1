@@ -402,6 +402,22 @@ problema mediaMovilN (lista: seq⟨Z⟩, n: Z) : Float {
   asegura: {res es el promedio de los últimos n elementos de lista}
  }
 -}
+mediaMovilN :: [Integer] -> Integer -> Float
+mediaMovilN (x:xs) n = fromIntegral (suma (ultimosNElementos (x:xs) n)) / fromIntegral (longitud (ultimosNElementos (x:xs) n))
+
+suma :: [Integer] -> Integer
+suma [] = 0
+suma [x] = x
+suma (x:xs) = x + suma xs
+
+ultimosNElementos :: [Integer] -> Integer -> [Integer]
+ultimosNElementos [] _ = []
+ultimosNElementos (x:xs) n | n >= longitud (x:xs) = x:xs
+                           | otherwise = ultimosNElementos xs n
+
+longitud :: [Integer] -> Integer
+longitud [] = 0
+longitud (x:xs) = 1 + longitud xs
 
 
 -- EJERCICIO 22 --
@@ -412,6 +428,12 @@ problema mediaMovilN (lista: seq⟨Z⟩, n: Z) : Float {
 -- }
 -- Aclaración: los factores primos de 30 son [5,3,2]. Los factores primos de 9 son [3,3]
 -}
+esAtractivo :: Integer -> Bool
+esAtractivo n = esPrimo (cantPrimos (divisoresPropios n))
+
+cantPrimos :: [Integer] -> Integer
+cantPrimos [] = 0
+cantPrimos (x:xs) = 1 + cantPrimos xs
 
 
 -- EJERCICIO 23 --
@@ -422,6 +444,21 @@ problema mediaMovilN (lista: seq⟨Z⟩, n: Z) : Float {
 -- }
 -- Aclaración: 'a' < 'b' es True.
 -}
+palabraOrdenada :: String -> Bool
+palabraOrdenada [] = True
+palabraOrdenada [x] = True
+palabraOrdenada (x:y:xs) = palabraOrdenadaAux (quitarBlancos (x:y:xs))
+
+palabraOrdenadaAux :: String -> Bool
+palabraOrdenadaAux [] = True
+palabraOrdenadaAux [x] = True
+palabraOrdenadaAux (x:y:xs) | x <= y = palabraOrdenadaAux (y:xs)
+                            | otherwise = False
+
+quitarBlancos :: [Char] -> [Char]
+quitarBlancos [] = []
+quitarBlancos (x:xs) | x == ' ' = quitarBlancos xs
+                     | otherwise = x : quitarBlancos xs
 
 
 -- EJERCICIO 24 --
@@ -431,6 +468,39 @@ problema mediaMovilN (lista: seq⟨Z⟩, n: Z) : Float {
 --   asegura: {res = true <=> (para todo caracter no blanco, la cantidad de apariciones de ese caracter en palabra1 es igual a la cantidad de apariciones en palabra2, y además existe al menos un caracter en palabra1 que tiene una posición distinta en palabra2)}
 -- }
 -}
+similAnagrama palabra1 palabra2 =
+  mismasLetras sinEspacios1 sinEspacios2 && distintoOrden sinEspacios1 sinEspacios2
+  where
+    -- eliminar espacios con recursión
+    quitarEspacios [] = []
+    quitarEspacios (x:xs) | x == ' '  = quitarEspacios xs
+                          | otherwise = x : quitarEspacios xs
+
+    sinEspacios1 = quitarEspacios palabra1
+    sinEspacios2 = quitarEspacios palabra2
+
+    -- contar apariciones de un caracter
+    contar _ [] = 0
+    contar c (x:xs) | c == x    = 1 + contar c xs
+                    | otherwise = contar c xs
+
+    -- verificar que todas las letras de la primera tienen igual cantidad en la segunda
+    mismasLetras [] [] = True
+    mismasLetras [] _  = False
+    mismasLetras (c:cs) ys | contar c (c:cs) == contar c ys = mismasLetras (quitarTodas c cs) ys
+                           | otherwise = False
+
+    -- quitar todas las ocurrencias de un caracter
+    quitarTodas _ [] = []
+    quitarTodas c (x:xs) | c == x = quitarTodas c xs
+                         | otherwise = x : quitarTodas c xs
+
+    -- verificar que no sean idénticas letra por letra
+    distintoOrden [] [] = False
+    distintoOrden [] _  = True   -- longitudes diferentes → ya cambia
+    distintoOrden _  [] = True
+    distintoOrden (x:xs) (y:ys) | x /= y = True
+                                | otherwise = distintoOrden xs ys
 
 
 -- EJERCICIO 25 --
