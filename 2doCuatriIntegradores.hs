@@ -513,6 +513,22 @@ problema aproboMasDeNMaterias (registro: seq⟨seq⟨Char⟩ x seq⟨Z⟩⟩, al
   asegura: {res = true <=> el alumno tiene más de n notas de finales mayores o iguales a 4 en el registro}
 }
 -}
+aproboMasDeNMaterias :: [(String, [Int])] -> String -> Int -> Bool
+aproboMasDeNMaterias registro alumno n = cantidadAprobadas (notasAlumno registro alumno) > n
+
+-- Buscar las notas del alumno en el registro
+notasAlumno :: [(String,[Int])] -> String -> [Int]
+notasAlumno (x:xs) alumno 
+  | fst x == alumno = snd x
+  | otherwise       = notasAlumno xs alumno
+
+-- Contar la cantidad de notas aprobadas (>= 4)
+cantidadAprobadas :: [Int] -> Int
+cantidadAprobadas [] = 0
+cantidadAprobadas (x:xs)
+  | x >= 4    = 1 + cantidadAprobadas xs
+  | otherwise = cantidadAprobadas xs
+
 
 
 -- EJERCICIO 26 --
