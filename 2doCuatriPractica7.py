@@ -299,6 +299,13 @@ print(cantidad_digitos_impares([22,46,88,26,77,54]))
  es par, entonces s[i] = 0) }
  }
 '''
+def ceros_en_posiciones (s: list[int]) -> list[int]:
+    for i in range(len(s)):
+        if i % 2 == 0:
+            s[i] = 0
+    return s
+print(ceros_en_posiciones([3,3,3,3,3,3]))
+print("\n")
 
 '''
  2. problema CerosEnPosicionesPares2 (in s:seq⟨Z⟩) : seq⟨Z⟩ {
@@ -309,13 +316,22 @@ print(cantidad_digitos_impares([22,46,88,26,77,54]))
 '''
 '''
  3. Dada una cadena de caracteres devuelva una cadena igual a la anterior, pero sin las vocales. No se agregan espacios,
- sino que borra la vocal y concatena a continuaci´on.
- problema sin
- vocales (in s:seq⟨Char⟩) : seq⟨Char⟩ {
+ sino que borra la vocal y concatena a continuación.
+ problema sin_vocales (in s:seq⟨Char⟩) : seq⟨Char⟩ {
  requiere: { True }
  asegura: { res es la subsecuencia de s que se obtiene al quitarle las vocales a s }
  }
-'''
+''' # ???
+def sin_vocales (s: str) -> str:
+    vocales: str = ['a', 'e', 'i', 'o', 'u']
+    res = ""
+    for i in range(len(s)):
+        if s[i] not in vocales:
+            res += s[i]
+    return res
+print(sin_vocales("Hola"))
+print("\n")
+
 '''
  Nota: Una subsecuencia de una cadena es una nueva secuencia que se crea eliminando algunos elementos de la cadena
  original, conservando el orden de los elementos restantes.
@@ -327,15 +343,38 @@ print(cantidad_digitos_impares([22,46,88,26,77,54]))
  (¬ pertenece(<‘a’,‘e’,‘i’,‘o’,‘u’>, s[i]) ∧ res[i] = s[i])) }
  }
 '''
+def reemplaza_vocales (s: str) -> str:
+    vocales: str = ['a', 'e', 'i', 'o', 'u']
+    res = ""
+    for i in range(len(s)):
+        if s[i] in vocales:
+            res += " "
+        else:
+            res += s[i]
+    return res
+print(reemplaza_vocales("Hola"))
+print("\n")
+
 '''
-5. problema da
- vuelta
+5. problema da_vuelta
  str (in s:seq⟨Char⟩) : seq⟨Char⟩ {
  requiere: { True }
  asegura: { |res| = |s| }
  asegura: { Para todo i ∈ Z si 0 ≤ i < |res| → res[i] = s[|s|−i−1] }
  }
 '''
+def da_vuelta (s: str) -> str:
+    palabra_invertida: str = ""
+
+    for i in range(len(s)):
+        letra = s[len(s) - 1 - i]
+        palabra_invertida += letra
+
+    return palabra_invertida
+
+print(da_vuelta("Hola"))
+print("\n")
+
 '''
  6. problema eliminar_repetidos (in s:seq⟨Char⟩) : seq⟨Char⟩ {
  requiere: { True }
@@ -343,6 +382,30 @@ print(cantidad_digitos_impares([22,46,88,26,77,54]))
  (0 ≤ i,j < |res|∧i ̸ = j) → res[i] ̸ = res[j]) }
  }
 '''
+def pertenece_mas_de_una_vez (palabra: str, letra: str) -> bool:
+    repeticiones: int = 0
+
+    for i in range(len(palabra)):
+        if letra == palabra[i]:
+            repeticiones += 1
+
+    if repeticiones > 1:
+        return True
+    return False
+
+def eliminar_repetidos (s: str) -> str:
+    palabras_sin_repetidos: str = ""
+
+    for i in range(len(s)):
+        if pertenece_mas_de_una_vez(s, s[i]):
+            palabras_sin_repetidos += ""
+        else:
+            palabras_sin_repetidos += s[i]
+    return palabras_sin_repetidos
+
+print(eliminar_repetidos("fafefifofu"))
+print("\n")
+
 '''
  Ejercicio 3. Implementar una funcion para conocer el estado de aprobacion de una materia a partir de las notas obtenidas
  por un/a alumno/a cumpliendo con la siguiente especificacion:
@@ -354,6 +417,38 @@ print(cantidad_digitos_impares([22,46,88,26,77,54]))
  asegura: { res = 3 ↔ alguno de los elementos de notas es menor a 4 o el promedio es menor a 4 }
  }
 '''
+def suma_notas (notas: list[int]) -> int:
+    res = 0
+    for i in range(len(notas)):
+        res += notas[i]
+    return res
+
+def promedio_notas (notas: list[int]) -> int:
+    res: float = suma_notas(notas) / len(notas)
+    return res
+print(promedio_notas([10,10,10,10]))
+
+def notas_aprobadas (notas: list[int]) -> bool:
+    for i in range(len(notas)):
+        if notas[i] < 4:
+            return False
+    return True
+
+def resultado_materia (notas: list[int]) -> int:
+    if notas_aprobadas(notas) and (promedio_notas(notas) >= 7):
+        res = 1
+    elif notas_aprobadas(notas) and (4 <= promedio_notas(notas) < 7):
+        res = 2
+    elif not notas_aprobadas(notas) or (promedio_notas(notas) < 4):
+        res = 3
+    return res
+
+print(resultado_materia([7,8,9,10])) # Debe devolver 1
+print(resultado_materia([5,6,7]))    # Debe devolver 2
+print(resultado_materia([1,10,10]))  # Debe devolver 3
+print(resultado_materia([1,2,3]))    # Debe devolver 3
+print("\n")
+
 '''
  Ejercicio 4. Dada una lista de tuplas, que representa un historial de movimientos en una cuenta bancaria, devolver el saldo
  actual. Asumir que el saldo inicial es 0. Las tuplas tienen una letra que nos indica el tipo de movimiento “I” para ingreso
@@ -365,6 +460,17 @@ print(cantidad_digitos_impares([22,46,88,26,77,54]))
  i
  }
 '''
+def saldo_actual (movimientos: list[(chr, int)]) -> int:
+    saldo: int = 0
+    for operacion in movimientos:
+        if operacion[0] == 'I':
+            saldo += operacion[1]
+        elif operacion[0] == 'R':
+            saldo -= operacion[1]
+    return saldo
+
+print(saldo_actual([('I',2000), ('R', 20),('R', 1000),('I', 300)]))
+print("\n")
 
 
 # EJERCICIO 3
@@ -380,8 +486,24 @@ print(cantidad_digitos_impares([22,46,88,26,77,54]))
  asegura: { |res| ≥ |s| }
  asegura: { Para todo i ∈ Z si 0 ≤ i < |s| → (res[i] = true ↔ pertenece(s[i],e)) }
  }
- Nota: Reutilizar la funci´on pertenece() implementada previamente para listas.
+ Nota: Reutilizar la función pertenece() implementada previamente para listas.
 '''
+def pertenece (s: list[int], e: int) -> bool:
+    for i in range(len(s)):
+        if s[i] == e:
+            return True
+    return False
+
+def pertenece_a_cada_uno_version1 (s: list[list[int]], e: int, res: list[bool]) -> None:
+    res.clear()
+    for i in range(len(s)):
+        res.append(pertenece(s[i], e))
+
+    return res
+
+print(pertenece_a_cada_uno_version1([[4,5,6], [7,8,10], [4,4,4]], 4, [True, False, True]))
+print("\n")
+
 '''
  2. problema pertenece
  a
@@ -419,15 +541,32 @@ print(cantidad_digitos_impares([22,46,88,26,77,54]))
  asegura: { res = true ↔ (|s| > 0)∧(|s[0]| > 0)∧(Para todo i ∈ Z si 0 ≤ i < |s| → |s[i]| = |s[0]|) }
  }
 '''
+def es_matriz (s: list[list[int]]) -> bool:
+    for i in range(len(s)):
+        if len(s) > 0 and len(s[0]) > 0 and len(s[i] == len(s[0])):
+            return True
+    return False
+
 '''
  2. problema filas
  ordenadas (in m:seq⟨seq⟨Z⟩⟩, out res: seq⟨Bool⟩) {
  requiere: { esMatriz(m) }
  asegura: { Para todo i ∈ Z si 0 ≤ i < |res| → (res[i] = true ↔ ordenados(s[i])) }
  }
+ Nota: Reutilizar la función ordenados() implementada previamente para listas
 '''
+def filas_ordenadas (m: list[list[int]], res: list[bool]):
+    res: list[bool] = []
+    for i in range(len(m)):
+        res.append(ordenados(m[i]))
+    return res
+
+m = [[1,2,3],[4,5,6],[7,8,9],[1,2,3]]
+res = [True, True, True]
+print(filas_ordenadas(m, res))
+print("\n")
+
 '''
- Nota: Reutilizar la funci´on ordenados() implementada previamente para listas
  3. problema columna (in m:seq⟨seq⟨Z⟩⟩, in c: Z) : seq⟨Z⟩ {
  requiere: { esMatriz(m) }
  requiere: { c < |m[0]| }
@@ -436,15 +575,47 @@ print(cantidad_digitos_impares([22,46,88,26,77,54]))
  el mismo orden que aparecen }
  }
 '''
+def columna (m: list[list[int]], c: int) -> list[int]:
+    res: list[int] = []
+
+    for fila in m:
+        elemento: int = fila[c]
+        res.append(elemento)
+    
+    return res
+
+m1 = [[1,2,3],
+      [4,5,6],
+      [7,8,9]]
+
+print(columna(m1, 0)) # Debe devolver [1, 4, 7]
+print(columna(m1, 1)) # Debe devolver [2, 5, 8]
+print(columna(m1, 2)) # Debe devolver [3, 6, 9]
+print("\n")
+
 '''
  4. problema columnas
  ordenadas (in m:seq⟨seq⟨Z⟩⟩) : seq⟨Bool⟩ {
  requiere: { esMatriz(m) }
- asegura: { Para todo´ındice de columna c: 0 ≤ c < |m[0]| → (res[c] = true ↔ ordenados(columna(m,c))) }
+ asegura: { Para todo índice de columna c: 0 ≤ c < |m[0]| → (res[c] = true ↔ ordenados(columna(m,c))) }
  asegura: {|res| = |m[0]|}
  }
- Nota: Reutilizar la funci´on ordenados() implementada previamente para listas
+ Nota: Reutilizar la función ordenados() implementada previamente para listas
 '''
+def columnas_ordenadas (m: list[list[int]]) -> list[bool]:
+    res: list[bool] = []
+
+    for i in range(len(m[0])):
+        if ordenados(columna(m, i)):
+            res.append(True)
+        else:
+            res.append(False)
+
+    return res
+
+print(columnas_ordenadas(m1)) # Debe devolver [True, True, True]
+print("\n")
+
 '''
  5. problema transponer (in m:seq⟨seq⟨Z⟩⟩) : seq⟨seq⟨Z⟩⟩ {
  requiere: { esMatriz(m) }
@@ -452,6 +623,18 @@ print(cantidad_digitos_impares([22,46,88,26,77,54]))
  }
  Nota: Usar columna() para ir obteniendo todas las columnas de la matriz.
 '''
+
+def transponer (m: list[list[int]]) -> list[list[int]]:
+    res: list[list[int]] = []
+
+    for i in range(len(m[0])):
+        res.append(columna(m, i))
+
+    return res
+
+print(transponer(m1))
+print("\n")
+
 '''
  6. Ta-Te-Ti Tradicional:
  problema quien
@@ -471,16 +654,16 @@ print(cantidad_digitos_impares([22,46,88,26,77,54]))
  }
 '''
 '''
-7. Opcional: Implementar una funci´on que tome un entero d y otro p y eleve una matriz cuadrada de tama˜no d con
- valores generados al azar a la potencia p. Es decir, multiplique a la matriz generada al azar por s´ı misma p veces.
- Realizar experimentos con diferentes valores de d. ¿Qu´e pasa con valores muy grandes?
+7. Opcional: Implementar una función que tome un entero d y otro p y eleve una matriz cuadrada de tama˜no d con
+ valores generados al azar a la potencia p. Es decir, multiplique a la matriz generada al azar por sí misma p veces.
+ Realizar experimentos con diferentes valores de d. ¿Qué pasa con valores muy grandes?
  problema exponenciacion
  matriz (in d:Z, in p:Z) : seq⟨seq⟨Z⟩⟩ {
  requiere: { d,p ∈ Z y d,p > 0 }
  asegura: { esMatriz(m) y |columna(m,0)| = d y |columna(transponer(m),0)| = d y res = p
  i=1m }
  }
- Nota 1: record´a que en la multiplicaci´on de una matriz cuadrada de dimensi´on d por si misma cada posici´on se calcula
+ Nota 1: recordá que en la multiplicaci´on de una matriz cuadrada de dimensi´on d por si misma cada posici´on se calcula
  como res[i][j] = d−1
  k=0(m[i][k] × m[k][j])
  Nota 2: para generar una matriz cuadrada de dimensi´on d con valores aleatorios hay muchas opciones de implemen
