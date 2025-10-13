@@ -314,6 +314,22 @@ print("\n")
  par, entonces res[i] = 0) }
  }
 '''
+def cerosEnPosicionesPares2 (s: list[int]) -> list[int]:
+    res: list[int] = []
+    for i in range(len(s)):
+        if i % 2 == 0:
+            res.append(0)
+        else:
+            res.append(s[i])
+    return res
+
+
+s: list[int] = [3, 4, 5, 6]
+print(s)
+resultado = cerosEnPosicionesPares2(s)
+print(s)
+print(resultado)
+
 '''
  3. Dada una cadena de caracteres devuelva una cadena igual a la anterior, pero sin las vocales. No se agregan espacios,
  sino que borra la vocal y concatena a continuación.
