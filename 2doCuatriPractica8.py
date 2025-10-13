@@ -1,3 +1,6 @@
+from queue import LifoQueue as Pila
+from queue import Queue as Cola
+import random
 '''
 1. Pilas
 Ejercicio 1. Implementar una soluci´on para el siguiente problema.
@@ -16,7 +19,17 @@ p = Pila () # crea una pila
 p . put (1) # apila un 1
 elemento = p . get () # desapila
 p . empty () # devuelve true si y solo si la pila est ´a vac ´ı a
+'''
+def generar_nros_al_azar(cantidad: int, desde: int, hasta: int) -> Pila[int]:
+    pila: Pila[int] = Pila()
+    for i in range(cantidad):
+        nro_random = random.randint(desde, hasta)
+        pila.put(nro_random)
+    return pila
+p = generar_nros_al_azar(3, 1, 10)
+print(p.queue)
 
+'''
 Ejercicio 2. Implementar una soluci´on para el siguiente problema.
 problema cantidad elementos (in p: Pila) : Z {
 requiere: {True}
@@ -25,13 +38,18 @@ asegura: {res es igual a la cantidad de elementos que contiene p}
 No se puede utilizar la funci´on LifoQueue.qsize(). Tener en cuenta que, al usar get() para recorrer la pila, se modifica el
 par´ametro de entrada, ya que los elementos se eliminan al accederse. Dado que la especificaci´on lo define como de tipo in, debe
 restaurarse posteriormente.
+'''
 
+'''
 Ejercicio 3. Implementar una soluci´on para el siguiente problema.
 problema buscar el maximo (in p: Pila[Z]) : Z {
 requiere: {p no est´a vac´ıa}
 asegura: {res es un elemento de p}
 asegura: {res es mayor o igual a todos los elementos de p}
 }
+'''
+
+'''
 Ejercicio 4. Implementar una soluci´on para el siguiente problema.
 problema buscar nota maxima (in p: Pila[seq⟨Char⟩×Z]) : seq⟨Char⟩ ×Z {
 requiere: {p no est´a vac´ıa}
@@ -40,6 +58,9 @@ asegura: {res es una tupla de p}
 asegura: {No hay ning´un elemento en p cuya segunda componente sea mayor que la segunda componente de res }
 }
 P´agina 1 de 10 Compilado el 2025/05/27
+'''
+
+'''
 Ejercicio 5. Implementar una soluci´on, que use pila, para el siguiente problema.
 problema esta bien balanceada (in s: seq⟨Char⟩) : Bool {
 requiere: {s solo puede tener n´umeros enteros, espacios y los s´ımbolos ’(’, ’)’, ’+’, ’-’, ’*’, ’/’}
@@ -56,6 +77,9 @@ Entonces las siguientes son f´ormulas aritm´eticas con sus par´entesis bien b
 10 * ( 1 + ( 2 * ( =1)))
 Y la siguiente es una f´ormula que no tiene los par´entesis bien balanceados:
 1 + ) 2 x 3 ( ( )
+'''
+
+'''
 Ejercicio 6. La notaci´on polaca inversa, tambi´en conocida como notaci´on postfix, es una forma de escribir expresiones ma-
 tem´aticas en la que los operadores siguen a sus operandos. Por ejemplo, la expresi´on “3 + 4” se escribe como “3 4 +” en notaci´on
 postfix. Para evaluar una expresi´on en notaci´on postfix, se puede usar una pila. Implementar una soluci´on para el siguiente
@@ -78,6 +102,9 @@ Ejemplo de uso:
 expresion = "3 4 + 5 * 2 -"
 resultado = evaluar_expresion(expresion)
 print(resultado) # Deber´ıa imprimir 33
+'''
+
+'''
 Ejercicio 7. Implementar una soluci´on para el siguiente problema.
 problema intercalar (in p1: Pila, in p2: Pila) : Pila {
 requiere: {p1 y p2 tienen la misma cantidad de elementos}
@@ -88,6 +115,10 @@ P´agina 2 de 10 Compilado el 2025/05/27
 asegura: {El tama˜no de res es igual al doble del tama˜no de p1}
 }
 Nota: Ojo que hay que recorrer dos veces para que queden en el orden apropiado al final.
+'''
+
+
+'''
 2. Colas
 Ejercicio 8. Implementar una soluci´on para el siguiente problema.
 problema generar nros al azar (in cantidad: Z, in desde: Z, in hasta: Z) : Cola[Z] {
@@ -105,6 +136,9 @@ c = Cola () # creo una cola
 c . put (1) # encolo el 1
 elemento = c . get () # desencolo
 c . empty () # devuelve true si y solo si la cola est ´a vac ´ı a
+'''
+
+'''
 Ejercicio 9. Implementar una soluci´on para el siguiente problema.
 problema cantidad elementos (in c: Cola) : Z {
 requiere: {True}
@@ -112,6 +146,9 @@ asegura: {res es igual a la cantidad de elementos que contiene c}
 }
 No se puede utilizar la funci´on Queue.qsize().
 Comparar el resultado con la implementaci´on utilizando una pila en lugar de una cola.
+'''
+
+'''
 Ejercicio 10. Implementar una soluci´on para el siguiente problema.
 problema buscar el maximo (in c: Cola[Z]) : Z {
 requiere: {c no est´a vac´ıa}
@@ -119,6 +156,9 @@ asegura: {res es un elemento de c}
 asegura: {res es mayor o igual a todos los elementos de c}
 }
 Comparar con la versi´on usando pila.
+'''
+
+'''
 Ejercicio 11. Implementar una soluci´on para el siguiente problema.
 problema buscar nota minima (in c: Cola[seq⟨Char × Z⟩]) : (seq⟨Char × Z⟩) {
 requiere: {c no est´a vac´ıa}
@@ -127,6 +167,9 @@ asegura: {res es una tupla de c}
 asegura: {No hay ning´un elemento en c cuya segunda componente sea menor que la de res }
 }
 P´agina 3 de 10 Compilado el 2025/05/27
+'''
+
+'''
 Ejercicio 12. Implementar una soluci´on para el siguiente problema.
 problema intercalar (in c1: Cola, in c2: Cola) : Cola {
 requiere: {c1 y c2 tienen la misma cantidad de elementos}
@@ -135,6 +178,9 @@ asegura: {res contiene todos los elementos de c1 y c2, intercalados y respetando
 asegura: {El primer elemento de res es el primer elemento de c1}
 asegura: {El tama˜no de res es igual al doble del tama˜no de c1}
 }
+'''
+
+'''
 Ejercicio 13. Bingo: un cart´on de bingo contiene 12 n´umeros al azar en el rango [0, 99]. Implementar una soluci´on para cada
 uno de los siguientes problemas.
 1. problema armar secuencia de bingo () : Cola[Z] {
@@ -150,7 +196,9 @@ requiere: {bolillero solo contiene 100 n´umeros, ordenados al azar, del 0 al 99
 asegura: {res es la cantidad m´ınima de jugadas necesarias para que todos los n´umeros del carton hayan salido del
 bolillero}
 }
+'''
 
+'''
 Ejercicio 14. Vamos a modelar una guardia de un hospital usando una cola donde se van almacenando los pedidos de atenci´on
 para los pacientes que van llegando. A cada paciente se le asigna una prioridad del 1 al 10 (donde la prioridad 1 es la m´as urgente
 y requiere atenci´on inmediata) junto con su nombre y la especialidad m´edica que le corresponde. Implementar una soluci´on para
@@ -159,7 +207,9 @@ problema pacientes urgentes (in c:Cola[Z× seq⟨Char⟩ × seq⟨Char⟩]) : Z 
 requiere: {Todos los elementos de c tienen como primer componente de la tupla un entero positivo y menor a 11}
 asegura: {res es la cantidad de elementos de c que tienen como primer componente de la tupla un n´umero menor a 4}
 }
+'''
 
+'''
 Ejercicio 15. La gerencia de un banco nos pide modelar la atenci´on de los clientes usando una cola donde se van registrando
 los pedidos de atenci´on. Cada vez que ingresa una persona a la entidad, debe completar sus datos en una pantalla que est´a a la
 entrada: Nombre y Apellido, DNI, tipo de cuenta (true si es preferencial o f alse en el caso contrario) y si tiene prioridad (true
@@ -176,7 +226,9 @@ P´agina 4 de 10 Compilado el 2025/05/27
 3. Diccionarios
 
 En esta secci´on trabajaremos con el tipo dict de Python, que nos permite asociar claves con valores.
+'''
 
+'''
 Ejercicio 16. Implementar una soluci´on para el siguiente problema.
 problema calcular promedio por estudiante (in notas: seq⟨seq⟨Char⟩ × R⟩) : Diccionario ⟨ seq⟨Char⟩, R⟩ {
 requiere: {El primer componente de las tuplas de notas no es una cadena vac´ıa}
@@ -186,7 +238,9 @@ asegura: {Todos los nombres de notas (primer componente) son clave en res}
 asegura: {El valor de cada clave de res es el promedio de todas las notas que obtuvo el estudiante (segunda componente
 de notas)}
 }
+'''
 
+'''
 Ejercicio 17. Se debe desarrollar un navegador web muy simple que debe llevar un registro de los sitios web visitados por los
 usuarios del sistema. El navegador debe permitir al usuario navegar hacia atr´as en la historia de navegaci´on.
 
@@ -225,7 +279,9 @@ visitar_sitio(historiales, "Usuario1", "facebook.com")
 navegar_atras(historiales, "Usuario1")
 visitar_sitio(historiales, "Usuario2", "youtube.com")
 P´agina 5 de 10 Compilado el 2025/05/27
+'''
 
+'''
 Ejercicio 18. Se debe desarrollar un sistema de gesti´on de inventario para una tienda de ropa. Este sistema debe permitir llevar
 un registro de los productos en el inventario y realizar operaciones como agregar nuevos productos, actualizar las existencias y
 calcular el valor total del inventario.
@@ -299,7 +355,9 @@ agregar_producto(inventario, "Pantal´on", 30.0, 30)
 actualizar_stock(inventario, "Camisa", 10)
 valor_total = calcular_valor_inventario(inventario)
 print("Valor total del inventario:", valor_total) # Deber´ıa imprimir 1100.0
+'''
 
+'''
 4. Archivos
 Para usar archivos contamos con las funciones: open, close, read, readline, readlines, write, os.path.join(), os.path.exists().
 Para m´as informaci´on referirse a la documentaci´on: https://docs.python.org/es/3/tutorial/inputoutput.html#
@@ -319,7 +377,9 @@ que consideraremos son: . , ; : “ ” ‘ ’ ¡ ! ¿ ? ( ) [ ] { } ><\n.
 Ejemplos de palabras: IP Algo1 P5P ip-algo1 ip
 Ejemplos que no son palabras: Hola! sal-\nto
 P´agina 7 de 10 Compilado el 2025/05/27
+'''
 
+'''
 Ejercicio 19. Implementar una soluci´on para cada uno de los siguientes problemas.
 1. problema contar lineas (in nombre archivo: seq⟨Char⟩) : Z {
 requiere: {nombre archivo es el path con el nombre de un archivo existente y accesible}
@@ -337,7 +397,9 @@ requiere: {nombre archivo es el path con el nombre de un archivo existente y acc
 requiere: {palabra no es vac´ıa}
 asegura: {res es la cantidad de veces que palabra aparece en el archivo indicado por nombre archivo}
 }
+'''
 
+'''
 Ejercicio 20. Implementar una soluci´on para el siguiente problema.
 problema agrupar por longitud (in nombre archivo: seq⟨Char⟩) : Diccionario⟨Z, Z⟩ {
 requiere: {nombre archivo es el path con el nombre de un archivo existente y accesible}
@@ -353,6 +415,9 @@ Por ejemplo, el diccionario
 }
 indica que se encontraron 2 palabras de longitud 1, 10 palabras de longitud 2 y 4 palabras de longitud 5. Para este ejercicio
 se consideran como palabras todas aquellas secuencias de caracteres delimitadas por espacios en blanco.
+'''
+
+'''
 Ejercicio 21. Implementar una soluci´on para el siguiente problema.
 problema la palabra mas frecuente (in nombre archivo: seq⟨Char⟩) : seq⟨Char⟩ {
 requiere: {nombre archivo es un archivo existente y accesible que tiene, por lo menos, una palabra}
@@ -360,7 +425,9 @@ asegura: {res es una palabra que aparece en el archivo nombre archivo}
 asegura: {No hay ninguna palabra contenida en el archivo nombre archivo que aparezca m´as veces que la palabra res }
 }
 Para resolver el problema se aconseja utilizar un diccionario de palabras.
+'''
 
+'''
 Ejercicio 22. Implementar una soluci´on para el siguiente problema.
 problema clonar sin comentarios (in nombre archivo entrada: seq⟨Char⟩, in nombre archivo salida: seq⟨Char⟩) {
 requiere: {nombre archivo entrada es el path con el nombre de un archivo existente y accesible}
@@ -375,7 +442,9 @@ es el primer car´acter, se cumple que todos los anteriores son espacios.
 Por ejemplo, si se llama a clonar sin comentarios con un archivo con este contenido: ´
 nombre archivo salida solo contendr´a la ´ultima l´ınea:
 esto no es un comentario # esto tampoco
+'''
 
+'''
 Ejercicio 23. Implementar una soluci´on para el siguiente problema.
 problema invertir lineas (in nombre archivo entrada: seq⟨Char⟩, in nombre archivo salida: seq⟨Char⟩ ) {
 requiere: {nombre archivo entrada es el path de un archivo de texto existente y accesible}
@@ -390,7 +459,9 @@ Y esta es la segunda .
 debe generar:
 Y esta es la segunda .
 Esta es la primera linea .
+'''
 
+'''
 Ejercicio 24. Implementar una soluci´on para el siguiente problema.
 problema agregar frase al final (in nombre archivo: seq⟨Char⟩, in frase: seq⟨Char⟩ ) {
 requiere: {nombre archivo es el path de un archivo existente y accesible}
@@ -398,7 +469,9 @@ requiere: {f rase no es vac´ıa}
 asegura: {f rase se agrega como una nueva l´ınea al final del archivo nombre archivo}
 }
 Este problema no crea una copia del archivo de entrada, sino que lo modifica.
+'''
 
+'''
 Ejercicio 25. Dado un archivo de texto y una frase, implementar una funci´on
 agregar frase al principio(in nombre archivo : str, in frase : str), que agregue la frase al comienzo del archivo original
 (similar al ejercicio anterior, sin hacer una copia del archivo).
@@ -408,6 +481,9 @@ requiere: {f rase no es vac´ıa}
 asegura: {f rase se agrega como primera l´ınea del archivo nombre archivo, desplazando las anteriores hacia abajo}
 }
 Este problema no crea una copia del archivo de entrada, sino que lo modifica.
+'''
+
+'''
 Ejercicio 26. Implementar una soluci´on para el siguiente problema.
 problema listar textos de archivo (in nombre archivo: seq⟨Char⟩ ) : seq⟨seq⟨Char⟩⟩ {
 requiere: {nombre archivo es el path de un archivo existente y accesible}
@@ -422,6 +498,9 @@ Para resolver este ejercicio se puede abrir un archivo en modo binario ‘b’. 
 una secuencia de bytes, que al hacer chr(byte) nos va a devolver un car´acter correspondiente al byte
 le´ıdo.
 Una vez implementada la funci´on, probarla con diferentes archivos binarios (.exe, .zip, .wav, .mp3, etc).
+'''
+
+'''
 Ejercicio 27. Implementar una soluci´on para el siguiente problema.
 problema calcular promedio por estudiante (in nombre archivo notas: seq⟨Char⟩, in nombre archivo promedios: seq⟨Char⟩)
 {
