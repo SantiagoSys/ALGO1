@@ -1,6 +1,7 @@
 from queue import LifoQueue as Pila
 from queue import Queue as Cola
 import random
+separacion: str = "--------------------------------------------------"
 '''
 1. Pilas
 Ejercicio 1. Implementar una soluci´on para el siguiente problema.
@@ -28,6 +29,7 @@ def generar_nros_al_azar(cantidad: int, desde: int, hasta: int) -> Pila[int]:
     return pila
 p = generar_nros_al_azar(3, 1, 10)
 print(p.queue)
+print(separacion)
 
 '''
 Ejercicio 2. Implementar una soluci´on para el siguiente problema.
@@ -39,6 +41,33 @@ No se puede utilizar la funci´on LifoQueue.qsize(). Tener en cuenta que, al usa
 par´ametro de entrada, ya que los elementos se eliminan al accederse. Dado que la especificaci´on lo define como de tipo in, debe
 restaurarse posteriormente.
 '''
+def cantidad_elementos (p: Pila) -> int:
+    p1: Pila = Pila()
+    p2: Pila = Pila()
+    cantidad: int = 0
+    while not p.empty():
+        elem = p.get()
+        p1.put(elem)
+        p2.put(elem)
+        
+    while not p1.empty():
+        p1.get()
+        cantidad += 1
+        
+    while not p2.empty():
+        p.put(p2.get())
+    
+    return cantidad
+
+p: Pila = generar_nros_al_azar(3, 1, 9)
+print(p.queue)
+print(cantidad_elementos(p))
+print(p.queue)
+m: Pila = generar_nros_al_azar(5, 1, 100)
+print(m.queue)
+print(cantidad_elementos(m))
+print(m.queue)
+print(separacion)
 
 '''
 Ejercicio 3. Implementar una soluci´on para el siguiente problema.
@@ -48,7 +77,28 @@ asegura: {res es un elemento de p}
 asegura: {res es mayor o igual a todos los elementos de p}
 }
 '''
+def buscar_el_maximo (p: Pila[int]) -> int:
+    p2: Pila = Pila()
+    max: int = p.get()
+    p2.put(max)
+    
+    while not p.empty():
+        elem: int = p.get()
+        p2.put(elem)
+        if elem > max:
+            max = elem
+    
+    while not p2.empty():
+        p.put(p2.get())
+        
+    return max
 
+p = generar_nros_al_azar(4, 1, 100)
+print(p.queue)
+print(buscar_el_maximo(p))
+print(p.queue)
+print(separacion)
+        
 '''
 Ejercicio 4. Implementar una soluci´on para el siguiente problema.
 problema buscar nota maxima (in p: Pila[seq⟨Char⟩×Z]) : seq⟨Char⟩ ×Z {
@@ -59,6 +109,30 @@ asegura: {No hay ning´un elemento en p cuya segunda componente sea mayor que la
 }
 P´agina 1 de 10 Compilado el 2025/05/27
 '''
+def buscar_nota_maxima (p: Pila[tuple[str, int]]) -> tuple[str, int]:
+    p2: Pila = Pila()
+    max: int = p.get()
+    p2.put(max)
+    
+    while not p.empty():
+        elem: int = p.get()
+        p2.put(elem)
+        if elem[1] > max[1]:
+            max = elem
+    
+    while not p2.empty():
+        p.put(p2.get())
+        
+    return max
+
+p: Pila = Pila()
+p.put(("alex", 7))
+p.put(("ana", 6))
+p.put(("tomas", 9))
+print(p.queue)
+print(buscar_nota_maxima(p))
+print(p.queue)
+print(separacion)
 
 '''
 Ejercicio 5. Implementar una soluci´on, que use pila, para el siguiente problema.
@@ -78,49 +152,80 @@ Entonces las siguientes son f´ormulas aritm´eticas con sus par´entesis bien b
 Y la siguiente es una f´ormula que no tiene los par´entesis bien balanceados:
 1 + ) 2 x 3 ( ( )
 '''
+def esta_bien_balanceada(s: str) -> bool:
+    p: Pila = Pila()
+    i: int = 0
+    
+    while i < len(s):
+        c: str = s[i]
+        if c == '(':
+            p.put('(')
+        elif c == ')':
+            if p.empty():
+                return False
+            p.get()
+        i = i + 1
+        
+    if p.empty():
+        return True
+    else:
+        return False
+
+print(esta_bien_balanceada("1 + (2 * 3)"))
+print(esta_bien_balanceada("(1 + (2 + 3))"))
+print(esta_bien_balanceada("((1 + 2) * (3 + 4))"))
+print(esta_bien_balanceada("1 + 2) * 3("))
+print(separacion)
 
 '''
-Ejercicio 6. La notaci´on polaca inversa, tambi´en conocida como notaci´on postfix, es una forma de escribir expresiones ma-
-tem´aticas en la que los operadores siguen a sus operandos. Por ejemplo, la expresi´on “3 + 4” se escribe como “3 4 +” en notaci´on
-postfix. Para evaluar una expresi´on en notaci´on postfix, se puede usar una pila. Implementar una soluci´on para el siguiente
+Ejercicio 6. La notacion polaca inversa, tambien conocida como notacion postfix, es una forma de escribir expresiones ma-
+tematicas en la que los operadores siguen a sus operandos. Por ejemplo, la expresion “3 + 4” se escribe como “3 4 +” en notacion
+postfix. Para evaluar una expresion en notacion postfix, se puede usar una pila. Implementar una solucion para el siguiente
 problema.
 problema evaluar expresion (in s: seq⟨Char⟩) : R {
-requiere: {s solo contiene n´umeros enteros y los operadores binarios +, -, * y /}
-requiere: {Todos los elementos (operandos y operadores) est´an separados por un ´unico espacio}
-requiere: {La expresi´on es sint´acticamente v´alida: cada operador binario tiene exactamente dos operandos previos
-disponibles en el momento de su evaluaci´on.}
-asegura: {res es el valor obtenido al evaluar la expresi´on postfija representada por s}
+requiere: {s solo contiene numeros enteros y los operadores binarios +, -, * y /}
+requiere: {Todos los elementos (operandos y operadores) estan separados por un unico espacio}
+requiere: {La expresion es sintacticamente valida: cada operador binario tiene exactamente dos operandos previos
+disponibles en el momento de su evaluacion.}
+asegura: {res es el valor obtenido al evaluar la expresion postfija representada por s}
 }
 Para resolver este problema, se recomienda seguir el siguiente algoritmo:
-1. Dividir la expresi´on en tokens (operandos y operadores) utilizando espacios como delimitadores.
+1. Dividir la expresion en tokens (operandos y operadores) utilizando espacios como delimitadores.
 2. Recorre los tokens uno por uno.
-a) Si es un operando, agr´egalo a una pila.
-b) Si es un operador, saca los dos operandos superiores de la pila, apl´ıcale el operador y luego coloca el resultado en la
+a) Si es un operando, agregalo a una pila.
+b) Si es un operador, saca los dos operandos superiores de la pila, aplicale el operador y luego coloca el resultado en la
 pila.
-3. Al final de la evaluaci´on, la pila contendr´a el resultado de la expresi´on.
+3. Al final de la evaluacion, la pila contendra el resultado de la expresion.
 Ejemplo de uso:
 expresion = "3 4 + 5 * 2 -"
 resultado = evaluar_expresion(expresion)
-print(resultado) # Deber´ıa imprimir 33
+print(resultado) # Deberia imprimir 33
 '''
 
 '''
-Ejercicio 7. Implementar una soluci´on para el siguiente problema.
+Ejercicio 7. Implementar una solucion para el siguiente problema.
 problema intercalar (in p1: Pila, in p2: Pila) : Pila {
 requiere: {p1 y p2 tienen la misma cantidad de elementos}
 asegura: {res solo contiene los elementos de p1 y p2}
 asegura: {res contiene todos los elementos de p1 y p2, intercalados y respetando el orden original}
 asegura: {El tope de la pila res es el tope de p2}
-P´agina 2 de 10 Compilado el 2025/05/27
 asegura: {El tama˜no de res es igual al doble del tama˜no de p1}
 }
 Nota: Ojo que hay que recorrer dos veces para que queden en el orden apropiado al final.
 '''
+def intercalar(p1: Pila, p2: Pila) -> Pila:
+    pila_res: Pila = Pila()
 
+    while not p1.empty() and not p2.empty():
+        elemento1 = p1.get()
+        elemento2 = p2.get()
+        pila_res.put(elemento1)
+        pila_res.put(elemento2)
+    return pila_res.queue
 
 '''
 2. Colas
-Ejercicio 8. Implementar una soluci´on para el siguiente problema.
+Ejercicio 8. Implementar una solucion para el siguiente problema.
 problema generar nros al azar (in cantidad: Z, in desde: Z, in hasta: Z) : Cola[Z] {
 requiere: {cantidad ≥ 0}
 requiere: {desde ≤ hasta}
@@ -128,49 +233,49 @@ asegura: {El tama˜no de res es igual a cantidad}
 asegura: {Todos los elementos de res son valores entre desde y hasta (ambos inclusive), seleccionados aleatoriamente
 con probabilidad uniforme}
 }
-Para generar n´umeros en un rango con probabilidad uniforme, pueden usar la funci´on random.randint(< desde >, < hasta >)
+Para generar numeros en un rango con probabilidad uniforme, pueden usar la funci´on random.randint(< desde >, < hasta >)
 que devuelve un n´umero en el rango indicado. Recuerden importar el m´odulo random con import random. Pueden usar la clase
 Queue() que es un ejemplo de una implementaci´on b´asica de una Cola:
 from queue import Queue as Cola # importa Queue y le asigna el alias Cola
 c = Cola () # creo una cola
 c . put (1) # encolo el 1
 elemento = c . get () # desencolo
-c . empty () # devuelve true si y solo si la cola est ´a vac ´ı a
+c . empty () # devuelve true si y solo si la cola está vacía
 '''
 
 '''
-Ejercicio 9. Implementar una soluci´on para el siguiente problema.
+Ejercicio 9. Implementar una solución para el siguiente problema.
 problema cantidad elementos (in c: Cola) : Z {
 requiere: {True}
 asegura: {res es igual a la cantidad de elementos que contiene c}
 }
-No se puede utilizar la funci´on Queue.qsize().
-Comparar el resultado con la implementaci´on utilizando una pila en lugar de una cola.
+No se puede utilizar la función Queue.qsize().
+Comparar el resultado con la implementación utilizando una pila en lugar de una cola.
 '''
 
 '''
-Ejercicio 10. Implementar una soluci´on para el siguiente problema.
+Ejercicio 10. Implementar una solución para el siguiente problema.
 problema buscar el maximo (in c: Cola[Z]) : Z {
-requiere: {c no est´a vac´ıa}
+requiere: {c no está vacía}
 asegura: {res es un elemento de c}
 asegura: {res es mayor o igual a todos los elementos de c}
 }
-Comparar con la versi´on usando pila.
+Comparar con la versión usando pila.
 '''
 
 '''
-Ejercicio 11. Implementar una soluci´on para el siguiente problema.
+Ejercicio 11. Implementar una solución para el siguiente problema.
 problema buscar nota minima (in c: Cola[seq⟨Char × Z⟩]) : (seq⟨Char × Z⟩) {
-requiere: {c no est´a vac´ıa}
+requiere: {c no está vacía}
 requiere: {los elementos de c no tienen valores repetidos en la segunda componente de las tuplas}
 asegura: {res es una tupla de c}
-asegura: {No hay ning´un elemento en c cuya segunda componente sea menor que la de res }
+asegura: {No hay ningún elemento en c cuya segunda componente sea menor que la de res }
 }
-P´agina 3 de 10 Compilado el 2025/05/27
+Página 3 de 10 Compilado el 2025/05/27
 '''
 
 '''
-Ejercicio 12. Implementar una soluci´on para el siguiente problema.
+Ejercicio 12. Implementar una solución para el siguiente problema.
 problema intercalar (in c1: Cola, in c2: Cola) : Cola {
 requiere: {c1 y c2 tienen la misma cantidad de elementos}
 asegura: {res solo contiene los elementos de c1 y c2}
@@ -181,7 +286,7 @@ asegura: {El tama˜no de res es igual al doble del tama˜no de c1}
 '''
 
 '''
-Ejercicio 13. Bingo: un cart´on de bingo contiene 12 n´umeros al azar en el rango [0, 99]. Implementar una soluci´on para cada
+Ejercicio 13. Bingo: un cartón de bingo contiene 12 números al azar en el rango [0, 99]. Implementar una solución para cada
 uno de los siguientes problemas.
 1. problema armar secuencia de bingo () : Cola[Z] {
 requiere: {True}
