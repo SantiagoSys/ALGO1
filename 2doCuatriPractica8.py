@@ -242,6 +242,16 @@ c . put (1) # encolo el 1
 elemento = c . get () # desencolo
 c . empty () # devuelve true si y solo si la cola está vacía
 '''
+def generar_nros_al_azar2 (cantidad: int, desde: int, hasta: int) -> Cola[int]:
+    cola: Cola = Cola()
+    for i in range(cantidad):
+        nros: int = random.randint(desde, hasta)
+        cola.put(nros)
+    return cola
+
+c = generar_nros_al_azar2(3, 1, 10)
+print(c.queue) # Debe devolver "deque([nro, nro, nro])"
+print(separacion)
 
 '''
 Ejercicio 9. Implementar una solución para el siguiente problema.
@@ -252,6 +262,29 @@ asegura: {res es igual a la cantidad de elementos que contiene c}
 No se puede utilizar la función Queue.qsize().
 Comparar el resultado con la implementación utilizando una pila en lugar de una cola.
 '''
+def cantidad_elementos2 (c: Cola) -> int:
+    cantidad: int = 0
+    cola2: Cola = Cola()
+
+    while not c.empty():
+        elem = c.get()
+        cola2.put(elem)
+        cantidad += 1
+
+    while not cola2.empty():
+        c.put(cola2.get())
+
+    return cantidad
+
+c: Cola = generar_nros_al_azar2(3, 1, 10)
+print(c.queue)
+print(cantidad_elementos2(c))
+print(c.queue)
+m: Cola = generar_nros_al_azar2(5, 1, 10)
+print(m.queue)
+print(cantidad_elementos2(m))
+print(m.queue)
+print(separacion)
 
 '''
 Ejercicio 10. Implementar una solución para el siguiente problema.
@@ -262,6 +295,26 @@ asegura: {res es mayor o igual a todos los elementos de c}
 }
 Comparar con la versión usando pila.
 '''
+def buscar_el_maximo2 (c: Cola[int]) -> int: # ???
+    cola2: Cola = Cola()
+    max: int = c.get()
+    cola2.put(max)
+
+    while not c.empty():
+        elem = c.get()
+        if elem > max:
+            max = elem
+        cola2.put(elem)
+    
+    while not cola2.empty():
+        c.put(cola2.get())
+    
+    return max
+
+c: Cola[int] = generar_nros_al_azar2(3, 1, 10)
+print(c.queue)
+print(buscar_el_maximo2(c))
+print(c.queue)
 
 '''
 Ejercicio 11. Implementar una solución para el siguiente problema.
