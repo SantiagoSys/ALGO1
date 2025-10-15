@@ -326,6 +326,30 @@ asegura: {No hay ningún elemento en c cuya segunda componente sea menor que la 
 }
 Página 3 de 10 Compilado el 2025/05/27
 '''
+def buscar_nota_minima(c: Cola[tuple[str, int]]) -> tuple[str, int]:
+    cola2: Cola = Cola()
+    min: tuple = c.get()
+    cola2.put(min)
+
+    while not c.empty():
+        elem = c.get()
+        if elem[1] < min[1]:
+            min = elem
+        cola2.put(elem)
+    
+    while not cola2.empty():
+        c.put(cola2.get())
+    
+    return min
+
+c: Cola = Cola()
+c.put(("alex", 7))
+c.put(("ana", 6))
+c.put(("tomas", 9))
+print(c.queue)
+print(buscar_nota_minima(c))
+print(c.queue)
+print(separacion)
 
 '''
 Ejercicio 12. Implementar una solución para el siguiente problema.
@@ -337,6 +361,29 @@ asegura: {El primer elemento de res es el primer elemento de c1}
 asegura: {El tama˜no de res es igual al doble del tama˜no de c1}
 }
 '''
+def intercalar(c1: Cola, c2: Cola) -> Cola:
+    cola_res: Cola = Cola()
+
+    while not c1.empty() and not c2.empty():
+        elem1 = c1.get()
+        elem2 = c2.get()
+        cola_res.put(elem1)
+        cola_res.put(elem2)
+    
+    return cola_res
+
+c1 = Cola()
+c1.put("hola")
+c1.put("estas")
+c1.put("re")
+print(c1.queue)
+c2 = Cola()
+c2.put("como")
+c2.put("yo")
+c2.put("bien")
+print(c2.queue)
+print(intercalar(c1,c2).queue)
+print(separacion)
 
 '''
 Ejercicio 13. Bingo: un cartón de bingo contiene 12 números al azar en el rango [0, 99]. Implementar una solución para cada
@@ -397,6 +444,22 @@ asegura: {El valor de cada clave de res es el promedio de todas las notas que ob
 de notas)}
 }
 '''
+def calcular_promedio_por_estudiante(notas: list[tuple[str, float]]) -> dict[str, float]:
+    promedios: dict[str, float] = {}
+    acumuladores: dict[str, float] = {}
+    conteos: dict[str, int] = {}
+
+    for nombre, nota in notas:
+        if nombre not in acumuladores:
+            acumuladores[nombre] = 0
+            conteos[nombre] = 0
+        acumuladores[nombre] += nota
+        conteos[nombre] += 1
+
+    for nombre in acumuladores:
+        promedios[nombre] = acumuladores[nombre] / conteos[nombre]
+
+    return promedios
 
 '''
 Ejercicio 17. Se debe desarrollar un navegador web muy simple que debe llevar un registro de los sitios web visitados por los
