@@ -619,19 +619,38 @@ print(separacion)
  }
  Nota: Reutilizar la función ordenados() implementada previamente para listas
 '''
-def columnas_ordenadas (m: list[list[int]]) -> list[bool]:
+def ordenados2(s: list[int]) -> bool:
+    res: bool = True
+    for i in range((len(s)-1)):
+        if s[i] > s[i+1]:
+            res = False
+    return res
+
+print(ordenados2([1,2,3,4]))
+
+def dame_columna(m: list[list[int]], col: int) -> list[int]:
+    res: list[int] = []
+
+    for i in range(len(m)):
+        elemento: int = m[i][col]
+        res.append(elemento)
+    
+    return res
+
+print(dame_columna(m1, 1))
+
+def columnas_ordenadas(m: list[list[int]]) -> list[bool]:
     res: list[bool] = []
 
-    for i in range(len(m[0])):
-        if ordenados(columna(m, i)):
-            res.append(True)
-        else:
-            res.append(False)
-
+    for col in range(len(m[0])):
+        columna: list[int] = dame_columna(m, col) # -> list[int]
+        esta_ordenada: bool = ordenados2(columna) # -> bool
+        res.append(esta_ordenada)
+    
     return res
 
 print(columnas_ordenadas(m1)) # Debe devolver [True, True, True]
-print("\n")
+print(separacion)
 
 '''
  5. problema transponer (in m:seq⟨seq⟨Z⟩⟩) : seq⟨seq⟨Z⟩⟩ {
