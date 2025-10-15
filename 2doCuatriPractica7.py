@@ -1,3 +1,4 @@
+separacion: str = "--------------------------------------------------"
 # EJERCICIO 1
 '''
  1. problema pertenece (in s:seq⟨Z⟩, in e: Z) : Bool {
@@ -31,7 +32,7 @@ def pertenece3(s: list[int], e: int)-> bool:
         longitud -= 1
     return False
 print(pertenece3([1,2,3,4], 1))
-print("\n")
+print(separacion)
 
 '''
  2. problema divide_a_todos (in s:seq⟨Z⟩, in e: Z) : Bool {
@@ -45,7 +46,7 @@ def divide_a_todos (s: list[int], e: int) -> bool:
             return False
     return True
 print(divide_a_todos([4,4,4,4], 2))
-print("\n")
+print(separacion)
 
 '''
  3. problema suma_total (in s:seq⟨Z⟩) : Z {
@@ -60,7 +61,7 @@ def suma_total (s: list[int]) -> int:
         res = res + s[i]
     return res
 print(suma_total([1,2,3,4]))
-print("\n")
+print(separacion)
 
 '''
  4. problema maximo (in s:seq⟨Z⟩) : Z {
@@ -76,7 +77,7 @@ def maximo (s: list[int]) -> int:
             res = s[i]
     return res
 print(maximo([1,2,3,4]))
-print("\n")
+print(separacion)
 
 '''
 5. problema minimo (in s:seq⟨Z⟩) : Z {
@@ -92,7 +93,7 @@ def minimo (s: list[int]) -> int:
             res = s[i]
     return res
 print(minimo([1,2,3,4]))
-print("\n")
+print(separacion)
 
 '''
  6. problema ordenados (in s:seq⟨Z⟩) : Bool {
@@ -108,7 +109,7 @@ def ordenados (s: list[int]) -> bool:
     return res
 print(ordenados([1,2,3,4]))
 print(ordenados([4,3,2,1]))
-print("\n")
+print(separacion)
 
 '''
  7. problema pos_maximo (in s:seq⟨Z⟩) : Z {
@@ -131,7 +132,7 @@ def pos_maximo (s: list[int]) -> int:
     
 print(pos_maximo([1,2,4,56,2]))
 print(pos_maximo([56,2,4,56,2]))
-print("\n")
+print(separacion)
 
 '''
  8. problema pos_minimo (in s:seq⟨Z⟩) : Z {
@@ -153,7 +154,7 @@ def pos_minimo (s: list[int]) -> int:
         return indice
 print(pos_minimo([1,2,4,56,2]))
 print(pos_minimo([56,2,4,56,2]))
-print("\n")
+print(separacion)
 
 '''
  9. Dada una lista de palabras (seq⟨seq⟨Char⟩⟩), devolver verdadero si alguna palabra tiene longitud mayor a 7. Ejemplo:
@@ -172,7 +173,7 @@ def mayor_a_siete (s: list[str]) -> bool:
     return res
 print(mayor_a_siete(["Cubo", "Circulo", "Triangulo"]))
 print(mayor_a_siete(["Cubo", "Circulo"]))
-print("\n")
+print(separacion)
 
 '''
  10. Dado un texto en formato string, devolver verdadero si es palíndromo (se lee igual en ambos sentidos), falso en caso
@@ -189,7 +190,7 @@ def es_palindromo (s: str) -> bool:
     return True
 print(es_palindromo("hannah"))
 print(es_palindromo("gaspar"))
-print("\n")
+print(separacion)
 
 '''
  11. Recorrer una seq⟨Z⟩ y devolver verdadero si hay 3 numeros iguales consecutivos, en cualquier posicion y False en caso
@@ -208,7 +209,7 @@ def iguales_consecutivos (s: list[int]) -> bool:
 print(iguales_consecutivos([1,1,1,4]))
 print(iguales_consecutivos([4,1,1,1]))
 print(iguales_consecutivos([1,2,3,4]))
-print("\n")
+print(separacion)
 
 '''
  12. Recorrer una palabra en formato string y devolver True si esta tiene al menos 3 vocales distintas y False en caso
@@ -234,7 +235,7 @@ def vocales_distintas (s: str) -> bool:
 print(vocales_distintas("Santiago"))
 print(vocales_distintas("Santi"))
 print(vocales_distintas("Amanda"))
-print("\n")
+print(separacion)
 
 '''
 13. Recorrer una seq⟨Z⟩ y devolver la posición donde inicia la secuencia de números ordenada más larga. Si hay dos
@@ -264,7 +265,7 @@ def pos_secuencia_ordenada_mas_larga (s: list[int]) -> int:
 print(pos_secuencia_ordenada_mas_larga([1,2,3,0,1,2,3,4,0,1,2,3]))
 print(pos_secuencia_ordenada_mas_larga([0,1,2,0,10,11,12,13]))
 print(pos_secuencia_ordenada_mas_larga([0,1,2,3,0,1,2,3,0,1,2,3]))
-print("\n")
+print(separacion)
 
 '''
  14. Cantidad de dígitos impares.
@@ -305,7 +306,7 @@ def ceros_en_posiciones (s: list[int]) -> list[int]:
             s[i] = 0
     return s
 print(ceros_en_posiciones([3,3,3,3,3,3]))
-print("\n")
+print(separacion)
 
 '''
  2. problema CerosEnPosicionesPares2 (in s:seq⟨Z⟩) : seq⟨Z⟩ {
@@ -346,7 +347,7 @@ def sin_vocales (s: str) -> str:
             res += s[i]
     return res
 print(sin_vocales("Hola"))
-print("\n")
+print(separacion)
 
 '''
  Nota: Una subsecuencia de una cadena es una nueva secuencia que se crea eliminando algunos elementos de la cadena
@@ -369,7 +370,7 @@ def reemplaza_vocales (s: str) -> str:
             res += s[i]
     return res
 print(reemplaza_vocales("Hola"))
-print("\n")
+print(separacion)
 
 '''
 5. problema da_vuelta
@@ -389,7 +390,7 @@ def da_vuelta (s: str) -> str:
     return palabra_invertida
 
 print(da_vuelta("Hola"))
-print("\n")
+print(separacion)
 
 '''
  6. problema eliminar_repetidos (in s:seq⟨Char⟩) : seq⟨Char⟩ {
@@ -420,7 +421,7 @@ def eliminar_repetidos (s: str) -> str:
     return palabras_sin_repetidos
 
 print(eliminar_repetidos("fafefifofu"))
-print("\n")
+print(separacion)
 
 '''
  Ejercicio 3. Implementar una funcion para conocer el estado de aprobacion de una materia a partir de las notas obtenidas
@@ -463,7 +464,7 @@ print(resultado_materia([7,8,9,10])) # Debe devolver 1
 print(resultado_materia([5,6,7]))    # Debe devolver 2
 print(resultado_materia([1,10,10]))  # Debe devolver 3
 print(resultado_materia([1,2,3]))    # Debe devolver 3
-print("\n")
+print(separacion)
 
 '''
  Ejercicio 4. Dada una lista de tuplas, que representa un historial de movimientos en una cuenta bancaria, devolver el saldo
@@ -486,7 +487,7 @@ def saldo_actual (movimientos: list[(chr, int)]) -> int:
     return saldo
 
 print(saldo_actual([('I',2000), ('R', 20),('R', 1000),('I', 300)]))
-print("\n")
+print(separacion)
 
 
 # EJERCICIO 3
@@ -518,7 +519,7 @@ def pertenece_a_cada_uno_version1 (s: list[list[int]], e: int, res: list[bool]) 
     return res
 
 print(pertenece_a_cada_uno_version1([[4,5,6], [7,8,10], [4,4,4]], 4, [True, False, True]))
-print("\n")
+print(separacion)
 
 '''
  2. problema pertenece
@@ -580,7 +581,7 @@ def filas_ordenadas (m: list[list[int]], res: list[bool]):
 m = [[1,2,3],[4,5,6],[7,8,9],[1,2,3]]
 res = [True, True, True]
 print(filas_ordenadas(m, res))
-print("\n")
+print(separacion)
 
 '''
  3. problema columna (in m:seq⟨seq⟨Z⟩⟩, in c: Z) : seq⟨Z⟩ {
@@ -607,7 +608,7 @@ m1 = [[1,2,3],
 print(columna(m1, 0)) # Debe devolver [1, 4, 7]
 print(columna(m1, 1)) # Debe devolver [2, 5, 8]
 print(columna(m1, 2)) # Debe devolver [3, 6, 9]
-print("\n")
+print(separacion)
 
 '''
  4. problema columnas
@@ -649,7 +650,7 @@ def transponer (m: list[list[int]]) -> list[list[int]]:
     return res
 
 print(transponer(m1))
-print("\n")
+print(separacion)
 
 '''
  6. Ta-Te-Ti Tradicional:
