@@ -700,6 +700,29 @@ Por ejemplo, si se llama a clonar sin comentarios con un archivo con este conten
 nombre archivo salida solo contendr´a la ´ultima l´ınea:
 esto no es un comentario # esto tampoco
 '''
+def es_comentario(linea: str)-> bool:
+    i: int = 0 
+
+    while (i < len(linea) and linea[i] == ' '):   # i < len(linea) es por si hay una linea con todos blancos, se puede indefinir sino
+        i += 1
+
+    return i < len(linea) and linea[i] == '#'  # va a ser true si la linea cumple con todo esto
+
+print(es_comentario("#hla"))
+print(es_comentario("     #ajkfhas"))
+print(es_comentario("hola"))
+
+
+def clonar_sin_comentarios(nombre_archivo_entrada: str, nombre_archivo_salida: str) -> None:
+    archivo = open(nombre_archivo_entrada,"r")
+    archivo_clonado = open(nombre_archivo_salida,"w")   # si hago open(nombre_archivo,"w") y nombre_archivo no existe, se crea uno nuevo
+    lineas: list[str] = archivo.readlines()
+
+    for linea in lineas:
+        if (not es_comentario(linea)):
+            archivo_clonado.write(linea)
+    archivo.close()
+    archivo_clonado.close()
 
 '''
 Ejercicio 23. Implementar una soluci´on para el siguiente problema.
