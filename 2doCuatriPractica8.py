@@ -801,3 +801,16 @@ requiere: {lu corresponde a una LU presente en notas de estudiantes}
 asegura: {res es el promedio de las notas asociadas a lu en notas de estudiantes}
 }
 '''
+def agrupar_por_longitud(nombre_archivo: str) -> dict[int, int]:
+    res: dict[int, int] = {}
+    archivo = open(nombre_archivo, "r")
+    lineas_archivo: list[str] = archivo.readlines()
+    archivo.close()
+
+    for linea in lineas_archivo:
+        longitud = len(linea)
+        if longitud not in res.keys():
+            res[longitud] = 0
+        res[longitud] += 1
+    
+    return res
