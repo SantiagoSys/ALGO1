@@ -461,6 +461,34 @@ def calcular_promedio_por_estudiante(notas: list[tuple[str, float]]) -> dict[str
 
     return promedios
 
+def calcular_promedio_por_estudiante2(notas: list[tuple[str, float]]) -> dict[str, float]:
+    res: dict[str, float] = {}
+    # recorremos la lista buscando estudiante
+    for estudiante, nota in notas:
+        # queremos ver si estudiante es clave en res
+        if estudiante not in res:
+            res[estudiante] = promedio_estudiante(notas, estudiante)
+
+    return res
+
+def promedio_estudiante(notas: list[tuple[str, float]], estudiante: str) -> float:
+    res: float = 0.0
+    cantidad_notas: float = 0.0
+    suma_notas:float = 0.0
+
+    for nombre_estudiante, nota in notas:
+        if nombre_estudiante == estudiante:
+            cantidad_notas += 1
+            suma_notas += nota
+    
+    res = suma_notas / cantidad_notas
+    return res
+
+notas: list[tuple[str, float]] = [("A", 10),("B", 6), ("A", 10),("A", 5)]
+print("El promedio de 'A' es:", promedio_estudiante(notas, "A")) # Debe devolver 8.3333...
+
+print(calcular_promedio_por_estudiante2(notas)) # Debe devolver {'A': 8.333333333333334, 'B': 6.0}
+
 '''
 Ejercicio 17. Se debe desarrollar un navegador web muy simple que debe llevar un registro de los sitios web visitados por los
 usuarios del sistema. El navegador debe permitir al usuario navegar hacia atr´as en la historia de navegaci´on.
@@ -606,7 +634,15 @@ Ejercicio 19. Implementar una soluci´on para cada uno de los siguientes problem
 requiere: {nombre archivo es el path con el nombre de un archivo existente y accesible}
 asegura: {res es igual a la cantidad de l´ıneas que contiene el archivo indicado por nombre archivo}
 }
+'''
+def contar_lineas(nombre_archivo: str) -> int:
+    archivo = open(nombre_archivo, "r", encoding="utf-8")
+    lineas: list[str] = archivo.readlines()
+    archivo.close()
 
+    return len(lineas)
+
+'''
 2. problema existe palabra (in nombre archivo: seq⟨Char⟩, in palabra: seq⟨Char⟩) : Bool {
 requiere: {nombre archivo es el path con el nombre de un archivo existente y accesible}
 requiere: {palabra no es vac´ıa}
