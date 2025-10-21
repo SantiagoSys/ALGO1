@@ -13,6 +13,9 @@ asegura: {res tiene como claves todos los primeros elementos de las tuplas de st
 asegura: {El valor en res de un producto es una tupla de cantidades. Su primer elemento es la menor cantidad de ese
 producto en stock cambios y como segundo valor el mayor.}
 }
+'''
+
+'''
 Ejercicio 2. Veterinaria - Filtrar c´odigos de barra
 El hijo del due˜no de la veterinaria, cuya actividad principal es ver tik toks, cree que los productos cuyos c´odigos de barras
 terminan en n´umeros primos son especialmente auspiciosos y deben ser destacados en la tienda. Luego de convencer a su padre
@@ -28,6 +31,9 @@ asegura: {Los ´ultimos 3 d´ıgitos de cada uno de los elementos de res forman 
 asegura: {Todos los elementos de codigos barra cuyos ´ultimos 3 d´ıgitos forman un n´umero primo est´an en res.}
 asegura: {Todos los elementos de res est´an en codigos barra.}
 }
+'''
+
+'''
 Ejercicio 3. Veterinaria - Flujo de pacientes
 Con el objetivo de organizar el flujo de pacientes, en una veterinaria se anotan los tipos de mascotas que van ingresando
 al local. Se necesita identificar las consultas que involucran solo a perros y gatos. Por eso, se decide desarrollar una funci´on en
@@ -40,6 +46,9 @@ asegura: {res es el ´ındice donde empieza la subsecuencia m´as larga de tipos
 elementos ”perro” o ”gato”.}
 asegura: {Si hay m´as de una subsecuencia de tama˜no m´aximo, res tiene el ´ındice de la primera.}
 }
+'''
+
+'''
 Ejercicio 4. Veterinaria - Tabla turnos
 Las personas responsables de los turnos est´an anotadas en una matriz donde las columnas representan los d´ıas, en orden de
 lunes a domingo, y cada fila un rango de una hora. Hay cuatro filas para los turnos de la ma˜nana (9, 10, 11 y 12 hs) y otras
@@ -62,6 +71,9 @@ grilla horaria son iguales entre s´ı.}
 asegura: {El segundo valor de la tupla en res [i], con i:Z, 0 res| es igual a True los ´ultimos 4 valores de la columna i de
 grilla horaria son iguales entre s´ı.}
 }
+'''
+
+'''
 Ejercicio 5. Sala de Escape - Promedio de salidas
 Un grupo de amigos apasionados por las salas de escape, esas aventuras inmersivas donde tienen 60 minutos para salir de
 una habitaci´on resolviendo enigmas, llevan un registro meticuloso de todas las salas de escape que hay en Capital. Este registro
@@ -84,6 +96,9 @@ asegura: {El segundo elemento de la tupla de res para un integrante, si la canti
 0: es el promedio de salas con tiempo mayor estricto a 0 y menor estricto a 61 que figuran en sus valores de registro; sino
 es 0.0.}
 }
+'''
+
+'''
 Ejercicio 6. Sala de Escape - Tiempo m´as r´apido
 Dada una lista con los tiempos (en minutos) registrados para cada sala de escape de Capital, escribir una funci´on en Python
 que devuelva la posici´on (´ındice) en la cual se encuentra el tiempo m´as r´apido, excluyendo las salas en las que no haya salido (0
@@ -94,6 +109,9 @@ requiere: {Todos los tiempos en tiempos salas est´an entre 0 y 61 inclusive.}
 asegura: {res es la posici´on de la sala en tiempos salas de la que m´as r´apido se sali´o (en caso que haya m´as de una,
 devolver la primera, osea la de menor ´ındice).}
 }
+'''
+
+'''
 2
 Ejercicio 7. Sala de Escape - Racha m´as larga
 Dada una lista con los tiempos (en minutos) registrados para cada sala de escape a la que fue una persona, escribir una
@@ -113,6 +131,9 @@ posici´on de res y la segunda posici´on de res.}
 asegura: {Si hay dos o m´as subsecuencias de salidas exitosas de mayor longitud en tiempos, res debe contener la primera
 de ellas.}
 }
+'''
+
+'''
 Ejercicio 8. Sala de Escape - Escape en solitario
 Dada una matriz donde las columnas representan a cada amigo y las filas representan las salas de escape, y los valores son los
 tiempos (en minutos) registrados para cada sala (0 si no fueron, 61 si no salieron, y un n´umero entre 1 y 60 si salieron), escribir
@@ -128,6 +149,9 @@ asegura: {Por cada sala en amigos por salas cuyo primer, segundo y cuarto valor 
 asegura: {Para todo i pertenciente a res se cumple que el primer, segundo y cuarto valor de amigos por salas[i] es 0, y
 el tercer valor es distinto de 0.}
 }
+'''
+
+'''
 Ejercicio 9. Juego de la Gallina
 El juego del gallina es una competici´on en la que dos participantes conducen un veh´ıculo en direcci´on al del contrario; si
 alguno se desv´ıa de la trayectoria de choque pierde y es humillado por comportarse como un ”gallina”. Se hizo un torneo para
@@ -146,6 +170,9 @@ asegura: {Las claves de res y las claves de estrategias son iguales.}
 asegura: {Para cada jugador p perteneciente a claves(estrategias), res[p] es igual a la cantidad de puntos que obtuvo al
 finalizar el torneo, dado que jug´o una vez contra cada otro jugador.}
 }
+'''
+
+'''
 3
 Ejercicio 10. Cola en el Banco
 En el banco ExactaBank los clientes hacen cola para ser atendidos por un representante. Los clientes son representados por
@@ -166,6 +193,9 @@ filaClientes entonces el nombre de c1 aparece antes que el nombre de c2 en res.}
 asegura: {Para todo cliente c1 y cliente c2 de tipo ”vip” pertenecientes a filaClientes si c1 aparece antes que c2 en
 filaClientes entonces el nombre de c1 aparece antes que el nombre de c2 en res.}
 }
+'''
+
+'''
 Ejercicio 11. Sufijos que son pal´ındromos
 Decimos que una palabra es pal´ındromo si se lee igual de izquierda a derecha que de derecha a izquierda. Se nos pide programar
 en python la siguiente funci´on:
@@ -175,6 +205,9 @@ asegura: {res es igual a la cantidad de pal´ındromos que hay en el conjunto de
 }
 Nota: un sufijo es una subsecuencia de texto que va desde una posici´on cualquiera hasta el al final de la palabra. Ej: ”Diego”,
 el conjunto de sufijos es: ”Diego”, ”iego”,”ego”,”go”, ”o”. Para este ejercicio no consideraremos a ”” como sufijo de ning´un texto.
+'''
+
+'''
 Ejercicio 12. Ta-Te-Ti-Facilito
 Ana y Beto juegan al Ta-Te-Ti-Facilito. El juego es en un tablero cuadrado de lado entre 5 y 10. Cada jugador va poniendo su
 ficha en cada turno. Juegan intercaladamente y comienza Ana. Ana pone siempre una ”X” en su turno y Beto pone una ”O” en el
@@ -196,6 +229,9 @@ forma vertical(misma columna).}
 asegura: {res = 0 ⇔ no hay tres ”O” ni hay tres ”X” consecutivas en forma vertical.}
 asegura: {res = 3 ⇔ hay tres ”X” y hay tres ”O” consecutivas en forma vertical (evidenciando que beto hizo trampa).}
 }
+'''
+
+'''
 Ejercicio 13. Hospital - Atenci´on por Guardia
 Desde el Hospital Fernandez nos pidieron solucionar una serie de problemas relacionados con la informaci´on que maneja sobre
 los pacientes y el personal de salud. En primer lugar debemos resolver en qu´e orden se deben atender los pacientes que llegan a
@@ -218,6 +254,9 @@ c1 aparece antes que c2 en res.}
 asegura: {Para todo c1 y c2 de tipo ”postergable” pertenecientes a postergables si c1 aparece antes que c2 en postergables
 entonces c1 aparece antes que c2 en res.}
 }
+'''
+
+'''
 Ejercicio 14. Hospital - Alarma epidemiol´ogica
 Necesitamos detectar la aparici´on de posibles epidemias. Para esto contamos con un lista de enfermedades infecciosas y los
 registros de atenci´on por guardia dados por una lista expedientes. Cada expediente es una tupla con ID paciente y enfermedad
@@ -232,6 +271,9 @@ enfermedad sobre el total de registros es mayor o igual al umbral, entonces res[
 asegura: {Para cada enfermedad perteneciente a infecciosas, si el porcentaje de pacientes que se atendieron por esa
 enfermedad sobre el total de registros es menor que el umbral, entonces enfermedad no aparece en res.}
 }
+'''
+
+'''
 Ejercicio 15. Hospital - Empleado del mes
 Dado un diccionario con la cantidad de horas trabajadas por empleado, en donde la clave es el ID del empleado y el valor es
 una lista de las horas trabajadas por d´ıa, queremos saber quienes trabajaron m´as para darles un premio. Se deber´a buscar la o
@@ -244,6 +286,9 @@ los otros IDs.}
 asegura: {Para todo ID de claves de horas, si la suma de sus valores es el m´aximo de la suma de elementos de horas de
 los otros IDs, entonces ID pertenece a res.}
 }
+'''
+
+'''
 Ejercicio 16. Hospital - Nivel de ocupaci´on
 Queremos saber qu´e porcentaje de ocupaci´on de camas hay en el hospital. El hospital se representa por una matriz en donde
 las filas son los pisos, y las columnas son las camas. Los valores de la matriz son Booleanos que indican si la cama est´a ocupada
