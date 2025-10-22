@@ -325,3 +325,34 @@ camas_por_piso = [[True, False, True],
                   [True, True, True]]
 
 print(nivel_de_ocupacion(camas_por_piso))
+
+def cambiar_matriz(A: list[list[int]]) -> None:
+    nro_columnas: int = len(A[0])
+    nro_filas: int = (len(A))
+    for fila in range(0, nro_filas):
+        for col in range(nro_columnas):
+            A[fila][col], A[fila][nro_columnas-1] = A[fila][nro_columnas-1], A[fila][col]
+
+    return
+A = [[1,2,3,4,5], [6,7,8,9,10]]
+cambiar_matriz(A)
+print(A)
+
+# def cambiar_matriz2(A: list[list[int]]) -> None:
+#     res: list[list[int]] = []
+#     for fila in A:
+#         res.append(reordenar(fila))
+#     A = res
+
+# def reordenar(fila: list[int]) -> list[int]:
+#     res: list[int] = []
+#     res.append(fila[len(fila)-1])
+#     i = 0
+#     while i < len(fila)-1:
+#         res.append(fila[i])
+#         i += 1
+#     return res
+
+# A = [[1,2,3], [4,5,6]]
+# cambiar_matriz2(A)
+# print(A)
