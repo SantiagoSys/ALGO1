@@ -305,3 +305,23 @@ asegura: {Para todo 0 ≤ i < |res| se cumple que res[i] es igual a la cantidad 
 total de camas del piso i).}
 }
 '''
+def nivel_de_ocupacion(camas_por_piso: list[list[bool]]) -> list[float]:
+    res: list[float] = []
+
+    for piso in camas_por_piso:
+        camas_ocupadas: int = 0
+        cant_camas: int = 0
+        for cama in piso:
+            if cama:
+                camas_ocupadas += 1
+            cant_camas += 1
+
+        proporcion: float = camas_ocupadas / cant_camas
+        res.append(proporcion)
+    return res
+
+camas_por_piso = [[True, False, True],
+                  [False, False, True],
+                  [True, True, True]]
+
+print(nivel_de_ocupacion(camas_por_piso))
