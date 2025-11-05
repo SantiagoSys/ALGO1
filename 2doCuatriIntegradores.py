@@ -114,6 +114,34 @@ def subsecuencia_mas_larga(tipos_pacientes_atendidos: list[str]) -> int:
 verificar = subsecuencia_mas_larga(["loro", "perro", "gato", "gato", "conejo", "perro", "gato", "gato", "perro", "conejo"])
 print(verificar)
 
+def todos_consecutivos(v: list[int]) -> bool:
+    for i in range(len(v) - 1):
+        if v[i + 1] - v[i] != 1:
+            return False
+    return True
+
+def subsecuencia_mas_larga2(v: list[int]) -> tuple[int, int]:
+    max_len = 1
+    max_start = 0
+    current_len = 1
+    current_start = 0
+
+    for i in range(1,len(v)):
+        if v[i] - v[i - 1] == 1:
+            current_len += 1
+        else:
+            if current_len > max_len:
+                max_len = current_len
+                max_start = current_start
+            current_len = 1
+            current_start = i
+    
+    if current_len > max_len:
+        max_len = current_len
+        max_start = current_start
+    
+    return (max_len, max_start)
+
 
 '''
 Ejercicio 4. Veterinaria - Tabla turnos
