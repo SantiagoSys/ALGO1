@@ -673,3 +673,77 @@ print(nivel_de_ocupacion(camas_por_piso))
 # A = [[1,2,3], [4,5,6]]
 # cambiar_matriz2(A)
 # print(A)
+
+from queue import Queue as Cola
+
+# Ejercicio 1
+def cantidad_parejas_que_suman(s: list[int], n: int) -> int:
+    cant_parejas: int = 0
+
+    for i in range(0, len(s)):
+        numero_actual: int = s[i]
+        indice_mayor: int = i + 1
+
+        for indice_posterior in range(indice_mayor, len(s)):
+            numero_posterior: int = s[indice_posterior]
+            suma_numeros: int = numero_actual + numero_posterior
+
+            if suma_numeros == n:
+                cant_parejas += 1
+    
+    return cant_parejas
+
+print(cantidad_parejas_que_suman([1,2,3,4,5],5))
+
+
+# Ejercicio 2 
+def pasar_por_autoservicio(clientes: Cola[tuple[str, str, int]]) -> str:
+    cola2: Cola = Cola()
+    res: str = ""
+
+    while not clientes.empty():
+        elem = clientes.get()
+
+        if elem[1] != "efectivo" and elem[2] <= 15:
+            res = res + elem[0]
+
+        else:
+            cola2.put(elem)
+    
+    while not cola2.empty():
+        clientes.put(cola2.get())
+
+    return res
+
+c: Cola = Cola()
+c.put(("Ana","efectivo",13))
+c.put(("Juan","qr",22))
+c.put(("Bruno","tarjeta",14))
+print(c.queue)
+print(pasar_por_autoservicio(c))
+print(c.queue)
+
+
+# Ejercicio 3 
+def intercambiar_e_invertir_columnas(A: list[list[int]], col1: int, col2: int) -> None:
+    res: list[list[int]] = []
+    
+    return
+
+
+# Ejercicio 4
+def mantuvieron_residencia(censo1: dict[str, str], censo2: dict[str, str]) -> dict[str, int]:
+    res: dict[str, int] = {}
+
+    for residente in censo1.keys():
+        if censo1[residente] == censo2[residente]:
+            localidad: tuple[str,str] = censo1[residente]
+            if localidad not in res.keys():
+                res[localidad] = 1
+            else:
+                res[localidad] += 1
+    
+    return res
+
+print({'Juan': 'Merlo', 'Ana': 'Merlo'}, {'Juan': 'Castelar', 'Ana': 'Merlo'})
+print(mantuvieron_residencia({'Juan': 'Merlo', 'Ana': 'Merlo'}, {'Juan': 'Castelar', 'Ana': 'Merlo'}))
