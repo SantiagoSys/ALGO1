@@ -6,7 +6,7 @@ soluci´on en Python que les permita analizar las fluctuaciones del stock. Se pi
 de tuplas donde cada tupla contiene el nombre de un producto y su stock en ese momento. La funci´on debe procesar esta lista
 y devolver un diccionario que tenga como clave el nombre del producto y como valor una tupla con su m´ınimo y m´aximo stock
 hist´orico registrado.
-problema stock productos (in stock cambios : seq⟨str × Z⟩) : seq⟨Z⟩ {
+problema stock productos (in stock cambios : seq⟨str × Z⟩) : dict⟨Z⟩ {
 requiere: {Todos los elementos de stock cambios est´an formados por un str no vac´ıo y un entero ≥ 0.}
 asegura: {res tiene como claves solo los primeros elementos de las tuplas de stock cambios (o sea, un producto).}
 asegura: {res tiene como claves todos los primeros elementos de las tuplas de stock cambios.}
@@ -14,6 +14,26 @@ asegura: {El valor en res de un producto es una tupla de cantidades. Su primer e
 producto en stock cambios y como segundo valor el mayor.}
 }
 '''
+def stock_productos(stock_cambios: list[tuple[str, int]]) -> dict[str, tuple[int,int]]:
+    res: dict[str, tuple[int,int]] = {}
+
+    for producto, stock in stock_cambios:
+        if producto not in res:
+            res[producto] = (stock, stock)
+        else:
+            minimo: int = res[producto][0]
+            maximo: int = res[producto][1]
+            if stock < minimo:
+                minimo = stock
+            if stock > maximo:
+                maximo = stock
+            res[producto] = (minimo, maximo)
+    
+    return res
+
+verificar = stock_productos([('mayonesa',1), ('atun',2), ('pan',3), ('fideos',4), ('mayonesa',2)])
+print(verificar)
+
 
 '''
 Ejercicio 2. Veterinaria - Filtrar c´odigos de barra
@@ -32,6 +52,24 @@ asegura: {Todos los elementos de codigos barra cuyos ´ultimos 3 d´ıgitos form
 asegura: {Todos los elementos de res est´an en codigos barra.}
 }
 '''
+def filtrar_codigos_primos(codigos_barra: list[int]) -> list[int]:
+    res: list[int] = []
+
+    for numero in codigos_barra:
+        if ultimos_tres_digitos(numero) % 2 == 0:
+            continue
+        else:
+            res.append(numero)
+    
+    return res
+
+def ultimos_tres_digitos(numero: int) -> int:
+    res: int = numero % 1000
+    return res
+
+verificar = filtrar_codigos_primos([101, 102, 103])
+print(verificar)
+
 
 '''
 Ejercicio 3. Veterinaria - Flujo de pacientes
@@ -47,13 +85,41 @@ elementos ”perro” o ”gato”.}
 asegura: {Si hay m´as de una subsecuencia de tama˜no m´aximo, res tiene el ´ındice de la primera.}
 }
 '''
+def subsecuencia_mas_larga(tipos_pacientes_atendidos: list[str]) -> int:
+    indice_inicio_max: int = 0
+    longitud_max: int = 0
+    indice_actual: int = 0
+    longitud_actual: int = 0
+
+    for i in range(len(tipos_pacientes_atendidos)):
+        tipo: str = tipos_pacientes_atendidos[i]
+
+        if tipo == "perro" or tipo == "gato":
+            if longitud_actual == 0:
+                indice_actual = i
+            longitud_actual += 1
+
+        else:
+            if longitud_actual > longitud_max:
+                longitud_max = longitud_actual
+                indice_inicio_max = indice_actual
+            longitud_actual = 0
+        
+    if longitud_actual > longitud_max:
+        longitud_max = longitud_actual
+        indice_inicio_max = indice_actual
+
+    return indice_inicio_max
+
+verificar = subsecuencia_mas_larga(["loro", "perro", "gato", "gato", "conejo", "perro", "gato", "gato", "perro", "conejo"])
+print(verificar)
+
 
 '''
 Ejercicio 4. Veterinaria - Tabla turnos
 Las personas responsables de los turnos est´an anotadas en una matriz donde las columnas representan los d´ıas, en orden de
 lunes a domingo, y cada fila un rango de una hora. Hay cuatro filas para los turnos de la ma˜nana (9, 10, 11 y 12 hs) y otras
 cuatro para la tarde (14, 15, 16 y 17).
-1
 Para hacer m´as eficiente el trabajo del personal de una veterinaria, se necesita analizar si quienes quedan de responsables,
 est´an asignadas de manera continuada en los turnos de cada d´ıa.
 Para ello se pide desarrollar una funci´on en Python que, dada la matriz de turnos, devuelva una lista de tuplas de bool, una
@@ -72,6 +138,30 @@ asegura: {El segundo valor de la tupla en res [i], con i:Z, 0 res| es igual a Tr
 grilla horaria son iguales entre s´ı.}
 }
 '''
+def un_responsable_por_turno(grilla_horaria: list[list[str]]) -> list[tuple[bool, bool]]:
+    res: list[tuple[bool, bool]] = []
+    cantidad_dias: int = len(grilla_horaria[0])
+
+    for d in range(cantidad_dias):  # recorrer columnas (días)
+        # --- Verificar mañana ---
+        persona_mañana: str = grilla_horaria[0][d]
+        todas_iguales_mañana: bool = True
+        for fila in range(1, 4):
+            if grilla_horaria[fila][d] != persona_mañana:
+                todas_iguales_mañana = False
+
+        # --- Verificar tarde ---
+        persona_tarde: str = grilla_horaria[4][d]
+        todas_iguales_tarde: bool = True
+        for fila in range(5, 8):
+            if grilla_horaria[fila][d] != persona_tarde:
+                todas_iguales_tarde = False
+
+        # --- Agregar el resultado del día ---
+        res.append((todas_iguales_mañana, todas_iguales_tarde))
+
+    return res
+
 
 '''
 Ejercicio 5. Sala de Escape - Promedio de salidas
@@ -97,6 +187,28 @@ asegura: {El segundo elemento de la tupla de res para un integrante, si la canti
 es 0.0.}
 }
 '''
+def promedio_de_salidas(registro: dict[str, list[int]]) -> dict[str, tuple[int, float]]:
+    res: dict[str, tuple[int, float]] = {}
+
+    for amigo in registro.keys():
+        tiempos: list[int] = registro[amigo]
+        cantidad_salidas: int = 0
+        suma_tiempos: int = 0
+
+        for tiempo in tiempos:
+            if tiempo > 0 and tiempo < 61:
+                cantidad_salidas += 1
+                suma_tiempos += tiempo
+            
+        if cantidad_salidas > 0:
+            promedio: float = suma_tiempos / cantidad_salidas
+        else:
+            promedio = 0.0
+        
+        res[amigo] = (cantidad_salidas, promedio)
+    
+    return res
+
 
 '''
 Ejercicio 6. Sala de Escape - Tiempo m´as r´apido
@@ -110,9 +222,21 @@ asegura: {res es la posici´on de la sala en tiempos salas de la que m´as r´ap
 devolver la primera, osea la de menor ´ındice).}
 }
 '''
+def tiempo_mas_rapido(tiempos_salas: list[int]) -> int:
+    tiempo_min: int = 61
+    indice_min: int = -1
+
+    for i in range(len(tiempos_salas)):
+        tiempo: int = tiempos_salas[i]
+        if tiempo > 0 and tiempo < 61:
+            if tiempo < tiempo_min:
+                tiempo_min = tiempo
+                indice_min = i
+    
+    return indice_min
+
 
 '''
-2
 Ejercicio 7. Sala de Escape - Racha m´as larga
 Dada una lista con los tiempos (en minutos) registrados para cada sala de escape a la que fue una persona, escribir una
 funci´on en Python que devuelva una tupla con el ´ındice de inicio y el ´ındice de fin de la subsecuencia m´as larga de salidas
@@ -132,6 +256,37 @@ asegura: {Si hay dos o m´as subsecuencias de salidas exitosas de mayor longitud
 de ellas.}
 }
 '''
+def racha_mas_larga(tiempos: list[int]) -> tuple[int, int]:
+    indice_inicio_max: int = 0
+    longitud_max: int = 0
+    indice_actual: int = 0
+    longitud_actual: int = 0
+    indice_fin_max: int = -1
+
+    for i in range(len(tiempos)):
+        tiempo: int = tiempos[i]
+        if tiempo > 0 and tiempo < 61:
+            if longitud_actual == 0:
+                indice_actual = i
+            longitud_actual += 1
+        
+        else:
+            if longitud_actual > longitud_max:
+                longitud_max = longitud_actual
+                indice_inicio_max = indice_actual
+                indice_fin_max = i - 1
+            longitud_actual = 0
+        
+    if longitud_actual > longitud_max:
+        longitud_max = longitud_actual
+        indice_inicio_max = indice_actual
+        indice_fin_max = len(tiempo) - 1
+
+    return (indice_inicio_max, indice_fin_max)
+
+verificar = racha_mas_larga([0, 45, 30, 61, 25, 15, 10, 61, 5])
+print(verificar)
+
 
 '''
 Ejercicio 8. Sala de Escape - Escape en solitario
@@ -150,6 +305,19 @@ asegura: {Para todo i pertenciente a res se cumple que el primer, segundo y cuar
 el tercer valor es distinto de 0.}
 }
 '''
+def escape_en_solitario(amigos_por_salas: list[list[int]]) -> list[int]:
+    res: list[int] = []
+    cantidad_salas: int = len(amigos_por_salas)
+
+    for i in range(cantidad_salas):
+        sala: list[int] = amigos_por_salas[i]
+
+        # Solo agregamos el índice si cumple el patrón pedido:
+        if sala[0] == 0 and sala[1] == 0 and sala[2] != 0 and sala[3] == 0:
+            res.append(i)
+
+    return res
+            
 
 '''
 Ejercicio 9. Juego de la Gallina
@@ -171,9 +339,59 @@ asegura: {Para cada jugador p perteneciente a claves(estrategias), res[p] es igu
 finalizar el torneo, dado que jug´o una vez contra cada otro jugador.}
 }
 '''
+def torneo_de_gallinas(estrategias: dict[str, str]) -> dict[str, int]:
+    """
+    Devuelve un diccionario con los puntajes finales de cada jugador
+    después de jugar todos contra todos en el torneo de la gallina.
+
+    PRE:
+        - estrategias tiene al menos 2 jugadores.
+        - Las claves son strings no vacíos.
+        - Los valores son "me desvÍo siempre" o "me la banco y no me desvÍo".
+    POST:
+        - Devuelve un diccionario con las mismas claves.
+        - Los valores indican el puntaje total de cada jugador.
+    """
+
+    puntajes: dict[str, int] = {}
+    jugadores: list[str] = list(estrategias.keys())
+
+    # Inicializa los puntajes en 0
+    for jugador in jugadores:
+        puntajes[jugador] = 0
+
+    # Recorremos todas las combinaciones posibles sin repetir
+    for i in range(0, len(jugadores)):
+        for j in range(i + 1, len(jugadores)):
+            jugador1: str = jugadores[i]
+            jugador2: str = jugadores[j]
+            estrategia1: str = estrategias[jugador1]
+            estrategia2: str = estrategias[jugador2]
+
+            # Caso 1: ambos NO se desvían → choque
+            if estrategia1 == "me la banco y no me desvÍo" and estrategia2 == "me la banco y no me desvÍo":
+                puntajes[jugador1] = puntajes[jugador1] - 5
+                puntajes[jugador2] = puntajes[jugador2] - 5
+
+            # Caso 2: ambos se desvían → doble gallina
+            elif estrategia1 == "me desvÍo siempre" and estrategia2 == "me desvÍo siempre":
+                puntajes[jugador1] = puntajes[jugador1] - 10
+                puntajes[jugador2] = puntajes[jugador2] - 10
+
+            # Caso 3: jugador1 no se desvía y jugador2 sí → gana jugador1
+            elif estrategia1 == "me la banco y no me desvÍo" and estrategia2 == "me desvÍo siempre":
+                puntajes[jugador1] = puntajes[jugador1] + 10
+                puntajes[jugador2] = puntajes[jugador2] - 15
+
+            # Caso 4: jugador1 se desvía y jugador2 no → gana jugador2
+            elif estrategia1 == "me desvÍo siempre" and estrategia2 == "me la banco y no me desvÍo":
+                puntajes[jugador1] = puntajes[jugador1] - 15
+                puntajes[jugador2] = puntajes[jugador2] + 10
+
+    return puntajes
+
 
 '''
-3
 Ejercicio 10. Cola en el Banco
 En el banco ExactaBank los clientes hacen cola para ser atendidos por un representante. Los clientes son representados por
 las tuplas (nombre, tipo afiliado) donde la primera componente es el nombre y el tipo afiliado puede ser ”com´un” o ”vip”.
@@ -206,6 +424,32 @@ asegura: {res es igual a la cantidad de pal´ındromos que hay en el conjunto de
 Nota: un sufijo es una subsecuencia de texto que va desde una posici´on cualquiera hasta el al final de la palabra. Ej: ”Diego”,
 el conjunto de sufijos es: ”Diego”, ”iego”,”ego”,”go”, ”o”. Para este ejercicio no consideraremos a ”” como sufijo de ning´un texto.
 '''
+def es_palindromo(s: str) -> bool:
+    for i in range(len(s)):
+        if s[i] != s[len(s) - 1 - i]:
+            return False
+    return True
+
+def cuantos_sufijos_son_palindromos(texto: str) -> int:
+    res: int = 0
+    longitud: int = len(texto)
+
+    for i in range(longitud):
+        sufijo: str = ""
+        # construyo el sufijo desde i hasta el final
+        for j in range(i, longitud):
+            sufijo += texto[j]
+
+        if es_palindromo(sufijo):
+            res += 1
+
+    return res
+
+texto: str = "DIEGO"
+print(cuantos_sufijos_son_palindromos(texto))
+texto: str = "HANNAH"
+print(cuantos_sufijos_son_palindromos(texto))
+
 
 '''
 Ejercicio 12. Ta-Te-Ti-Facilito
@@ -230,6 +474,45 @@ asegura: {res = 0 ⇔ no hay tres ”O” ni hay tres ”X” consecutivas en fo
 asegura: {res = 3 ⇔ hay tres ”X” y hay tres ”O” consecutivas en forma vertical (evidenciando que beto hizo trampa).}
 }
 '''
+# def columna(m: list[list[int]], indice_columna: int) -> list[int]:
+#     res: list[int] = []
+
+#     for i in range(len(m)):
+#         res.append(m[i][indice_columna - 1])
+
+#     return res
+def hay_tres_consecutivas_en_columna(tablero: list[list[str]], col: int, ficha: str) -> bool:
+    consecutivas: int = 0
+    for fila in range(len(tablero)):
+        if tablero[fila[col]] == ficha:
+            consecutivas += 1
+            if consecutivas == 3:
+                return True
+        else:
+            consecutivas = 0
+    
+    return False
+
+def hay_tres_consecutivas(tablero: list[list[str]], ficha: str) -> bool:
+    for col in range(len(tablero)):
+        if hay_tres_consecutivas_en_columna(tablero, col, ficha):
+            return True
+    return False
+
+
+def quien_gano_el_tateti_facilito(tablero: list[list[str]]) -> int:
+    hay3X: bool = hay_tres_consecutivas(tablero, "X")
+    hay3O: bool = hay_tres_consecutivas(tablero, "O")
+
+    if hay3X and not hay3O:
+        return 1  # ganó Ana
+    elif hay3O and not hay3X:
+        return 2  # ganó Beto
+    elif not hay3X and not hay3O:
+        return 0  # empate o nadie ganó
+    else:
+        return 3  # ambos ganaron → trampa
+
 
 '''
 Ejercicio 13. Hospital - Atenci´on por Guardia
@@ -255,7 +538,6 @@ asegura: {Para todo c1 y c2 de tipo ”postergable” pertenecientes a postergab
 entonces c1 aparece antes que c2 en res.}
 }
 '''
-
 '''
 Ejercicio 14. Hospital - Alarma epidemiol´ogica
 Necesitamos detectar la aparici´on de posibles epidemias. Para esto contamos con un lista de enfermedades infecciosas y los
@@ -272,6 +554,40 @@ asegura: {Para cada enfermedad perteneciente a infecciosas, si el porcentaje de 
 enfermedad sobre el total de registros es menor que el umbral, entonces enfermedad no aparece en res.}
 }
 '''
+def alarma_epidemiologica(registros: list[tuple[int, str]], infecciosas: list[str], umbral: float) -> dict[str, float]:
+    res: dict[str, float] = {}
+    total_registros: int = len(registros)
+
+    if total_registros == 0:
+        return res
+
+    conteo: dict[str, int] = {}
+    for expediente in registros:
+        if expediente[1] in conteo.keys():
+            conteo[expediente[1]] += 1
+        else:
+            conteo[expediente[1]] = 1
+    
+    for enfermedad in infecciosas:
+        if enfermedad in conteo.keys():
+            proporcion: float = conteo[enfermedad] / total_registros
+            if proporcion >= umbral:
+                res[enfermedad] = proporcion
+    
+    return res
+
+registros = [
+    (1, "gripe"),
+    (2, "covid"),
+    (3, "gripe"),
+    (4, "dengue"),
+    (5, "covid")
+]
+infecciosas = ["gripe", "covid", "dengue"]
+umbral = 0.3
+
+print(alarma_epidemiologica(registros, infecciosas, umbral))
+
 
 '''
 Ejercicio 15. Hospital - Empleado del mes
@@ -296,7 +612,6 @@ o no. Si el valor es verdadero (True) indica que la cama est´a ocupada.
 Se nos pide programar en Python una funci´on que devuelve una secuencia de reales, indicando la proporci´on de camas
 ocupadas en cada piso.
 problema nivel de ocupacion (in camas por piso:seq⟨seq⟨Bool⟩⟩) : seq⟨R⟩ {
-5
 requiere: {Todos los pisos tienen la misma cantidad de camas.}
 requiere: {Hay por lo menos 1 piso en el hospital.}
 requiere: {Hay por lo menos una cama por piso.}
@@ -309,49 +624,23 @@ def nivel_de_ocupacion(camas_por_piso: list[list[bool]]) -> list[float]:
     res: list[float] = []
 
     for piso in camas_por_piso:
+        total_camas: int = len(piso)
         camas_ocupadas: int = 0
-        cant_camas: int = 0
-        for cama in piso:
-            if cama:
-                camas_ocupadas += 1
-            cant_camas += 1
 
-        proporcion: float = camas_ocupadas / cant_camas
-        res.append(proporcion)
+        for cama in piso:
+            if cama == True:
+                camas_ocupadas += 1
+
+        porcentaje: float = camas_ocupadas / total_camas
+        res.append(porcentaje)
+    
     return res
 
-camas_por_piso = [[True, False, True],
-                  [False, False, True],
-                  [True, True, True]]
+camas_por_piso: list[list[bool]] = [[False, True, False],
+                                    [True, False, True],
+                                    [True, True, True]]
 
 print(nivel_de_ocupacion(camas_por_piso))
-
-def cambiar_matriz(A: list[list[int]]) -> None:
-    nro_columnas: int = len(A[0])
-    nro_filas: int = (len(A))
-    for fila in range(0, nro_filas):
-        for col in range(nro_columnas):
-            A[fila][col], A[fila][nro_columnas-1] = A[fila][nro_columnas-1], A[fila][col]
-
-    return
-A = [[1,2,3,4,5], [6,7,8,9,10]]
-cambiar_matriz(A)
-print(A)
-
-# def cambiar_matriz2(A: list[list[int]]) -> None:
-#     res: list[list[int]] = []
-#     for fila in A:
-#         res.append(reordenar(fila))
-#     A = res
-
-# def reordenar(fila: list[int]) -> list[int]:
-#     res: list[int] = []
-#     res.append(fila[len(fila)-1])
-#     i = 0
-#     while i < len(fila)-1:
-#         res.append(fila[i])
-#         i += 1
-#     return res
 
 # A = [[1,2,3], [4,5,6]]
 # cambiar_matriz2(A)
