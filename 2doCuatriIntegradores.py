@@ -1,3 +1,6 @@
+from queue import LifoQueue as Pila
+from queue import Queue as Cola
+import random
 '''
 Ejercicio 1. Veterinaria - Stock
 En la veterinaria ”Exactas’s pets”, al finalizar cada d´ıa, el personal registra en papeles los nombres y la cantidad actual de
@@ -6,7 +9,7 @@ soluci´on en Python que les permita analizar las fluctuaciones del stock. Se pi
 de tuplas donde cada tupla contiene el nombre de un producto y su stock en ese momento. La funci´on debe procesar esta lista
 y devolver un diccionario que tenga como clave el nombre del producto y como valor una tupla con su m´ınimo y m´aximo stock
 hist´orico registrado.
-problema stock productos (in stock cambios : seq⟨str × Z⟩) : dict⟨Z⟩ {
+problema stock productos (in stock cambios : seq⟨str × Z⟩) : dict⟨ZxZ⟩ {
 requiere: {Todos los elementos de stock cambios est´an formados por un str no vac´ıo y un entero ≥ 0.}
 asegura: {res tiene como claves solo los primeros elementos de las tuplas de stock cambios (o sea, un producto).}
 asegura: {res tiene como claves todos los primeros elementos de las tuplas de stock cambios.}
@@ -14,25 +17,27 @@ asegura: {El valor en res de un producto es una tupla de cantidades. Su primer e
 producto en stock cambios y como segundo valor el mayor.}
 }
 '''
-def stock_productos(stock_cambios: list[tuple[str, int]]) -> dict[str, tuple[int,int]]:
-    res: dict[str, tuple[int,int]] = {}
+def stock_productos(stock_cambios: list[tuple[str, int]]) -> dict[tuple[int, int]]:
+    res: dict[tuple[int, int]] = {}
 
     for producto, stock in stock_cambios:
         if producto not in res:
             res[producto] = (stock, stock)
+        
         else:
             minimo: int = res[producto][0]
             maximo: int = res[producto][1]
+
             if stock < minimo:
                 minimo = stock
-            if stock > maximo:
+            elif stock > maximo:
                 maximo = stock
             res[producto] = (minimo, maximo)
-    
+        
     return res
 
-verificar = stock_productos([('mayonesa',1), ('atun',2), ('pan',3), ('fideos',4), ('mayonesa',2)])
-print(verificar)
+stock_cambios: list[tuple[str, int]] = [("A",2), ("B",4), ("C",3), ("A",5)]
+print(stock_productos(stock_cambios))
 
 
 '''
@@ -52,19 +57,21 @@ asegura: {Todos los elementos de codigos barra cuyos ´ultimos 3 d´ıgitos form
 asegura: {Todos los elementos de res est´an en codigos barra.}
 }
 '''
+def es_primo(numero: int) -> bool:
+    if numero % 2 == 0:
+        return False
+    return True
+
+def ultimos_tres_digitos(numero: int) -> int:
+    return numero % 1000
+
 def filtrar_codigos_primos(codigos_barra: list[int]) -> list[int]:
     res: list[int] = []
 
     for numero in codigos_barra:
-        if ultimos_tres_digitos(numero) % 2 == 0:
-            continue
-        else:
+        if es_primo(ultimos_tres_digitos(numero)):
             res.append(numero)
     
-    return res
-
-def ultimos_tres_digitos(numero: int) -> int:
-    res: int = numero % 1000
     return res
 
 verificar = filtrar_codigos_primos([101, 102, 103])
@@ -86,25 +93,24 @@ asegura: {Si hay m´as de una subsecuencia de tama˜no m´aximo, res tiene el ´
 }
 '''
 def subsecuencia_mas_larga(tipos_pacientes_atendidos: list[str]) -> int:
-    indice_inicio_max: int = 0
-    longitud_max: int = 0
     indice_actual: int = 0
     longitud_actual: int = 0
+    indice_inicio_max: int = 0
+    longitud_max: int = 0
 
     for i in range(len(tipos_pacientes_atendidos)):
         tipo: str = tipos_pacientes_atendidos[i]
-
         if tipo == "perro" or tipo == "gato":
             if longitud_actual == 0:
                 indice_actual = i
             longitud_actual += 1
-
+        
         else:
             if longitud_actual > longitud_max:
                 longitud_max = longitud_actual
                 indice_inicio_max = indice_actual
             longitud_actual = 0
-        
+
     if longitud_actual > longitud_max:
         longitud_max = longitud_actual
         indice_inicio_max = indice_actual
@@ -113,34 +119,6 @@ def subsecuencia_mas_larga(tipos_pacientes_atendidos: list[str]) -> int:
 
 verificar = subsecuencia_mas_larga(["loro", "perro", "gato", "gato", "conejo", "perro", "gato", "gato", "perro", "conejo"])
 print(verificar)
-
-def todos_consecutivos(v: list[int]) -> bool:
-    for i in range(len(v) - 1):
-        if v[i + 1] - v[i] != 1:
-            return False
-    return True
-
-def subsecuencia_mas_larga2(v: list[int]) -> tuple[int, int]:
-    max_len = 1
-    max_start = 0
-    current_len = 1
-    current_start = 0
-
-    for i in range(1,len(v)):
-        if v[i] - v[i - 1] == 1:
-            current_len += 1
-        else:
-            if current_len > max_len:
-                max_len = current_len
-                max_start = current_start
-            current_len = 1
-            current_start = i
-    
-    if current_len > max_len:
-        max_len = current_len
-        max_start = current_start
-    
-    return (max_len, max_start)
 
 
 '''
@@ -168,27 +146,34 @@ grilla horaria son iguales entre s´ı.}
 '''
 def un_responsable_por_turno(grilla_horaria: list[list[str]]) -> list[tuple[bool, bool]]:
     res: list[tuple[bool, bool]] = []
-    cantidad_dias: int = len(grilla_horaria[0])
+    cantidad_columnas: int = len(grilla_horaria[0])
 
-    for d in range(cantidad_dias):  # recorrer columnas (días)
-        # --- Verificar mañana ---
-        persona_mañana: str = grilla_horaria[0][d]
+    for j in range(0, cantidad_columnas):
+        persona_mañana: str = grilla_horaria[0][j]
         todas_iguales_mañana: bool = True
         for fila in range(1, 4):
-            if grilla_horaria[fila][d] != persona_mañana:
+            if persona_mañana != grilla_horaria[fila][j]:
                 todas_iguales_mañana = False
-
-        # --- Verificar tarde ---
-        persona_tarde: str = grilla_horaria[4][d]
+        
+        persona_tarde: str = grilla_horaria[4][j]
         todas_iguales_tarde: bool = True
         for fila in range(5, 8):
-            if grilla_horaria[fila][d] != persona_tarde:
+            if persona_tarde != grilla_horaria[fila][j]:
                 todas_iguales_tarde = False
 
-        # --- Agregar el resultado del día ---
         res.append((todas_iguales_mañana, todas_iguales_tarde))
 
     return res
+grilla_horaria: list[list[str]] = [["ANA", "ANA", "ANA"],
+                                   ["ANA", "ANA", "ANA"],
+                                   ["ANA", "PEDRO", "ANA"],
+                                   ["ANA", "ANA", "ANA"],
+                                   ["JUAN", "JUAN", "JUAN"],
+                                   ["JUAN", "JUAN", "JUAN"],
+                                   ["JUAN", "JUAN", "PEDRO"],
+                                   ["JUAN", "JUAN", "JUAN"]]
+
+print(un_responsable_por_turno(grilla_horaria))
 
 
 '''
@@ -220,22 +205,32 @@ def promedio_de_salidas(registro: dict[str, list[int]]) -> dict[str, tuple[int, 
 
     for amigo in registro.keys():
         tiempos: list[int] = registro[amigo]
-        cantidad_salidas: int = 0
+        cant_salidas: int = 0
         suma_tiempos: int = 0
 
         for tiempo in tiempos:
             if tiempo > 0 and tiempo < 61:
-                cantidad_salidas += 1
+                cant_salidas += 1
                 suma_tiempos += tiempo
-            
-        if cantidad_salidas > 0:
-            promedio: float = suma_tiempos / cantidad_salidas
+
+        if cant_salidas > 0:
+            promedio: float = suma_tiempos / cant_salidas
         else:
-            promedio = 0.0
+            res[amigo] = 0.0               
         
-        res[amigo] = (cantidad_salidas, promedio)
+        res[amigo] = (cant_salidas, promedio)
     
     return res
+
+registro = {
+    "Ana": [30, 45, 0, 70],        # 2 salidas válidas: promedio 37.5
+    "Beto": [15, 20, 25, 10, 5],   # 5 salidas válidas: promedio 15.0
+    "Carla": [0, 0, 0],            # Ninguna salida válida
+    "Damián": [59, 60, 61, 58]     # 3 válidas (61 no cuenta): promedio 59.0
+}
+
+resultado = promedio_de_salidas(registro)
+print("Resultado:", resultado)
 
 
 '''
@@ -251,17 +246,20 @@ devolver la primera, osea la de menor ´ındice).}
 }
 '''
 def tiempo_mas_rapido(tiempos_salas: list[int]) -> int:
-    tiempo_min: int = 61
-    indice_min: int = -1
+    res: int = 0
+    tiempo_minimo: int = 61
 
     for i in range(len(tiempos_salas)):
         tiempo: int = tiempos_salas[i]
         if tiempo > 0 and tiempo < 61:
-            if tiempo < tiempo_min:
-                tiempo_min = tiempo
-                indice_min = i
-    
-    return indice_min
+            if tiempo < tiempo_minimo:
+                tiempo_minimo = tiempo
+                res = i
+
+    return res
+
+tiempos_salas: list[int] = [4,83,23,53,22,1]
+print(tiempo_mas_rapido(tiempos_salas))
 
 
 '''
@@ -335,17 +333,25 @@ el tercer valor es distinto de 0.}
 '''
 def escape_en_solitario(amigos_por_salas: list[list[int]]) -> list[int]:
     res: list[int] = []
-    cantidad_salas: int = len(amigos_por_salas)
+    salas: int = len(amigos_por_salas)
 
-    for i in range(cantidad_salas):
+    for i in range(salas):
         sala: list[int] = amigos_por_salas[i]
-
-        # Solo agregamos el índice si cumple el patrón pedido:
         if sala[0] == 0 and sala[1] == 0 and sala[2] != 0 and sala[3] == 0:
             res.append(i)
-
+    
     return res
-            
+amigos_por_salas: list[list[int]] = [
+    [0, 0, 5, 0],   # ✅ Solo el amigo 3 participó → índice 0
+    [1, 0, 0, 0],   # No cumple (amigo 1 fue)
+    [0, 0, 0, 0],   # No cumple (nadie fue)
+    [0, 0, 12, 0],  # ✅ Solo el amigo 3 participó → índice 3
+    [0, 4, 9, 0],   # No cumple (también fue el amigo 2)
+]
+
+resultado = escape_en_solitario(amigos_por_salas)
+print("Salas en las que el amigo 3 fue solo:", resultado)
+
 
 '''
 Ejercicio 9. Juego de la Gallina
@@ -418,6 +424,18 @@ def torneo_de_gallinas(estrategias: dict[str, str]) -> dict[str, int]:
 
     return puntajes
 
+estrategias: dict[str, str] = {
+    "Ana": "me la banco y no me desvÍo",
+    "Beto": "me desvÍo siempre",
+    "Carla": "me la banco y no me desvÍo",
+    "Diego": "me desvÍo siempre"
+}
+
+resultado = torneo_de_gallinas(estrategias)
+print("🏁 Resultados del torneo de gallinas 🐔")
+for jugador in resultado.keys():
+    print(f"{jugador}: {resultado[jugador]} puntos")
+
 
 '''
 Ejercicio 10. Cola en el Banco
@@ -440,6 +458,32 @@ asegura: {Para todo cliente c1 y cliente c2 de tipo ”vip” pertenecientes a f
 filaClientes entonces el nombre de c1 aparece antes que el nombre de c2 en res.}
 }
 '''
+def reordenar_cola_priorizando_vips(filaClientes: Cola[tuple[str, str]]) -> Cola[str]:
+    clientes1: Cola[str] = Cola()
+    clientes2: Cola[str] = Cola()
+
+    while not filaClientes.empty():
+        descripcion = filaClientes.get()
+        if descripcion[1] == "vip":
+            clientes1.put(descripcion[0])
+        else:
+            clientes2.put(descripcion[0])
+    
+    while not clientes2.empty():
+        clientes1.put(clientes2.get())
+    
+    return clientes1
+
+c1 = Cola()
+c1.put(("Martha", "vip"))
+c1.put(("Tomas", "comun"))
+c1.put(("Lorena", "vip"))
+c1.put(("Andrea", "comun"))
+
+print("Cola original:", list(c1.queue))
+resultado = reordenar_cola_priorizando_vips(c1)
+print("Cola reordenada:", list(resultado.queue))
+
 
 '''
 Ejercicio 11. Sufijos que son pal´ındromos
@@ -452,31 +496,31 @@ asegura: {res es igual a la cantidad de pal´ındromos que hay en el conjunto de
 Nota: un sufijo es una subsecuencia de texto que va desde una posici´on cualquiera hasta el al final de la palabra. Ej: ”Diego”,
 el conjunto de sufijos es: ”Diego”, ”iego”,”ego”,”go”, ”o”. Para este ejercicio no consideraremos a ”” como sufijo de ning´un texto.
 '''
-def es_palindromo(s: str) -> bool:
-    for i in range(len(s)):
-        if s[i] != s[len(s) - 1 - i]:
-            return False
-    return True
-
 def cuantos_sufijos_son_palindromos(texto: str) -> int:
-    res: int = 0
+    cantidad_palindromos: int = 0
     longitud: int = len(texto)
 
-    for i in range(longitud):
-        sufijo: str = ""
-        # construyo el sufijo desde i hasta el final
-        for j in range(i, longitud):
-            sufijo += texto[j]
+    for inicio in range(0, longitud):
+        es_palindromo: bool = True
+        fin: int = longitud - 1
+        i: int = inicio
 
-        if es_palindromo(sufijo):
-            res += 1
+        # Recorremos desde ambos extremos hacia el centro
+        while i < fin:
+            if texto[i] != texto[fin]:
+                es_palindromo = False
+            i += 1
+            fin -= 1
 
-    return res
+        if es_palindromo:
+            cantidad_palindromos += 1
 
-texto: str = "DIEGO"
-print(cuantos_sufijos_son_palindromos(texto))
-texto: str = "HANNAH"
-print(cuantos_sufijos_son_palindromos(texto))
+    return cantidad_palindromos
+
+print(cuantos_sufijos_son_palindromos("ana"))
+print(cuantos_sufijos_son_palindromos("oso"))
+print(cuantos_sufijos_son_palindromos("Diego"))
+print(cuantos_sufijos_son_palindromos("abba"))
 
 
 '''
@@ -502,51 +546,67 @@ asegura: {res = 0 ⇔ no hay tres ”O” ni hay tres ”X” consecutivas en fo
 asegura: {res = 3 ⇔ hay tres ”X” y hay tres ”O” consecutivas en forma vertical (evidenciando que beto hizo trampa).}
 }
 '''
-# def columna(m: list[list[int]], indice_columna: int) -> list[int]:
-#     res: list[int] = []
-
-#     for i in range(len(m)):
-#         res.append(m[i][indice_columna - 1])
-
-#     return res
-def hay_tres_consecutivas_en_columna(tablero: list[list[str]], col: int, ficha: str) -> bool:
-    consecutivas: int = 0
-    for fila in range(len(tablero)):
-        if tablero[fila[col]] == ficha:
-            consecutivas += 1
-            if consecutivas == 3:
-                return True
-        else:
-            consecutivas = 0
-    
-    return False
-
-def hay_tres_consecutivas(tablero: list[list[str]], ficha: str) -> bool:
-    for col in range(len(tablero)):
-        if hay_tres_consecutivas_en_columna(tablero, col, ficha):
-            return True
-    return False
-
-
 def quien_gano_el_tateti_facilito(tablero: list[list[str]]) -> int:
-    hay3X: bool = hay_tres_consecutivas(tablero, "X")
-    hay3O: bool = hay_tres_consecutivas(tablero, "O")
+    """
+    Determina el resultado del Ta-Te-Ti-Facilito.
 
-    if hay3X and not hay3O:
-        return 1  # ganó Ana
-    elif hay3O and not hay3X:
-        return 2  # ganó Beto
-    elif not hay3X and not hay3O:
-        return 0  # empate o nadie ganó
+    Returns:
+        1 -> ganó Ana (X)
+        2 -> ganó Beto (O)
+        0 -> empate (nadie tiene 3 seguidas verticales)
+        3 -> ambos tienen 3 seguidas verticales (trampa de Beto)
+    """
+    n: int = len(tablero)
+    hay_ganadora_X: bool = False
+    hay_ganador_O: bool = False
+
+    # Recorre cada columna
+    for col in range(n):
+        contador_X: int = 0
+        contador_O: int = 0
+
+        for fila in range(n):
+            celda: str = tablero[fila][col]
+
+            if celda == "X":
+                contador_X += 1
+                contador_O = 0
+            elif celda == "O":
+                contador_O += 1
+                contador_X = 0
+            else:
+                contador_X = 0
+                contador_O = 0
+
+            if contador_X == 3:
+                hay_ganadora_X = True
+            if contador_O == 3:
+                hay_ganador_O = True
+
+    # Resultado según el estado
+    if hay_ganadora_X and hay_ganador_O:
+        return 3
+    elif hay_ganadora_X:
+        return 1
+    elif hay_ganador_O:
+        return 2
     else:
-        return 3  # ambos ganaron → trampa
+        return 0
+
+tablero = [
+    ["X", " ", "O", "O", " "],
+    ["X", " ", "O", " ", " "],
+    ["X", " ", " ", " ", " "],
+    [" ", "O", " ", " ", " "],
+    [" ", " ", " ", " ", " "]
+]
+print(quien_gano_el_tateti_facilito(tablero))
 
 
 '''
 Ejercicio 13. Hospital - Atenci´on por Guardia
 Desde el Hospital Fernandez nos pidieron solucionar una serie de problemas relacionados con la informaci´on que maneja sobre
 los pacientes y el personal de salud. En primer lugar debemos resolver en qu´e orden se deben atender los pacientes que llegan a
-4
 la guardia. En enfermer´ıa, hay una primera instancia que clasifica en dos colas a los pacientes: una urgente y otra postergable
 (esto se llama hacer triage). A partir de dichas colas que contienen la identificaci´on del paciente, se pide devolver una nueva cola
 seg´un la siguiente especificaci´on.
@@ -566,6 +626,50 @@ asegura: {Para todo c1 y c2 de tipo ”postergable” pertenecientes a postergab
 entonces c1 aparece antes que c2 en res.}
 }
 '''
+def orden_de_atencion(urgentes: Cola[int], postergables: Cola[int]) -> Cola[int]:
+    """
+    Devuelve una nueva cola con el orden de atención:
+    - Comienza con un paciente urgente.
+    - Alterna entre urgente y postergable.
+    - Mantiene el orden relativo de cada cola.
+    """
+    res: Cola[int] = Cola()
+
+    # Mientras haya pacientes en ambas colas
+    while not urgentes.empty() and not postergables.empty():
+        res.put(urgentes.get())
+        res.put(postergables.get())
+
+    # En teoría, ambas colas deberían quedar vacías al mismo tiempo (según la especificación)
+    # pero si alguna tuviera más elementos, los agregamos al final
+    while not urgentes.empty():
+        res.put(urgentes.get())
+    while not postergables.empty():
+        res.put(postergables.get())
+
+    return res
+
+# Creo las colas
+urgentes = Cola()
+postergables = Cola()
+
+# Pacientes urgentes
+urgentes.put(101)
+urgentes.put(102)
+urgentes.put(103)
+
+# Pacientes postergables
+postergables.put(201)
+postergables.put(202)
+postergables.put(203)
+
+# Obtengo la cola final
+resultado = orden_de_atencion(urgentes, postergables)
+
+# Muestro el orden final
+print(list(resultado.queue))
+
+
 '''
 Ejercicio 14. Hospital - Alarma epidemiol´ogica
 Necesitamos detectar la aparici´on de posibles epidemias. Para esto contamos con un lista de enfermedades infecciosas y los
@@ -652,14 +756,14 @@ def nivel_de_ocupacion(camas_por_piso: list[list[bool]]) -> list[float]:
     res: list[float] = []
 
     for piso in camas_por_piso:
-        total_camas: int = len(piso)
-        camas_ocupadas: int = 0
+        cant_camas: int = len(piso)
+        cant_camas_ocupadas: int = 0
 
         for cama in piso:
             if cama == True:
-                camas_ocupadas += 1
-
-        porcentaje: float = camas_ocupadas / total_camas
+                cant_camas_ocupadas += 1
+            porcentaje: float = cant_camas_ocupadas / cant_camas
+        
         res.append(porcentaje)
     
     return res
@@ -670,13 +774,7 @@ camas_por_piso: list[list[bool]] = [[False, True, False],
 
 print(nivel_de_ocupacion(camas_por_piso))
 
-# A = [[1,2,3], [4,5,6]]
-# cambiar_matriz2(A)
-# print(A)
 
-from queue import Queue as Cola
-
-# Ejercicio 1
 def cantidad_parejas_que_suman(s: list[int], n: int) -> int:
     cant_parejas: int = 0
 
