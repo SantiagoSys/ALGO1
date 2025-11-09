@@ -796,20 +796,22 @@ print(cantidad_parejas_que_suman([1,2,3,4,5],5))
 
 # Ejercicio 2 
 def pasar_por_autoservicio(clientes: Cola[tuple[str, str, int]]) -> str:
-    cola2: Cola = Cola()
+    cola_aux: Cola = Cola()
     res: str = ""
+    encontrado: bool = False
 
     while not clientes.empty():
         elem = clientes.get()
 
-        if elem[1] != "efectivo" and elem[2] <= 15:
-            res = res + elem[0]
-
+        if not encontrado and elem[1] != "efectivo" and elem[2] <= 15:
+            res = elem[0]
+            encontrado = True  # 🚩 Ya encontré el primero, no sigo buscando
         else:
-            cola2.put(elem)
-    
-    while not cola2.empty():
-        clientes.put(cola2.get())
+            cola_aux.put(elem)
+
+    # Restaurar la cola original (sin el cliente atendido)
+    while not cola_aux.empty():
+        clientes.put(cola_aux.get())
 
     return res
 
