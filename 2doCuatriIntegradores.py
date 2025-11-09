@@ -847,3 +847,122 @@ def mantuvieron_residencia(censo1: dict[str, str], censo2: dict[str, str]) -> di
 
 print({'Juan': 'Merlo', 'Ana': 'Merlo'}, {'Juan': 'Castelar', 'Ana': 'Merlo'})
 print(mantuvieron_residencia({'Juan': 'Merlo', 'Ana': 'Merlo'}, {'Juan': 'Castelar', 'Ana': 'Merlo'}))
+
+
+def suma_total(s: list[int]) -> int:
+    res: int = 0
+
+    for i in range(len(s)):
+        res += s[i]
+    
+    return res
+
+print(suma_total([1,2,3,4]))
+
+def maximo(s: list[int]) -> int:
+    maximo: int = s[0]
+
+    for i in range(1, len(s)):
+        if s[i] >= maximo:
+            maximo = s[i]
+    
+    return maximo
+
+print(maximo([1,2,3,4]))
+
+def minimo(s: list[int]) -> int:
+    minimo: int = s[0]
+
+    for i in range(1, len(s)):
+        if s[i] <= minimo:
+            minimo = s[i]
+    
+    return minimo
+
+print(minimo([1,2,3,4]))
+
+def maximo_y_minimo(s: list[int]) -> tuple[int, int]:
+    return (minimo(s), maximo(s))
+
+print(maximo_y_minimo([1,2,3,4]))
+
+def eliminar_fila_que_mas_suma(A: list[list[int]]) -> list[list[int]]:
+    res: list[list[int]] = []
+    maximo: int = 0
+
+    for i in range(len(A)):
+        if suma_total(A[i]) >= maximo:
+            maximo = suma_total(A[i])
+        
+    for fila in A:
+        if suma_total(fila) != maximo:
+            res.append(fila)
+    
+    return res
+
+matriz = [[1,2,3],
+          [7,8,9],
+          [4,5,6]]
+
+print(eliminar_fila_que_mas_suma(matriz))
+
+
+def ordenar_lista(lista: list[int]) -> list[int]:
+    res: list[int] = lista.copy()
+    n: int = len(res)
+
+    for i in range(n - 1):
+        pos_min: int = i
+        for j in range(i + 1, n):
+            if res[j] < res[pos_min]:
+                pos_min = j
+        # intercambio de elementos
+        aux: int = res[i]
+        res[i] = res[pos_min]
+        res[pos_min] = aux
+
+        # otra forma de hacerlo
+
+    return res
+
+
+def ordenar_lista2(s: list[int]) -> list[int]:
+    res = s.copy()
+    for i in range(len(res)):
+        for j in range(len(res) - i - 1):
+            if res[j] > res[j + 1]:
+                res[j], res[j + 1] = res[j + 1], res[j]  # swap elegante
+    return res
+
+
+def matriz_ordenada(m: list[list[int]]) -> list[list[int]]:
+    # Paso 1: aplanar la matriz
+    elementos: list[int] = []
+    for fila in m:
+        for elem in fila:
+            elementos.append(elem)
+
+    # Paso 2: ordenar con nuestra función
+    elementos_ordenados: list[int] = ordenar_lista2(elementos)
+
+    # Paso 3: reconstruir la matriz ordenada
+    n: int = len(m)
+    res: list[list[int]] = []
+    k: int = 0
+
+    for i in range(n):
+        fila_nueva: list[int] = []
+        for j in range(n):
+            fila_nueva.append(elementos_ordenados[k])
+            k += 1
+        res.append(fila_nueva)
+
+    return res
+
+matriz = [
+    [9, 3, 4],
+    [2, 1, 5],
+    [8, 7, 6]
+]
+
+print(matriz_ordenada(matriz))
