@@ -617,3 +617,99 @@ problema menosVotado (formulas: seq⟨String x String⟩, votos:seq< Z >) : Stri
 A continuación te dejamos una estructura básica para resolver los ejercicios.
  Este código no pretende resolver ningun caso de los ejercicios planteados, es sólo una plantilla.
 -}
+
+-- EJERCICIOS DE 2DO CUATRI 2025 --
+{-
+Ejercicio 1 (2 puntos)
+problema esCuadradoDePrimo (n: Z) : Bool {
+  requiere: {n > 1}
+  asegura: {res = true ⇔ Existe un número primo p tal que p² = n}
+}
+
+Ejemplo 1: esCuadradoDePrimo 9 debe devolver True
+Ejemplo 2: esCuadradoDePrimo 16 debe devolver False
+-}
+esCuadradoDePrimo :: Int -> Bool
+esCuadradoDePrimo n = existePrimoDesde n 2
+
+existePrimoDesde :: Int -> Int -> Bool
+existePrimoDesde n p  | p*p == n = esPrimo p
+                      | p*p > n = False
+                      | otherwise = existePrimoDesde n (p+1)
+
+esPrimo :: Int -> Bool
+esPrimo n = esPrimoAux n (n-1)
+
+esPrimoAux :: Int -> Int -> Bool
+esPrimoAux n i  | i == 1 = True
+                | mod n i == 0 = False
+                | otherwise = esPrimoAux n (i-1)
+
+
+{-
+Ejercicio 2 (2 puntos)
+problema posParesFormanEscalera (lista: seq⟨Z⟩) : Bool {
+  requiere: {True}
+  asegura: {res = true ⇔ Para todo número par i tal que 0 ≤ i < |lista|-2, se cumple que lista[i+2] = lista[i] + 1}
+}
+
+Ejemplo 1: posParesFormanEscalera [1,5,2,8,3] debe devolver True
+Ejemplo 2: posParesFormanEscalera [1,2,3,4] debe devolver False
+-}
+posParesFormanEscalera :: [Integer] -> Bool
+posParesFormanEscalera [] = True
+posParesFormanEscalera [_] = True
+posParesFormanEscalera[_,_] = True
+posParesFormanEscalera (x:_:z:xs) = z == x + 1 && posParesFormanEscalera (z:xs)
+
+
+{-
+Ejercicio 3 (2 puntos)
+Recibimos de una importante productora el listado de películas estrenadas, agrupadas por año (es decir, en una tupla de la forma (Año, [Título])). Debemos pasarle a una famosa plataforma de streaming el listado de tuplas película/año de estreno disponibles.
+
+problema listadoDePeliculas (pelisPorAnio: seq⟨Z x seq⟨String⟩⟩) : seq⟨⟨String x Z⟩⟩ {
+  requiere: {Las primeras componentes de pelisPorAnio son todas distintas}
+  requiere: {En cada tupla de pelisPorAnio, en la segunda componente no hay repetidos}
+  asegura: {res es una lista de tuplas donde cada tupla contiene un título de película y su año de estreno, de acuerdo a los datos ingresados en pelisPorAnio}
+  asegura: {Para cada película en pelisPorAnio, existe una tupla correspondiente en res con el título y año correctos y viceversa}
+  asegura: {res no contiene elementos repetidos}
+}
+
+Ejemplo 1: listadoDePeliculas [(2019,["Parasite","Joker"]),(2021,["Dune"])] puede devolver [("Parasite",2019),("Joker",2019),("Dune",2021)]
+Ejemplo 2: listadoDePeliculas [(2019,["Avengers: Endgame"])] debe devolver [("Avengers: Endgame",2019)]
+-}
+listadoDePeliculas :: [(Integer, [String])] -> [(String, Integer)]
+listadoDePeliculas [] = []
+listadoDePeliculas ((año, pelis):xs) = peliDelAño año pelis ++ listadoDePeliculas xs
+
+peliDelAño :: Integer -> [String] -> [(String, Integer)]
+peliDelAño _ [] = []
+peliDelAño año (peli:xs) = (peli, año) : peliDelAño año xs
+
+
+{-
+Ejercicio 4 (2 puntos)
+Dada una matriz de números enteros, eliminar la primera fila que tenga la suma máxima.
+
+problema eliminarFilaQueMasSuma (mat: seq⟨seq⟨Z⟩⟩) : seq⟨seq⟨Z⟩⟩ {
+  requiere: {|mat| > 0}
+  requiere: {Todos los elementos de mat tienen la misma longitud (y dicha longitud es estrictamente mayor a 0)}
+  asegura: {|res| = |mat| - 1}
+  asegura: {res contiene todas las filas de mat (con los mismos elementos y en el mismo orden) excepto la primera que tiene suma máxima}
+}
+
+Ejemplo 1: eliminarFilaQueMasSuma [[1,2],[3,4],[1,1],[6,1]] debe devolver [[1,2],[1,1],[6,1]]
+-}
+eliminarFilaQueMasSuma :: [[Integer]] -> [[Integer]]
+eliminarFilaQueMasSuma [fila] = []
+eliminarFilaQueMasSuma (fila:filas) | sumaLista fila >= maximaSuma filas = filas
+                                    | otherwise = fila : eliminarFilaQueMasSuma   filas
+
+maximaSuma :: [[Integer]] -> Integer
+maximaSuma [fila] = sumaLista fila
+maximaSuma (fila:filas) | sumaLista fila > maximaSuma filas = sumaLista fila
+                        | otherwise = maximaSuma filas
+
+sumaLista :: [Integer] -> Integer
+sumaLista [] = 0
+sumaLista (x:xs) = x + sumaLista xs
