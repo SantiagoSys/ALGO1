@@ -715,6 +715,102 @@ sumaLista [] = 0
 sumaLista (x:xs) = x + sumaLista xs
 
 
+-- EJERCICIOS PROPIOS --
+iesimaColumna :: Integer -> [[Integer]] -> [Integer]
+iesimaColumna _ [] = []
+iesimaColumna n (fila:filas) = obtener n fila : iesimaColumna n filas
+
+-- obtiene el elemento n-ésimo (contando desde 0)
+obtener :: Integer -> [Integer] -> Integer
+obtener 0 (x:_)  = x
+obtener n (_:xs) = obtener (n-1) xs
+
+iesimaFila :: Integer -> [[Integer]] -> [Integer]
+iesimaFila 0 (fila:_) = fila
+iesimaFila n (_:filas) = iesimaFila (n-1) filas
+
+t2 :: [[Integer]]
+t2 =  [[10,20,30],
+       [40,50,60],
+       [70,80,90]]
+
+
+invertirLista :: [a] -> [a]
+invertirLista []     = []
+invertirLista (x:xs) = invertirLista xs ++ [x]
+
+
+maximo :: (Ord a) => [a] -> a -- con "Eq a" obtengo si dos valores son iguales (==) o distintos (/=)
+maximo [x] = x                -- con "Ord a" obtengo si dos valores son > y/o <
+maximo (x:xs) | x > maximo xs = x -- ambos solamente se usan si el parametro es indefinido (Ej: "a" o "t")
+              | otherwise = maximo xs
+
+
+
+nEsimoPrimo :: Integer -> Integer
+nEsimoPrimo n = buscarPrimoDesde 2 n
+
+
+buscarPrimoDesde :: Integer -> Integer -> Integer
+buscarPrimoDesde candidato k  | esPrimo candidato && k == 1 = candidato
+                              | esPrimo candidato = buscarPrimoDesde (candidato + 1) (k - 1)
+                              | otherwise = buscarPrimoDesde (candidato + 1) k
+
+
+esMultiploDe :: Integer -> Integer -> Bool
+esMultiploDe a b = mod a b == 0
+
+
+matrizTranspuesta :: [[Integer]] -> [[Integer]]
+matrizTranspuesta [] = []
+matrizTranspuesta ([]:_) = []
+matrizTranspuesta m = primeraColumna m : matrizTranspuesta (restoColumnas m)
+
+primeraColumna :: [[Integer]] -> [Integer]
+primeraColumna [] = []
+primeraColumna (x:xs) = head x : primeraColumna xs
+
+restoColumnas :: [[Integer]] -> [[Integer]]
+restoColumnas [] = []
+restoColumnas (x:xs) = tail x : restoColumnas xs
+
+
+sumarMatriz :: [[Integer]] -> Integer
+sumarMatriz [] = 0
+sumarMatriz m = sumatoria(unirFilas (m))
+
+sumatoria :: [Integer] -> Integer
+sumatoria [] = 0
+sumatoria [x] = x
+sumatoria (x:xs) = x + sumatoria xs
+
+unirFilas :: [[Integer]] -> [Integer]
+unirFilas [] = []
+unirFilas (x:xs) = x ++ unirFilas xs
+
+
+multiplicarMPorEscalar :: Integer -> [[Integer]] -> [[Integer]]
+multiplicarMPorEscalar _ [] = []
+multiplicarMPorEscalar n (fila:filas) = multiplicarFPorEscalar n fila : multiplicarMPorEscalar n filas
+
+multiplicarFPorEscalar :: Integer -> [Integer] -> [Integer]
+multiplicarFPorEscalar _ [] = []
+multiplicarFPorEscalar n (x:xs) = n*x : multiplicarFPorEscalar n xs
+
+
+posImparesFormanEscalera :: [Integer] -> Bool
+posImparesFormanEscalera [] = True
+posImparesFormanEscalera [_] = True
+posImparesFormanEscalera [_,_] = True
+posImparesFormanEscalera (w:x:y:z:xs) = z == x+1 && posImparesFormanEscalera (y:z:xs)
+
+
+devuelveFilaQueMasSuma :: [[Integer]] -> [Integer]
+devuelveFilaQueMasSuma [fila] = []
+devuelveFilaQueMasSuma (fila:filas) | sumatoria fila >= maximaSuma filas = fila
+                                    | otherwise = devuelveFilaQueMasSuma filas
+
+
 -- EJERCICIO TURNO TARDE --
 {-
 ✅ Ejercicio 1 (2 puntos)
@@ -743,16 +839,14 @@ mayorFibonacciEnRango a b = buscarMayor a b 0
 
 -- Genera números de Fibonacci hasta pasarse del límite superior
 buscarMayor :: Integer -> Integer -> Integer -> Integer
-buscarMayor a b n
-  | fib n > b = buscarHaciaAbajo a b (n-1)
-  | otherwise = buscarMayor a b (n+1)
+buscarMayor a b n | fib n > b = buscarHaciaAbajo a b (n-1)
+                  | otherwise = buscarMayor a b (n+1)
 
 -- Busca el mayor Fibonacci que esté dentro del rango
 buscarHaciaAbajo :: Integer -> Integer -> Integer -> Integer
-buscarHaciaAbajo a b n
-  | fib n < a = -1
-  | fib n <= b = fib n
-  | otherwise = buscarHaciaAbajo a b (n-1)
+buscarHaciaAbajo a b n  | fib n < a = -1
+                        | fib n <= b = fib n
+                        | otherwise = buscarHaciaAbajo a b (n-1)
 
 -- Fibonacci clásico
 fib :: Integer -> Integer
@@ -780,27 +874,23 @@ esMontaniaRusa [3, 1, 4, 0] → True
 esMontaniaRusa :: [Integer] -> Bool
 esMontaniaRusa [] = True
 esMontaniaRusa [_] = True
-esMontaniaRusa (x:y:xs)
-  | diff == 0 = False
-  | otherwise = checkSign xs (sign diff)
+esMontaniaRusa (x:y:xs) | diff == 0 = False
+                        | otherwise = checkSign xs (sign diff)
   where
     diff = y - x
-    sign n
-      | n > 0 = 1
-      | otherwise = -1
+    sign n  | n > 0 = 1
+            | otherwise = -1
 
 checkSign :: [Integer] -> Integer -> Bool
 checkSign [] _ = True
 checkSign [_] _ = True
-checkSign (x:y:xs) prevSign
-  | diff == 0 = False
-  | sign diff == prevSign = False
-  | otherwise = checkSign xs (sign diff)
+checkSign (x:y:xs) prevSign | diff == 0 = False
+                            | sign diff == prevSign = False
+                            | otherwise = checkSign xs (sign diff)
   where
     diff = y - x
-    sign n
-      | n > 0 = 1
-      | otherwise = -1
+    sign n  | n > 0 = 1
+            | otherwise = -1
 
 {-
 ✅ Ejercicio 3 (2 puntos)
@@ -829,14 +919,12 @@ catalogoPorAutores [("Poe","El cuervo")]
 -}
 catalogoPorAutores :: [(String, String)] -> [(String, [String])]
 catalogoPorAutores [] = []
-catalogoPorAutores ((autor,titulo):xs) =
-  agregarAlCatalogo autor titulo (catalogoPorAutores xs)
+catalogoPorAutores ((autor,titulo):xs) = agregarAlCatalogo autor titulo (catalogoPorAutores xs)
 
 agregarAlCatalogo :: String -> String -> [(String, [String])] -> [(String, [String])]
 agregarAlCatalogo autor titulo [] = [(autor, [titulo])]
-agregarAlCatalogo autor titulo ((a,ts):xs)
-  | autor == a = (a, titulo:ts) : xs
-  | otherwise  = (a, ts) : agregarAlCatalogo autor titulo xs
+agregarAlCatalogo autor titulo ((a,ts):xs)  | autor == a = (a, titulo:ts) : xs
+                                            | otherwise  = (a, ts) : agregarAlCatalogo autor titulo xs
 
 {-
 ✅ Ejercicio 4 (2 puntos)
