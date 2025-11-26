@@ -1,3 +1,25 @@
+{-
+ Listado de funciones que pueden utilizar para el parcial de Haskell. Cualquier otra funci´on
+ debe ser implementada. Si utilizan una funci´on no permitida, se anula el ejercicio.
+ mod :: Integral a => a-> a-> a
+ div :: Integral a => a-> a-> a
+ fst :: (a, b)-> a
+ snd :: (a, b)-> b
+ sqrt :: Floating a => a-> a
+ (:) :: a-> [a]-> [a]
+ (++) :: [a]-> [a]-> [a]
+ head :: [a]-> a
+ tail :: [a]-> [a]
+ fromIntegral :: (Integral a, Num b) => a-> b
+ fromInteger :: Num a => Integer-> a
+ arim´eticas (+,-,*,/)
+ potencia (**,^)
+ not :: Bool-> Bool
+ l´ogicas (&&,||,==,/=,>,<,>=,<=)
+ Aclaraci´on1: no est´a permitido el uso del condicional “if then else”.
+ Aclaraci´on2: el uso de where est´a permitido.
+-}
+
 {-Ejercicio 1. Implementar la funci´on generarStock :: [String] ->[(String, Int)]
 problema generarStock (mercader´ıa: seq⟨String⟩) : seq⟨String × Z⟩ {
 requiere: {True}
