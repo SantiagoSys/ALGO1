@@ -713,3 +713,189 @@ maximaSuma (fila:filas) | sumaLista fila > maximaSuma filas = sumaLista fila
 sumaLista :: [Integer] -> Integer
 sumaLista [] = 0
 sumaLista (x:xs) = x + sumaLista xs
+
+
+-- EJERCICIO TURNO TARDE --
+{-
+✅ Ejercicio 1 (2 puntos)
+
+problema mayorFibonacciEnRango (d: Z, h: Z) : Z {
+requiere: {d ≥ 0}
+requiere: {h ≥ d}
+requiere: {El rango [d, h] contiene al menos un número de Fibonacci}
+asegura: {res es el mayor número de Fibonacci que pertenece al rango [d, h]}
+}
+
+Aclaración: Un número es Fibonacci si pertenece a la secuencia:
+0, 1, 1, 2, 3, 5, 8, 13, 21, 34, … definida por:
+F(0) = 0, F(1) = 1, y para n ≥ 2: F(n) = F(n-1) + F(n-2).
+
+Ejemplos:
+
+mayorFibonacciEnRango 4 10 → 8
+
+mayorFibonacciEnRango 5 8 → 8
+
+mayorFibonacciEnRango 13 13 → 13
+-}
+mayorFibonacciEnRango :: Integer -> Integer -> Integer
+mayorFibonacciEnRango a b = buscarMayor a b 0
+
+-- Genera números de Fibonacci hasta pasarse del límite superior
+buscarMayor :: Integer -> Integer -> Integer -> Integer
+buscarMayor a b n
+  | fib n > b = buscarHaciaAbajo a b (n-1)
+  | otherwise = buscarMayor a b (n+1)
+
+-- Busca el mayor Fibonacci que esté dentro del rango
+buscarHaciaAbajo :: Integer -> Integer -> Integer -> Integer
+buscarHaciaAbajo a b n
+  | fib n < a = -1
+  | fib n <= b = fib n
+  | otherwise = buscarHaciaAbajo a b (n-1)
+
+-- Fibonacci clásico
+fib :: Integer -> Integer
+fib 0 = 0
+fib 1 = 1
+fib n = fib (n-1) + fib (n-2)
+
+{-
+✅ Ejercicio 2 (2 puntos)
+
+problema esMontaniaRusa (s: seq⟨Z⟩) : Bool {
+requiere: {True}
+asegura: {res = true ⇔ s es una secuencia montaña rusa}
+}
+
+Aclaración: Una secuencia montaña rusa es aquella donde las diferencias entre elementos consecutivos se alternan entre positivas y negativas estrictas.
+Si la primera diferencia es positiva, la siguiente será negativa, la siguiente positiva, etc. (Y viceversa si la primera diferencia es negativa).
+
+Ejemplos:
+
+esMontaniaRusa [1, 2, 4] → False
+
+esMontaniaRusa [3, 1, 4, 0] → True
+-}
+esMontaniaRusa :: [Integer] -> Bool
+esMontaniaRusa [] = True
+esMontaniaRusa [_] = True
+esMontaniaRusa (x:y:xs)
+  | diff == 0 = False
+  | otherwise = checkSign xs (sign diff)
+  where
+    diff = y - x
+    sign n
+      | n > 0 = 1
+      | otherwise = -1
+
+checkSign :: [Integer] -> Integer -> Bool
+checkSign [] _ = True
+checkSign [_] _ = True
+checkSign (x:y:xs) prevSign
+  | diff == 0 = False
+  | sign diff == prevSign = False
+  | otherwise = checkSign xs (sign diff)
+  where
+    diff = y - x
+    sign n
+      | n > 0 = 1
+      | otherwise = -1
+
+{-
+✅ Ejercicio 3 (2 puntos)
+
+Se recibe un listado con todos los libros disponibles en una biblioteca. Cada libro tiene un autor y un título (primera y segunda componente del par respectivamente). El objetivo es crear un catálogo: una lista de tuplas donde la primera componente es el autor y la segunda la lista de todos sus títulos.
+
+problema catalogoPorAutores (l: seq⟨(String × String)⟩) : seq⟨(String × seq⟨String⟩)⟩ {
+requiere: {Los libros no contienen autores repetidos con el mismo título}
+asegura: {Los autores que aparecen en res son los mismos que aparecen en l}
+asegura: {res es un catálogo donde cada autor aparece una sola vez junto con la lista de todos sus títulos}
+}
+
+Ejemplo 1:
+catalogoPorAutores
+[("García Márquez","Cien años de soledad"),
+("Borges","Ficciones"),
+("García Márquez","El amor en los tiempos del cólera")]
+
+→
+[("García Márquez",["Cien años de soledad","El amor en los tiempos del cólera"]),
+("Borges",["Ficciones"])]
+
+Ejemplo 2:
+catalogoPorAutores [("Poe","El cuervo")]
+→ [("Poe",["El cuervo"])]
+-}
+catalogoPorAutores :: [(String, String)] -> [(String, [String])]
+catalogoPorAutores [] = []
+catalogoPorAutores ((autor,titulo):xs) =
+  agregarAlCatalogo autor titulo (catalogoPorAutores xs)
+
+agregarAlCatalogo :: String -> String -> [(String, [String])] -> [(String, [String])]
+agregarAlCatalogo autor titulo [] = [(autor, [titulo])]
+agregarAlCatalogo autor titulo ((a,ts):xs)
+  | autor == a = (a, titulo:ts) : xs
+  | otherwise  = (a, ts) : agregarAlCatalogo autor titulo xs
+
+{-
+✅ Ejercicio 4 (2 puntos)
+
+problema filaDelMaximo (matriz: seq⟨seq⟨Z⟩⟩) : Z {
+requiere: {matriz no está vacía y todas sus filas tienen al menos un elemento}
+requiere: {Todos los elementos de matriz tienen la misma longitud}
+requiere: {No hay elementos repetidos en matriz}
+asegura: {res es el número de fila (índice desde 1) que contiene el valor máximo de toda la matriz}
+}
+
+Ejemplo:
+filaDelMaximo [[1,2,3],[4,5,6],[7,8,9]] → 3
+-}
+filaDelMaximo :: [[Integer]] -> Integer
+filaDelMaximo matriz = filaMax matriz 1 (head (head matriz)) 1
+
+filaMax :: [[Integer]] -> Integer -> Integer -> Integer -> Integer
+filaMax [] filaActual _ filaMaxima = filaMaxima
+filaMax (fila:filas) filaActual maxValor filaMaxima
+  | maxFila > maxValor = filaMax filas (filaActual+1) maxFila filaActual
+  | otherwise          = filaMax filas (filaActual+1) maxValor filaMaxima
+  where
+    maxFila = maxDeFila fila
+
+maxDeFila :: [Integer] -> Integer
+maxDeFila [x] = x
+maxDeFila (x:xs)
+  | x > resto = x
+  | otherwise = resto
+  where resto = maxDeFila xs
+
+{-
+✅ Ejercicio 5 (1 punto)
+
+Conteste marcando la opción correcta asumiendo que α y β son dos fórmulas de lógica proposicional tales que es más fuerte suponer que:
+
+a) α es necesariamente una tautología
+b) α podría ser una tautología (y también podría no serlo)
+c) β es necesariamente una tautología (y también podría no serlo)
+
+(El enunciado original continúa según opciones del examen.)
+Rta: a)
+
+✅ Ejercicio 6 (1 punto)
+
+Respecto del testing de caja negra, marque la opción correcta asumiendo que se cuenta con la siguiente especificación:
+
+problema unaFuncionQueHaceAlgo (n: Z) : Z {
+requiere: {n ≥ 0}
+asegura: {res = n + 1 ∨ res = n - 1}
+}
+
+Opciones:
+
+No es posible armar un caso de test para n = 0 porque no sabemos cuál es exactamente el resultado esperado
+
+No es necesario testear el caso n = 0
+
+Debo armar dos casos de test para n = 0, en uno el resultado esperado debe ser 1, y en el otro -1
+Rta: No es necesario testear el caso n = 0
+-}
