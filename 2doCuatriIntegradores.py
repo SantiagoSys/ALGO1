@@ -27,17 +27,13 @@ def stock_productos(stock_cambios: list[tuple[str, int]]) -> dict[tuple[int, int
         else:
             minimo: int = res[producto][0]
             maximo: int = res[producto][1]
-
             if stock < minimo:
                 minimo = stock
             elif stock > maximo:
                 maximo = stock
             res[producto] = (minimo, maximo)
-        
+    
     return res
-
-stock_cambios: list[tuple[str, int]] = [("A",2), ("B",4), ("C",3), ("A",5)]
-print(stock_productos(stock_cambios))
 
 
 '''
@@ -57,25 +53,22 @@ asegura: {Todos los elementos de codigos barra cuyos ´ultimos 3 d´ıgitos form
 asegura: {Todos los elementos de res est´an en codigos barra.}
 }
 '''
+def ultimos_tres_elementos(numero: int) -> int:
+    return numero % 1000
+
 def es_primo(numero: int) -> bool:
     if numero % 2 == 0:
         return False
     return True
 
-def ultimos_tres_digitos(numero: int) -> int:
-    return numero % 1000
-
 def filtrar_codigos_primos(codigos_barra: list[int]) -> list[int]:
     res: list[int] = []
 
     for numero in codigos_barra:
-        if es_primo(ultimos_tres_digitos(numero)):
+        if es_primo(ultimos_tres_elementos(numero)):
             res.append(numero)
     
     return res
-
-verificar = filtrar_codigos_primos([101, 102, 103])
-print(verificar)
 
 
 '''
@@ -94,8 +87,8 @@ asegura: {Si hay m´as de una subsecuencia de tama˜no m´aximo, res tiene el ´
 '''
 def subsecuencia_mas_larga(tipos_pacientes_atendidos: list[str]) -> int:
     indice_actual: int = 0
-    longitud_actual: int = 0
     indice_inicio_max: int = 0
+    longitud_actual: int = 0
     longitud_max: int = 0
 
     for i in range(len(tipos_pacientes_atendidos)):
@@ -104,21 +97,18 @@ def subsecuencia_mas_larga(tipos_pacientes_atendidos: list[str]) -> int:
             if longitud_actual == 0:
                 indice_actual = i
             longitud_actual += 1
-        
+
         else:
             if longitud_actual > longitud_max:
                 longitud_max = longitud_actual
                 indice_inicio_max = indice_actual
             longitud_actual = 0
-
+    
     if longitud_actual > longitud_max:
         longitud_max = longitud_actual
         indice_inicio_max = indice_actual
-
+    
     return indice_inicio_max
-
-verificar = subsecuencia_mas_larga(["loro", "perro", "gato", "gato", "conejo", "perro", "gato", "gato", "perro", "conejo"])
-print(verificar)
 
 
 '''
@@ -160,20 +150,9 @@ def un_responsable_por_turno(grilla_horaria: list[list[str]]) -> list[tuple[bool
         for fila in range(5, 8):
             if persona_tarde != grilla_horaria[fila][j]:
                 todas_iguales_tarde = False
-
+        
         res.append((todas_iguales_mañana, todas_iguales_tarde))
-
     return res
-grilla_horaria: list[list[str]] = [["ANA", "ANA", "ANA"],
-                                   ["ANA", "ANA", "ANA"],
-                                   ["ANA", "PEDRO", "ANA"],
-                                   ["ANA", "ANA", "ANA"],
-                                   ["JUAN", "JUAN", "JUAN"],
-                                   ["JUAN", "JUAN", "JUAN"],
-                                   ["JUAN", "JUAN", "PEDRO"],
-                                   ["JUAN", "JUAN", "JUAN"]]
-
-print(un_responsable_por_turno(grilla_horaria))
 
 
 '''
@@ -201,25 +180,27 @@ es 0.0.}
 }
 '''
 def promedio_de_salidas(registro: dict[str, list[int]]) -> dict[str, tuple[int, float]]:
-    res: dict[str, tuple[int, float]] = {}
+    res: dict[str, tuple[str, float]] = {}
 
-    for amigo in registro.keys():
-        tiempos: list[int] = registro[amigo]
-        cant_salidas: int = 0
-        suma_tiempos: int = 0
-
-        for tiempo in tiempos:
-            if tiempo > 0 and tiempo < 61:
-                cant_salidas += 1
-                suma_tiempos += tiempo
-
-        if cant_salidas > 0:
-            promedio: float = suma_tiempos / cant_salidas
+    for amigo, tiempos in registro.items():
+        exitosos: list[int] = []
+        for t in tiempos:
+            if 0 < t < 61:
+                exitosos.append(t)
+        if len(exitosos) > 0:
+            res[amigo] = (len(exitosos), promedio(exitosos))
         else:
-            res[amigo] = 0.0               
-        
-        res[amigo] = (cant_salidas, promedio)
-    
+            res[amigo] = (0, 0.0)
+            
+    return res
+
+def promedio(s: list[int]) -> float:
+    return sumatoria(s) / len(s)
+
+def sumatoria(s:list[int]) -> int:
+    res: int = 0
+    for i in range(len(s)):
+        res += s[i]
     return res
 
 registro = {
@@ -255,9 +236,9 @@ def tiempo_mas_rapido(tiempos_salas: list[int]) -> int:
             if tiempo < tiempo_minimo:
                 tiempo_minimo = tiempo
                 res = i
-
     return res
 
+print("EJERCICIO TIEMPO_MAS_RAPIDO")
 tiempos_salas: list[int] = [4,83,23,53,22,1]
 print(tiempo_mas_rapido(tiempos_salas))
 
@@ -283,32 +264,7 @@ de ellas.}
 }
 '''
 def racha_mas_larga(tiempos: list[int]) -> tuple[int, int]:
-    indice_inicio_max: int = 0
-    longitud_max: int = 0
-    indice_actual: int = 0
-    longitud_actual: int = 0
-    indice_fin_max: int = -1
-
-    for i in range(len(tiempos)):
-        tiempo: int = tiempos[i]
-        if tiempo > 0 and tiempo < 61:
-            if longitud_actual == 0:
-                indice_actual = i
-            longitud_actual += 1
-        
-        else:
-            if longitud_actual > longitud_max:
-                longitud_max = longitud_actual
-                indice_inicio_max = indice_actual
-                indice_fin_max = i - 1
-            longitud_actual = 0
-        
-    if longitud_actual > longitud_max:
-        longitud_max = longitud_actual
-        indice_inicio_max = indice_actual
-        indice_fin_max = len(tiempo) - 1
-
-    return (indice_inicio_max, indice_fin_max)
+    pass
 
 verificar = racha_mas_larga([0, 45, 30, 61, 25, 15, 10, 61, 5])
 print(verificar)
@@ -332,15 +288,8 @@ el tercer valor es distinto de 0.}
 }
 '''
 def escape_en_solitario(amigos_por_salas: list[list[int]]) -> list[int]:
-    res: list[int] = []
-    salas: int = len(amigos_por_salas)
+    pass
 
-    for i in range(salas):
-        sala: list[int] = amigos_por_salas[i]
-        if sala[0] == 0 and sala[1] == 0 and sala[2] != 0 and sala[3] == 0:
-            res.append(i)
-    
-    return res
 amigos_por_salas: list[list[int]] = [
     [0, 0, 5, 0],   # ✅ Solo el amigo 3 participó → índice 0
     [1, 0, 0, 0],   # No cumple (amigo 1 fue)
@@ -374,19 +323,6 @@ finalizar el torneo, dado que jug´o una vez contra cada otro jugador.}
 }
 '''
 def torneo_de_gallinas(estrategias: dict[str, str]) -> dict[str, int]:
-    """
-    Devuelve un diccionario con los puntajes finales de cada jugador
-    después de jugar todos contra todos en el torneo de la gallina.
-
-    PRE:
-        - estrategias tiene al menos 2 jugadores.
-        - Las claves son strings no vacíos.
-        - Los valores son "me desvÍo siempre" o "me la banco y no me desvÍo".
-    POST:
-        - Devuelve un diccionario con las mismas claves.
-        - Los valores indican el puntaje total de cada jugador.
-    """
-
     puntajes: dict[str, int] = {}
     jugadores: list[str] = list(estrategias.keys())
 
@@ -431,6 +367,7 @@ estrategias: dict[str, str] = {
     "Diego": "me desvÍo siempre"
 }
 
+print("EJERCICIO TORNEO_DE_GALLINAS")
 resultado = torneo_de_gallinas(estrategias)
 print("🏁 Resultados del torneo de gallinas 🐔")
 for jugador in resultado.keys():
@@ -480,6 +417,7 @@ c1.put(("Tomas", "comun"))
 c1.put(("Lorena", "vip"))
 c1.put(("Andrea", "comun"))
 
+print("EJERCICIO COLA_EN_EL_BANCO")
 print("Cola original:", list(c1.queue))
 resultado = reordenar_cola_priorizando_vips(c1)
 print("Cola reordenada:", list(resultado.queue))
@@ -517,6 +455,7 @@ def cuantos_sufijos_son_palindromos(texto: str) -> int:
 
     return cantidad_palindromos
 
+print("EJERCICIO SUFIJOS_SON_PALINDROMOS")
 print(cuantos_sufijos_son_palindromos("ana"))
 print(cuantos_sufijos_son_palindromos("oso"))
 print(cuantos_sufijos_son_palindromos("Diego"))
@@ -546,16 +485,7 @@ asegura: {res = 0 ⇔ no hay tres ”O” ni hay tres ”X” consecutivas en fo
 asegura: {res = 3 ⇔ hay tres ”X” y hay tres ”O” consecutivas en forma vertical (evidenciando que beto hizo trampa).}
 }
 '''
-def quien_gano_el_tateti_facilito(tablero: list[list[str]]) -> int:
-    """
-    Determina el resultado del Ta-Te-Ti-Facilito.
-
-    Returns:
-        1 -> ganó Ana (X)
-        2 -> ganó Beto (O)
-        0 -> empate (nadie tiene 3 seguidas verticales)
-        3 -> ambos tienen 3 seguidas verticales (trampa de Beto)
-    """
+def quien_gano_el_tateti_facilito(tablero: list[str]) -> int:
     n: int = len(tablero)
     hay_ganadora_X: bool = False
     hay_ganador_O: bool = False
@@ -593,6 +523,7 @@ def quien_gano_el_tateti_facilito(tablero: list[list[str]]) -> int:
     else:
         return 0
 
+print("EJERCICIO TATETI FACILITO")
 tablero = [
     ["X", " ", "O", "O", " "],
     ["X", " ", "O", " ", " "],
@@ -627,12 +558,6 @@ entonces c1 aparece antes que c2 en res.}
 }
 '''
 def orden_de_atencion(urgentes: Cola[int], postergables: Cola[int]) -> Cola[int]:
-    """
-    Devuelve una nueva cola con el orden de atención:
-    - Comienza con un paciente urgente.
-    - Alterna entre urgente y postergable.
-    - Mantiene el orden relativo de cada cola.
-    """
     res: Cola[int] = Cola()
 
     # Mientras haya pacientes en ambas colas
@@ -667,6 +592,7 @@ postergables.put(203)
 resultado = orden_de_atencion(urgentes, postergables)
 
 # Muestro el orden final
+print("EJERCICIO ORDEN DE ATENCION")
 print(list(resultado.queue))
 
 
@@ -718,6 +644,7 @@ registros = [
 infecciosas = ["gripe", "covid", "dengue"]
 umbral = 0.3
 
+print("EJERCICIO ALARMA_EPIDEMIOLOGICA")
 print(alarma_epidemiologica(registros, infecciosas, umbral))
 
 
@@ -735,6 +662,9 @@ asegura: {Para todo ID de claves de horas, si la suma de sus valores es el m´ax
 los otros IDs, entonces ID pertenece a res.}
 }
 '''
+def empleado_del_mes(horas: dict[tuple[int, list[int]]]) -> list[int]:
+    pass
+
 
 '''
 Ejercicio 16. Hospital - Nivel de ocupaci´on
@@ -772,7 +702,143 @@ camas_por_piso: list[list[bool]] = [[False, True, False],
                                     [True, False, True],
                                     [True, True, True]]
 
+print("EJERCICIO NIVEL_DE_OCUPACION")
 print(nivel_de_ocupacion(camas_por_piso))
+
+
+'''
+Ejercicio 17.
+problema ejercicio1 (in s: seq⟨Z⟩, in objetivo: Z) : Z x Z {
+  requiere: { Existen al menos dos posiciones i < j en rango tales que s[i] + s[j] = objetivo }
+  asegura: { s[res0] + s[res1] = objetivo }
+  asegura: { res0 < res1 }
+  asegura: { Sean i y j (con i < j) dos posiciones cualesquiera de s tales que s[i] + s[j] = objetivo, entonces res1 - res0 <= j - i }
+}
+'''
+def ejercicio1(s: list[int], objetivo: int) -> tuple[int, int]:
+    mejor = (0, 1)
+    mejor_distancia = len(s)  # mayor que cualquier distancia posible (max len(s) - 1)
+
+    for i in range(len(s)):
+        for j in range(i + 1, len(s)):
+            if s[i] + s[j] == objetivo and j - i < mejor_distancia:
+                mejor = (i, j)
+                mejor_distancia = j - i
+
+    return mejor
+
+print("IIIIIIIIIIIIIIIIIII")
+print(ejercicio1([1,2,3,5], 4))
+
+
+'''
+Ejercicio 18.
+En la cocina de un restaurante, los pedidos se van apilando a medida que llegan (se prepara primero el que llegó último). Cada pedido es una tupla 
+con el número de mesa y un booleano que indica si es un pedido express (True) o no (False). Se desea separar de la pila los pedidos express, 
+pasándolos a una nueva pila, y dejar en la pila original solamente los pedidos que no son express. Implementar la función separar_pedidos_express.
+
+problema separar_pedidos_express (inout pedidos: Pila⟨Z x Bool⟩) : Pila⟨Z⟩ {
+  modifica: { pedidos }
+  asegura: { res contiene exactamente los números de mesa de las tuplas cuya segunda componente en pedidos@pre era True, en el mismo orden 
+  relativo (de tope a base) en que se encontraban en pedidos@pre }
+  asegura: { pedidos contiene exactamente las tuplas de pedidos@pre cuya segunda componente era False, en el mismo orden relativo (de tope a base) 
+  en que se encontraban originalmente }
+
+Ejemplo: Si pedidos contiene (de tope a base):
+[(5, True), (3, False), (8, True), (2, False)], entonces
+separar_pedidos_express(pedidos) debe devolver una pila que (de tope a base) 
+contiene [5, 8], y pedidos queda (de tope a base) con [(3, False), (2, False)].
+'''
+def separar_pedidos_express(pedidos: Pila[int, bool]) -> Pila[int]:
+    express_aux = Pila()      # guarda solo números de mesa
+    no_express_aux = Pila()   # guarda tuplas completas
+
+    # 1) Vaciar la pila original, repartiendo cada pedido según su booleano
+    while not pedidos.empty():
+        mesa, es_express = pedidos.get()
+        if es_express:
+            express_aux.put(mesa)
+        else:
+            no_express_aux.put((mesa, es_express))
+
+    # 2) Devolver los no express a la pila original (invierte de nuevo)
+    while not no_express_aux.empty():
+        pedidos.put(no_express_aux.get())
+
+    # 3) Armar la pila resultado con los express (invierte de nuevo)
+    res = Pila()
+    while not express_aux.empty():
+        res.put(express_aux.get())
+
+    return res
+
+
+'''
+Ejercicio 19.
+problema ejercicio5 (inout A: seq⟨seq⟨Z⟩⟩) {
+  requiere: { |A| > 0 }
+  requiere: { Todas las filas de A tienen la misma longitud, la cual es estrictamente mayor a 0 }
+  requiere: { Todos los elementos de A son distintos entre sí }
+  modifica: { A }
+  asegura: { A tiene exactamente las mismas dimensiones que A@pre }
+  asegura: { Sea max el máximo elemento de A@pre, y sea i la fila tal que existe una columna j con A@pre[i][j] = max, entonces A[i][k] = 2 * A@pre[i][k] para todo k en rango }
+  asegura: { Sea max el máximo elemento de A@pre, y sea i la fila tal que existe una columna j con A@pre[i][j] = max, entonces A[f][k] = A@pre[f][k] para todo f en rango y todo k en rango tal que f ≠ i }
+}
+'''
+def ejercicio5(A: list[list[int]]) -> None:
+    # 1) Buscar la fila que contiene el máximo (sin modificar nada todavía)
+    fila_max = 0
+    maximo = A[0][0]
+
+    for i in range(len(A)):
+        for j in range(len(A[i])):
+            if A[i][j] > maximo:
+                maximo = A[i][j]
+                fila_max = i
+
+    # 2) Duplicar todos los elementos de esa fila, en el lugar
+    for k in range(len(A[fila_max])):
+        A[fila_max][k] = 2 * A[fila_max][k]
+
+
+'''
+Ejercicio 20.
+Una plataforma de e-learning registra, para cada estudiante, la lista de calificaciones obtenidas en los distintos cursos que realizó a lo largo 
+del tiempo. Estos datos se almacenan en un diccionario cuyas claves son los nombres de los estudiantes y cuyos valores son secuencias con las 
+calificaciones (de 1 a 10) obtenidas en cada curso. Diremos que un estudiante es destacado si todas sus calificaciones son mayores o iguales a 
+una nota mínima dada. Implementar la función estudiantes_destacados_por_cantidad_de_cursos, que agrupa a los estudiantes destacados según la 
+cantidad de cursos que realizaron:
+
+problema estudiantes_destacados_por_cantidad_de_cursos (in calificaciones: dict⟨String, seq⟨Z⟩⟩, in nota_minima: Z) : dict⟨Z, seq⟨String⟩⟩ {
+  requiere: { Para toda clave c de calificaciones, calificaciones[c] no es vacía }
+  asegura: { Una clave n de res existe si y sólo si existe al menos un estudiante destacado c que haya realizado exactamente n cursos, es decir, 
+  tal que |calificaciones[c]| = n }
+  asegura: { Para toda clave n de res, res[n] contiene exactamente los nombres de los estudiantes destacados que realizaron exactamente n cursos }
+}
+Nota: Un estudiante c de calificaciones es destacado si todas las calificaciones de calificaciones[c] son mayores o iguales a nota_minima
+
+Ejemplo: estudiantes_destacados_por_cantidad_de_cursos({"Ana": [10, 9], 
+  "Beto": [8], "Cami": [7, 8, 9], "Dani": [6, 3]}, 7) debe devolver 
+{2: ["Ana"], 1: ["Beto"], 3: ["Cami"]} 
+(Dani no es destacado, ya que tiene una calificación menor a 7)
+'''
+def estudiantes_destacados_por_cantidad_de_cursos(calificaciones: dict[str, list[int]], nota_minima: int) -> dict[int, list[str]]:
+    res: dict[int, list[str]] = {}
+
+    for alumno, notas in calificaciones.items():
+        if not desaprobo_curso(notas, nota_minima):
+            cantidad = len(notas)
+            if cantidad not in res:
+                res[cantidad] = []
+            res[cantidad].append(alumno)
+    return res
+
+def desaprobo_curso(s: list[int], nota_minima: int) -> bool:
+    for i in range(len(s)):
+        if s[i] < nota_minima:
+            return True
+    return False
+
 
 
 def cantidad_parejas_que_suman(s: list[int], n: int) -> int:
@@ -966,3 +1032,794 @@ matriz = [
 ]
 
 print(matriz_ordenada(matriz))
+
+
+'''
+Otros ejercicios
+'''
+
+'''
+problema par_mas_lejano_que_suma_objetivo (in s: seq⟨Z⟩, in objetivo: Z) : Z x Z {
+  requiere: { Existen al menos dos posiciones i < j en rango tales que s[i] + s[j] = objetivo }
+  asegura: { s[res0] + s[res1] = objetivo }
+  asegura: { res0 < res1 }
+  asegura: { Sean i y j (con i < j) dos posiciones cualesquiera de s tales que s[i] + s[j] = objetivo, entonces res1 - res0 >= j - i }
+}
+
+Ejemplo: s = [3, 1, 4, 6, 2, 5], objetivo = 7 → (0, 2) y (1, 3) suman 7 con distancia 2, pero (2, 5)... verificá vos cuál es el más lejano.
+'''
+def par_mas_lejano_que_suma_objetivo(s: list[int], objetivo: int) -> tuple[int, int]:
+    mejor = (0, 1)
+    mejor_distancia = len(s)  # mayor que cualquier distancia posible (max len(s) - 1)
+    
+    for i in range(len(s)):
+        for j in range(i + 1, len(s)):
+            if s[i] + s[j] == objetivo and j - i < mejor_distancia:
+                mejor = (i, j)
+                mejor_distancia = j - i
+    
+    return mejor
+
+'''
+problema par_con_mayor_diferencia (in s: seq⟨Z⟩) : Z x Z {
+  requiere: { |s| >= 2 }
+  asegura: { res0 < res1 }
+  asegura: { Para todo par de posiciones i < j en rango, s[res1] - s[res0] >= s[j] - s[i] }
+}
+
+Ejemplo: s = [5, 1, 9, 3, 2] → (1, 2), porque 9 - 1 = 8 es la mayor diferencia con la derecha mayor.
+'''
+def par_con_mayor_diferencia(s: list[int]) -> tuple[int, int]:
+    mejor = (0, 1)
+    mejor_distancia = len(s)
+
+    for i in range(len(s)):
+        for j in range(i + 1, len(s)):
+            if j - i > mejor_distancia:
+                mejor = (i, j)
+                mejor_distancia = j - i
+
+    return mejor
+
+'''
+problema separar_pares (inout p: Pila⟨Z⟩) : Pila⟨Z⟩ {
+  modifica: { p }
+  asegura: { res contiene exactamente los elementos pares de p@pre, en el mismo orden relativo (de tope a base) en que estaban en p@pre }
+  asegura: { p contiene exactamente los elementos impares de p@pre, en el mismo orden relativo (de tope a base) en que estaban en p@pre }
+}
+
+Ejemplo: p (tope a base) [4, 7, 2, 9, 6] → res = [4, 2, 6], p = [7, 9].
+'''
+
+'''
+problema atender_urgentes (inout turnos: Cola⟨Z x Bool⟩) : Cola⟨Z⟩ {
+  modifica: { turnos }
+  asegura: { res contiene los números de paciente de las tuplas de turnos@pre cuya segunda componente era True, en el mismo orden en que estaban en turnos@pre }
+  asegura: { turnos contiene exactamente las tuplas de turnos@pre cuya segunda componente era False, en el mismo orden relativo }
+}
+
+Ejemplo: turnos (primero a último) [(1, False), (2, True), (3, True), (4, False)] → res = [2, 3], turnos = [(1, False), (4, False)].
+'''
+
+'''
+problema duplicar_columna_del_minimo (inout A: seq⟨seq⟨Z⟩⟩) {
+  requiere: { |A| > 0 }
+  requiere: { Todas las filas de A tienen la misma longitud, la cual es estrictamente mayor a 0 }
+  requiere: { Todos los elementos de A son distintos entre sí }
+  modifica: { A }
+  asegura: { A tiene exactamente las mismas dimensiones que A@pre }
+  asegura: { Sea min el mínimo elemento de A@pre, y sea j la columna tal que existe una fila i con A@pre[i][j] = min, entonces A[f][j] = 2 * A@pre[f][j] para todo f en rango }
+  asegura: { Para toda fila f y toda columna k en rango con k ≠ j, A[f][k] = A@pre[f][k] }
+}
+'''
+
+'''
+problema intercambiar_fila_del_maximo_con_la_primera (inout A: seq⟨seq⟨Z⟩⟩) {
+  requiere: { |A| > 0 }
+  requiere: { Todas las filas de A tienen la misma longitud, la cual es estrictamente mayor a 0 }
+  requiere: { Todos los elementos de A son distintos entre sí }
+  modifica: { A }
+  asegura: { A tiene las mismas dimensiones que A@pre }
+  asegura: { Sea i la fila de A@pre que contiene el máximo elemento. Entonces A[0] = A@pre[i] y A[i] = A@pre[0] }
+  asegura: { Para toda fila f en rango con f ≠ 0 y f ≠ i, A[f] = A@pre[f] }
+}
+'''
+
+'''
+problema productos_por_cantidad_de_ventas (in ventas: dict⟨String, seq⟨Z⟩⟩, in monto_minimo: Z) : dict⟨Z, seq⟨String⟩⟩ {
+  requiere: { Para toda clave p de ventas, ventas[p] no es vacía }
+  asegura: { Una clave n de res existe si y sólo si existe al menos un producto p cuyas ventas sean todas mayores o iguales a monto_minimo y tal que |ventas[p]| = n }
+  asegura: { Para toda clave n de res, res[n] contiene exactamente los nombres de los productos con todas sus ventas >= monto_minimo y con exactamente n ventas }
+}
+Ejemplo: ventas = {"lapiz": [50, 60], "goma": [20, 90], "regla": [70]}, monto_minimo = 50 → {2: ["lapiz"], 1: ["regla"]}.
+'''
+
+'''
+problema invertir_diccionario (in d: dict⟨String, Z⟩) : dict⟨Z, seq⟨String⟩⟩ {
+  asegura: { Una clave v de res existe si y sólo si existe una clave c de d tal que d[c] = v }
+  asegura: { Para toda clave v de res, res[v] contiene exactamente las claves c de d tales que d[c] = v }
+}
+
+Ejemplo: {"Ana": 8, "Beto": 5, "Cami": 8} → {8: ["Ana", "Cami"], 5: ["Beto"]}.
+'''
+
+
+'''
+EJERCICIO 1
+'''
+def cantidad_parejas_iguales(s: list[int]) -> int:
+    contador: int = 0
+
+    for i in range(len(s)):
+        for j in range(i+1, len(s)):
+            if s[i] == s[j]:
+                contador += 1
+    return contador
+
+print(cantidad_parejas_iguales([1, 2, 1, 1]))
+
+def cantidad_parejas_con_diferencia(s: list[int], d: int) -> int:
+    contador: int = 0
+    
+    for i in range(len(s)):
+        for j in range(i+1, len(s)):
+            if absoluto(s[i] - s[j]) == d:
+                contador += 1
+    return contador
+
+def absoluto(n: int) -> int:
+    if n < 0:
+        return -n
+
+print(cantidad_parejas_con_diferencia([1, 4, 6, 3], 2))
+
+def parejas_que_suman(s: list[int], n: int) -> list[tuple[int, int]]:
+    res: list[tuple[int]] =  []
+    mejor = (0, 1)
+
+    for i in range(len(s)):
+        for j in range(i + 1, len(s)):
+            if s[i] + s[j] == n:
+                mejor = (s[i], s[j])
+                res.append(mejor)
+
+    return res
+
+print(parejas_que_suman([2, 4, 3, 3], 6))
+
+
+'''
+EJERCICIOS MATRICES
+'''
+
+def suma_de_esquinas(A: list[list[int]]) -> int:
+    ultima_fila: int = len(A) - 1
+    ultima_col: int = len(A[0]) - 1
+
+    res: int = A[0][0] + A[0][ultima_col] + A[ultima_fila][0] + A[ultima_fila][ultima_col]
+    return res
+
+def iesima_columna(A: list[list[int]], i: int) -> int:
+    res: list[int] = []
+
+    for f in range(len(A)):
+        res.append(A[f][i])
+
+    return res
+
+'''
+problema duplicar_fila_del_minimo (inout A: seq⟨seq⟨Z⟩⟩) {
+  requiere: { |A| > 0 }
+  requiere: { Todas las filas de A tienen la misma longitud, la cual es estrictamente mayor a 0 }
+  requiere: { Todos los elementos de A son distintos entre sí }
+  modifica: { A }
+  asegura: { A tiene exactamente las mismas dimensiones que A@pre }
+  asegura: { Sea min el mínimo elemento de A@pre, y sea i la fila tal que existe una columna j con A@pre[i][j] = min, entonces A[i][k] = 2 * A@pre[i][k] para todo k en rango }
+  asegura: { A[f][k] = A@pre[f][k] para todo f en rango y todo k en rango tal que f ≠ i }
+}
+
+Ejemplo: [[5,2,8],[7,1,9],[4,6,3]] → [[5,2,8],[14,2,18],[4,6,3]].
+'''
+def duplicar_fila_del_minimo(A: list[list[int]]) -> None:
+    fila_min = 0
+    minimo = A[0][0]
+
+    for i in range(len(A)):
+        for j in range(len(A[i])):
+            if A[i][j] < minimo:
+                minimo = A[i][j]
+                fila_min = i
+
+    for k in range(len(A[fila_min])):
+        A[fila_min][k] = 2 * A[fila_min][k]
+
+print("DUPLICAR FILA DEL MINIMO")
+M: list[list[int]] = [[5,2,8],[7,1,9],[4,6,3]]
+print(M)
+duplicar_fila_del_minimo(M)
+print(M)
+
+'''
+problema duplicar_columna_del_maximo (inout A: seq⟨seq⟨Z⟩⟩) {
+  requiere: { |A| > 0 }
+  requiere: { Todas las filas de A tienen la misma longitud, la cual es estrictamente mayor a 0 }
+  requiere: { Todos los elementos de A son distintos entre sí }
+  modifica: { A }
+  asegura: { A tiene exactamente las mismas dimensiones que A@pre }
+  asegura: { Sea max el máximo elemento de A@pre, y sea j la columna tal que existe una fila i con A@pre[i][j] = max, entonces A[f][j] = 2 * A@pre[f][j] para todo f en rango }
+  asegura: { A[f][k] = A@pre[f][k] para todo f en rango y todo k en rango tal que k ≠ j }
+}
+
+Ejemplo: [[1,2,3],[4,9,6],[7,8,5]] → [[1,4,3],[4,18,6],[7,16,5]].
+'''
+def duplicar_columna_del_maximo(A: list[list[int]]) -> None:
+    j: int = columna_del_maximo(A)
+
+    for i in range(len(A)):
+        A[i][j] = 2*A[i][j]
+
+def columna_del_maximo(A: list[list[int]]) -> int:
+    maximo: int = A[0][0]
+    col_maximo: int = 0
+
+    for i in range(len(A)):
+        for j in range(len(A[i])):
+            if A[i][j] >= maximo:
+                maximo = A[i][j]
+                col_maximo = j
+
+    return col_maximo
+
+def maximo_matriz(A: list[list[int]]) -> int:
+    maximo: int = maximo_fila(A[0])
+
+    for i in range(1, len(A)):
+        if maximo_fila(A[i]) >= maximo:
+            maximo = maximo_fila(A[i])
+    return maximo
+
+def maximo_fila(s: list[int]) -> int:
+    maximo: int = s[0]
+
+    for i in range(1, len(s)):
+        if s[i] >= maximo:
+            maximo = s[i]
+    return maximo
+print("LALALAL")
+print(maximo_fila([1,2,3,4]))
+print(maximo_matriz(M))
+
+'''
+problema intercambiar_filas_del_maximo_y_el_minimo (inout A: seq⟨seq⟨Z⟩⟩) {
+  requiere: { |A| > 0 }
+  requiere: { Todas las filas de A tienen la misma longitud, la cual es estrictamente mayor a 0 }
+  requiere: { Todos los elementos de A son distintos entre sí }
+  modifica: { A }
+  asegura: { A tiene exactamente las mismas dimensiones que A@pre }
+  asegura: { Sea i la fila de A@pre que contiene el máximo y sea j la fila de A@pre que contiene el mínimo. Entonces A[i] = A@pre[j] y A[j] = A@pre[i] }
+  asegura: { A[f] = A@pre[f] para toda fila f en rango con f ≠ i y f ≠ j }
+}
+
+Ejemplo: [[5,2,8],[7,6,9],[4,1,3]] → [[5,2,8],[4,1,3],[7,6,9]]. Pensá qué pasa si el máximo y el mínimo están en la misma fila.
+'''
+def intercambiar_filas_del_maximo_y_el_minimo(A: list[list[int]]) -> None:
+    fila_min: int = fila_del_minimo(A)
+    fila_max: int = fila_del_maximo(A)
+
+    A[fila_min], A[fila_max] = A[fila_max], A[fila_min]
+
+def fila_del_maximo(A: list[list[int]]) -> int:
+    fila_maxima: int = 0
+    maximo: int = A[0][0]
+
+    for i in range(len(A)):
+        for j in range(len(A[i])):
+            if A[i][j] >= maximo:
+                maximo = A[i][j]
+                fila_maxima = i
+
+    return fila_maxima
+
+def fila_del_minimo(A: list[list[int]]) -> int:
+    fila_minima: int = 0
+    minimo: int = A[0][0]
+
+    for i in range(len(A)):
+        for j in range(len(A[i])):
+            if A[i][j] <= minimo:
+                minimo = A[i][j]
+                fila_minima = i
+
+    return fila_minima
+
+'''
+problema restar_minimo_de_cada_fila (inout A: seq⟨seq⟨Z⟩⟩) {
+  requiere: { |A| > 0 }
+  requiere: { Todas las filas de A tienen la misma longitud, la cual es estrictamente mayor a 0 }
+  modifica: { A }
+  asegura: { A tiene exactamente las mismas dimensiones que A@pre }
+  asegura: { Para toda fila i y toda columna j en rango, A[i][j] = A@pre[i][j] - m, donde m es el mínimo elemento de A@pre[i] }
+}
+
+Ejemplo: [[5,2,8],[7,6,9]] → [[3,0,6],[1,0,3]].
+'''
+def restar_minimo_de_cada_fila(A: list[list[int]]) -> None:
+    for i in range(len(A)):
+        minimo: int = minimo_fila(A[i])
+        for j in range(len(A[i])):
+            A[i][j] = A[i][j] - minimo
+
+def minimo_fila(s: list[int]) -> int:
+    minimo: int = s[0]
+    for i in range(len(s)):
+        if s[i] <= minimo:
+            minimo = s[i]
+
+    return minimo
+
+'''
+problema poner_ceros_en_la_diagonal (inout A: seq⟨seq⟨Z⟩⟩) {
+  requiere: { |A| > 0 }
+  requiere: { A es cuadrada: todas sus filas tienen longitud |A| }
+  modifica: { A }
+  asegura: { A tiene exactamente las mismas dimensiones que A@pre }
+  asegura: { A[i][i] = 0 para todo i en rango }
+  asegura: { A[i][j] = A@pre[i][j] para todo i, j en rango con i ≠ j }
+}
+
+Ejemplo: [[1,2],[3,4]] → [[0,2],[3,0]].
+'''
+def poner_ceros_en_la_diagonal(A: list[list[int]]) -> None:
+    for i in range(len(A)):
+        A[i][i] = 0
+
+'''
+problema reemplazar_negativos_por_cero (inout A: seq⟨seq⟨Z⟩⟩) {
+  requiere: { |A| > 0 }
+  modifica: { A }
+  asegura: { A tiene exactamente las mismas dimensiones que A@pre }
+  asegura: { Para todo i, j en rango, si A@pre[i][j] < 0 entonces A[i][j] = 0, y si no, A[i][j] = A@pre[i][j] }
+}
+
+Ejemplo: [[1,-2],[-3,4]] → [[1,0],[0,4]].
+'''
+def reemplazar_negativos_por_ceros(A: list[list[int]]) -> None:
+    for i in range(len(A)):
+        for j in range(len(A[i])):
+            if A[i][j] < 0:
+                A[i][j] = 0
+
+'''
+problema invertir_cada_fila (inout A: seq⟨seq⟨Z⟩⟩) {
+  requiere: { |A| > 0 }
+  modifica: { A }
+  asegura: { A tiene exactamente las mismas dimensiones que A@pre }
+  asegura: { Para toda fila i y toda columna j en rango, A[i][j] = A@pre[i][|A@pre[i]| - 1 - j] }
+}
+
+Ejemplo: [[1,2,3],[4,5,6]] → [[3,2,1],[6,5,4]].
+'''
+def invertir_cada_fila(A: list[list[int]]) -> None:
+    for i in range(len(A)):
+        n: int = len(A[i])
+        for j in range(n // 2):
+            A[i][j], A[i][n - 1 - j] = A[i][n - 1 - j], A[i][j]
+
+'''
+problema trasponer_matriz_cuadrada (inout A: seq⟨seq⟨Z⟩⟩) {
+  requiere: { |A| > 0 }
+  requiere: { A es cuadrada: todas sus filas tienen longitud |A| }
+  modifica: { A }
+  asegura: { A tiene exactamente las mismas dimensiones que A@pre }
+  asegura: { Para todo i, j en rango, A[i][j] = A@pre[j][i] }
+}
+
+Ejemplo: [[1,2],[3,4]] → [[1,3],[2,4]].
+'''
+def trasponer_matriz_cuadrada(A: list[list[int]]) -> None:
+    for i in range(len(A)):
+        for j in range(i + 1, len(A)):
+            A[i][j], A[j][i] = A[j][i], A[i][j]
+
+
+'''
+EJERCICIOS DE PILAS Y COLAS
+'''
+'''
+problema contar_pares_en_pila (in p: Pila⟨Z⟩) : Z {
+  requiere: { - }
+  asegura: { res es la cantidad de elementos pares de p }
+}
+'''
+def contar_pares_en_pila(p: Pila) -> int:
+    aux: Pila = Pila()
+    res: int = 0
+
+    # Vaciar p en aux, contando los pares
+    while not p.empty():
+        elem: int = p.get()
+        if elem % 2 == 0:
+            res += 1
+        aux.put(elem)
+
+    # Restaurar p (aux tiene el orden invertido, así que se invierte de nuevo)
+    while not aux.empty():
+        p.put(aux.get())
+
+    return res
+
+'''
+problema copiar_pila (in p: Pila⟨Z⟩) : Pila⟨Z⟩ {
+  requiere: { - }
+  asegura: { res tiene los mismos elementos que p, en el mismo orden (de tope a base) }
+}
+
+Ejemplo: p = [1, 2, 3] → res = [1, 2, 3]
+'''
+def copiar_pila(p: Pila) -> Pila:
+    aux: Pila = Pila()
+    res: Pila = Pila()
+
+    # Paso 1: vaciar p en aux (aux queda con el orden invertido)
+    while not p.empty():
+        aux.put(p.get())
+
+    # Paso 2: pasar de aux a p y a res (restaura p y arma la copia)
+    while not aux.empty():
+        elem: int = aux.get()
+        p.put(elem)
+        res.put(elem)
+
+    return res
+
+'''
+problema mayores_que_el_tope (in p: Pila⟨Z⟩) : Pila⟨Z⟩ {
+  requiere: { p no es vacía }
+  asegura: { res contiene exactamente los elementos de p estrictamente mayores al tope de p, en el mismo orden relativo (de tope a base) }
+}
+
+Ejemplo: p = [4, 7, 2, 9, 6] → res = [7, 9, 6].
+'''
+def mayores_que_el_tope(p: Pila) -> Pila:
+    aux: Pila = Pila()
+    res: Pila = Pila()
+
+    # Paso 1: sacar el tope y guardarlo
+    tope: int = p.get()
+    aux.put(tope)
+
+    # Paso 2: vaciar el resto de p en aux
+    while not p.empty():
+        aux.put(p.get())
+
+    # aux tiene (tope a base): base original ... tope original (el tope original queda abajo de todo
+    # pero lo guardamos en la variable "tope")
+    # Paso 3: pasar de aux a p restaurando el orden original,
+    # y armar res con los mayores al tope
+    while not aux.empty():
+        elem: int = aux.get()
+        p.put(elem)
+        if elem > tope:
+            res.put(elem)
+
+    return res
+
+'''
+problema pila_ordenada (in p: Pila⟨Z⟩) : Bool {
+  requiere: { - }
+  asegura: { res = true si y solo si, leyendo de tope a base, cada elemento es menor o igual al siguiente }
+}
+
+Ejemplos: [1, 3, 3, 8] → True, [1, 5, 2] → False.
+'''
+def pila_ordenada(p: Pila) -> bool:
+    aux: Pila = Pila()
+    ordenada: bool = True
+
+    if not p.empty():
+        anterior: int = p.get()
+        aux.put(anterior)
+
+        # Vaciar el resto de p en aux, comparando cada elemento con el anterior
+        while not p.empty():
+            actual: int = p.get()
+            if anterior > actual:
+                ordenada = False
+            aux.put(actual)
+            anterior = actual
+
+    # Restaurar p (aux tiene el orden invertido, así que se invierte de nuevo)
+    while not aux.empty():
+        p.put(aux.get())
+
+    return ordenada
+
+'''
+problema posicion_del_maximo_en_cola (in c: Cola⟨Z⟩) : Z {
+  requiere: { c no es vacía }
+  asegura: { res es la menor posición (contando desde 0 el primer elemento) en la que c tiene su máximo elemento }
+}
+
+Ejemplo: c = [3, 9, 2, 9] → 1.
+'''
+def posicion_del_maximo_en_cola(c: Cola) -> int:
+    n: int = c.qsize()
+    maximo: int = 0
+    pos_maximo: int = 0
+
+    for i in range(n):
+        elem: int = c.get()
+        if i == 0 or elem > maximo:
+            maximo = elem
+            pos_maximo = i
+        c.put(elem)   # se reencola al final: tras n vueltas, c queda como estaba
+
+    return pos_maximo
+
+'''
+problema intercalar_colas (in c1: Cola⟨Z⟩, in c2: Cola⟨Z⟩) : Cola⟨Z⟩ {
+  requiere: { - }
+  asegura: { res alterna elementos de c1 y de c2 empezando por c1. Cuando una de las dos se agota, los elementos que quedan de la otra se agregan al final en su orden }
+}
+
+Ejemplo: c1 = [1, 2, 3], c2 = [10, 20] → res = [1, 10, 2, 20, 3].
+'''
+def intercalar_colas(c1: Cola, c2: Cola) -> Cola:
+    res: Cola = Cola()
+    n1: int = c1.qsize()
+    n2: int = c2.qsize()
+    menor: int = min(n1, n2)
+
+    # Alternar mientras haya elementos en ambas
+    for _ in range(menor):
+        e1: int = c1.get()
+        res.put(e1)
+        c1.put(e1)      # se reencola al final para restaurar c1
+
+        e2: int = c2.get()
+        res.put(e2)
+        c2.put(e2)      # se reencola al final para restaurar c2
+
+    # Pasar lo que queda de la más larga (solo una de las dos tiene resto)
+    for _ in range(n1 - menor):
+        e1: int = c1.get()
+        res.put(e1)
+        c1.put(e1)
+
+    for _ in range(n2 - menor):
+        e2: int = c2.get()
+        res.put(e2)
+        c2.put(e2)
+
+    return res
+
+'''
+problema primeros_k_de_cola (in c: Cola⟨Z⟩, in k: Z) : Cola⟨Z⟩ {
+  requiere: { 0 <= k <= |c| }
+  asegura: { res contiene los primeros k elementos de c, en el mismo orden }
+}
+
+Ejemplo: c = [5, 1, 8, 3, 9], k = 3 → res = [5, 1, 8].
+'''
+def primeros_k_de_cola(c: Cola, k: int) -> Cola:
+    res: Cola = Cola()
+    n: int = c.qsize()
+
+    for i in range(n):
+        elem: int = c.get()
+        if i < k:
+            res.put(elem)
+        c.put(elem)   # se reencola al final: tras n vueltas, c queda como estaba
+
+    return res
+
+'''
+problema invertir_cola (in c: Cola⟨Z⟩) : Cola⟨Z⟩ {
+  requiere: { - }
+  asegura: { res tiene los mismos elementos que c, en el orden inverso (el primero de res es el último de c) }
+}
+
+Ejemplo: c = [1, 2, 3] → res = [3, 2, 1]. Acá se combinan una cola y una pila auxiliar.
+'''
+def invertir_cola(c: Cola) -> Cola:
+    res: Cola = Cola()
+    aux: Pila = Pila()
+    n: int = c.qsize()
+
+    # Paso 1: recorrer c copiando cada elemento a la pila (y reencolándolo para restaurar c)
+    for _ in range(n):
+        elem: int = c.get()
+        aux.put(elem)
+        c.put(elem)
+
+    # Paso 2: vaciar la pila en res (sale en orden inverso)
+    while not aux.empty():
+        res.put(aux.get())
+
+    return res
+
+
+'''
+EJERCICIOS DE DICCIONARIOS
+'''
+'''
+problema suma_de_notas_por_estudiante (in calificaciones: dict⟨String, seq⟨Z⟩⟩) : dict⟨String, Z⟩ {
+  requiere: { -  }
+  asegura: { Las claves de res son exactamente las claves de calificaciones }
+  asegura: { Para toda clave c de res, res[c] es la suma de los elementos de calificaciones[c] }
+}
+
+Ejemplo: {"Ana": [10, 9], "Beto": [8]} → {"Ana": 19, "Beto": 8}.
+'''
+def suma_de_notas_por_estudiante(calificaciones: dict[str, list[int]]) -> dict[str, int]:
+    res: dict[str, int] = {}
+
+    for nombre in calificaciones:
+        suma: int = 0
+        for nota in calificaciones[nombre]:
+            suma += nota
+        res[nombre] = suma
+
+    return res
+
+'''
+problema estudiantes_con_alguna_nota_baja (in calificaciones: dict⟨String, seq⟨Z⟩⟩, in nota_minima: Z) : seq⟨String⟩ {
+  requiere: { - }
+  asegura: { res contiene exactamente los nombres de los estudiantes que tienen al menos una calificación menor a nota_minima, sin repetidos }
+}
+
+Ejemplo: {"Ana": [10, 9], "Beto": [8], "Cami": [7, 8, 9], "Dani": [6, 3]}, nota_minima = 7 → ["Dani"]. Es el complemento de "destacado" del parcial.
+'''
+def estudiantes_con_alguna_nota_baja(calificaciones: dict[str, list[int]], nota_minima: int) -> list[str]:
+    res: list[str] = []
+
+    for nombre in calificaciones:
+        tiene_nota_baja: bool = False
+        for nota in calificaciones[nombre]:
+            if nota < nota_minima:
+                tiene_nota_baja = True
+
+        if tiene_nota_baja:
+            res.append(nombre)
+
+    return res
+
+'''
+problema clave_con_mayor_valor (in d: dict⟨String, Z⟩) : String {
+  requiere: { d no es vacío }
+  requiere: { Todos los valores de d son distintos entre sí }
+  asegura: { res es una clave de d tal que d[res] >= d[c] para toda clave c de d }
+}
+
+Ejemplo: {"a": 3, "b": 9, "c": 5} → "b". Es el equivalente a maximo_lista, pero sobre valores de un diccionario.
+'''
+def clave_con_mayor_valor(d: dict[str, int]) -> str:
+    mejor_clave: str = ""
+    mejor_valor: int = 0
+    primera: bool = True
+
+    for clave in d:
+        if primera or d[clave] > mejor_valor:
+            mejor_clave = clave
+            mejor_valor = d[clave]
+            primera = False
+
+    return mejor_clave
+
+'''
+problema agrupar_por_longitud (in palabras: seq⟨String⟩) : dict⟨Z, seq⟨String⟩⟩ {
+  requiere: { - }
+  asegura: { Una clave n de res existe si y sólo si existe al menos una palabra de palabras de longitud n }
+  asegura: { Para toda clave n de res, res[n] contiene exactamente las palabras de palabras de longitud n, en el mismo orden en que aparecen en palabras }
+}
+
+Ejemplo: ["sol", "cielo", "luz", "nube"] → {3: ["sol", "luz"], 5: ["cielo"], 4: ["nube"]}.
+'''
+def agrupar_por_longitud(palabras: list[str]) -> dict[int, list[str]]:
+    res: dict[int, list[str]] = {}
+
+    for palabra in palabras:
+        n: int = len(palabra)
+        if n in res:
+            res[n].append(palabra)
+        else:
+            res[n] = [palabra]
+
+    return res
+
+'''
+problema agrupar_por_inicial (in nombres: seq⟨String⟩) : dict⟨String, seq⟨String⟩⟩ {
+  requiere: { Todos los nombres de nombres tienen al menos un carácter }
+  asegura: { Una clave k de res existe si y sólo si existe un nombre en nombres cuya primera letra es k }
+  asegura: { Para toda clave k de res, res[k] contiene exactamente los nombres de nombres que empiezan con k, en el mismo orden en que aparecen en nombres }
+}
+
+Ejemplo: ["Ana", "Beto", "Alan", "Bruno", "Cami"] → {"A": ["Ana", "Alan"], "B": ["Beto", "Bruno"], "C": ["Cami"]}.
+'''
+def agrupar_por_inicial(nombres: list[str]) -> dict[str, list[str]]:
+    res: dict[str, list[str]] = {}
+
+    for nombre in nombres:
+        inicial: str = nombre[0]
+        if inicial in res:
+            res[inicial].append(nombre)
+        else:
+            res[inicial] = [nombre]
+
+    return res
+
+'''
+problema frecuencia_de_elementos (in s: seq⟨Z⟩) : dict⟨Z, Z⟩ {
+  requiere: { - }
+  asegura: { Una clave x de res existe si y sólo si x aparece en s }
+  asegura: { Para toda clave x de res, res[x] es la cantidad de veces que x aparece en s }
+}
+
+Ejemplo: [3, 1, 3, 2, 1, 3] → {3: 3, 1: 2, 2: 1}.
+'''
+def frecuencia_de_elementos(s: list[int]) -> dict[int, int]:
+    res: dict[int, int] = {}
+
+    for elem in s:
+        if elem in res:
+            res[elem] += 1
+        else:
+            res[elem] = 1
+
+    return res
+
+'''
+problema elemento_mas_frecuente (in s: seq⟨Z⟩) : Z {
+  requiere: { |s| > 0 }
+  asegura: { res es un elemento de s tal que su cantidad de apariciones en s es mayor o igual que la de cualquier otro elemento de s }
+}
+
+Ejemplo: [4, 2, 4, 7, 2, 4] → 4. Si hay empate, cualquiera de los empatados es válido. Se resuelve combinando el 6 con el 3.
+'''
+def frecuencia_de_elementos(s: list[int]) -> dict[int, int]:
+    res: dict[int, int] = {}
+    for elem in s:
+        if elem in res:
+            res[elem] += 1
+        else:
+            res[elem] = 1
+    return res
+
+def elemento_mas_frecuente(s: list[int]) -> int:
+    frecuencias: dict[int, int] = frecuencia_de_elementos(s)
+
+    mejor_elem: int = s[0]
+    mejor_cant: int = frecuencias[s[0]]
+
+    for elem in frecuencias:
+        if frecuencias[elem] > mejor_cant:
+            mejor_elem = elem
+            mejor_cant = frecuencias[elem]
+
+    return mejor_elem
+
+'''
+problema unir_sumando (in d1: dict⟨String, Z⟩, in d2: dict⟨String, Z⟩) : dict⟨String, Z⟩ {
+  requiere: { - }
+  asegura: { Una clave c de res existe si y sólo si c es clave de d1 o de d2 }
+  asegura: { Si c es clave de d1 y de d2, res[c] = d1[c] + d2[c] }
+  asegura: { Si c es clave solo de d1, res[c] = d1[c]; si c es clave solo de d2, res[c] = d2[c] }
+}
+
+Ejemplo: {"a": 1, "b": 2} y {"b": 5, "c": 7} → {"a": 1, "b": 7, "c": 7}.
+'''
+def unir_sumando(d1: dict[str, int], d2: dict[str, int]) -> dict[str, int]:
+    res: dict[str, int] = {}
+
+    # Paso 1: copiar todo d1
+    for clave in d1:
+        res[clave] = d1[clave]
+
+    # Paso 2: agregar d2, sumando si la clave ya está
+    for clave in d2:
+        if clave in res:
+            res[clave] += d2[clave]
+        else:
+            res[clave] = d2[clave]
+
+    return res
